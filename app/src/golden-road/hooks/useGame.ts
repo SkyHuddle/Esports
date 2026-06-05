@@ -22,6 +22,7 @@ import {
   estimatePercentile,
   isOnePerOrgDay,
   orgConstraintViolated,
+  playerPassesFilter,
 } from '@/golden-road/features/daily';
 import { recordAttempt, saveDailyResult } from '@/golden-road/features/storage';
 
@@ -64,7 +65,7 @@ export function useGame() {
     setRoundIndex(0);
     setDraftSubphase('spin');
     setSpinGeneration(0);
-    setRespinsLeft(1);
+    setRespinsLeft(gameMode === 'daily' ? 0 : 1);
     setResult(null);
     setDailyPercentile(null);
     setPhase('draft');
@@ -74,15 +75,14 @@ export function useGame() {
     setDraftSubphase('pick');
   }, []);
 
-  /** One respin per game — after the spin lands and the roster is shown */
   const respinTeam = useCallback(() => {
+    if (mode === 'daily') return;
     if (respinsLeft <= 0 || draftSubphase !== 'pick') return;
 
     const usedIds = draftRounds
       .filter((_, i) => i !== roundIndex)
       .map((r) => r.team.id);
-    const filter = mode === 'daily' ? dailyConstraint.filter : undefined;
-    const next = rerollRound(runSeed, roundIndex, usedIds, filter);
+    const next = rerollRound(runSeed, roundIndex, usedIds);
 
     setDraftRounds((prev) => {
       const copy = [...prev];
@@ -99,8 +99,33 @@ export function useGame() {
     roundIndex,
     runSeed,
     mode,
-    dailyConstraint.filter,
   ]);
+
+  const finalizeRun = useCallback(
+    (finalPicks: DraftPick[]) => {
+      const simSeed =
+        mode === 'daily'
+          ? `${dateKey}-${finalPicks.map((p) => p.player.id).sort().join('-')}`
+          : undefined;
+      const sim = simulateGoldenRoad(finalPicks, { seed: simSeed });
+      setResult(sim);
+      setPhase('result');
+
+      recordAttempt(sim.goldenRoad, sim.rosterScore, mode === 'daily');
+
+      if (mode === 'daily') {
+        const percentile = estimatePercentile(sim.rosterScore, sim.goldenRoad);
+        setDailyPercentile(percentile);
+        saveDailyResult({
+          date: dateKey,
+          score: sim.rosterScore,
+          goldenRoad: sim.goldenRoad,
+          percentile,
+        });
+      }
+    },
+    [mode, dateKey]
+  );
 
   const selectPlayer = useCallback(
     (player: Player, naturalRole: Role) => {
@@ -114,6 +139,8 @@ export function useGame() {
         return;
       }
 
+      if (mode === 'daily' && !playerPassesFilter(player, dailyConstraint)) return;
+
       const pick: DraftPick = {
         role: naturalRole,
         naturalRole,
@@ -122,45 +149,19 @@ export function useGame() {
         phase: currentRound.phase,
       };
 
-      setPicks((prev) => [...prev, pick]);
+      const nextPicks = [...picks, pick];
+      setPicks(nextPicks);
 
       if (roundIndex >= ROLE_ORDER.length - 1) {
-        setPhase('ready');
+        finalizeRun(nextPicks);
       } else {
         setRoundIndex((i) => i + 1);
         setDraftSubphase('spin');
         setSpinGeneration((g) => g + 1);
       }
     },
-    [currentRound, openRoles, mode, dailyConstraint.id, picks, roundIndex]
+    [currentRound, openRoles, mode, dailyConstraint.id, picks, roundIndex, finalizeRun]
   );
-
-  const startSimulation = useCallback(() => {
-    const simSeed =
-      mode === 'daily'
-        ? `${dateKey}-${picks.map((p) => p.player.id).sort().join('-')}`
-        : undefined;
-    const sim = simulateGoldenRoad(picks, { seed: simSeed });
-    setResult(sim);
-    setPhase('simulation');
-
-    recordAttempt(sim.goldenRoad, sim.rosterScore, mode === 'daily');
-
-    if (mode === 'daily') {
-      const percentile = estimatePercentile(sim.rosterScore, sim.goldenRoad);
-      setDailyPercentile(percentile);
-      saveDailyResult({
-        date: dateKey,
-        score: sim.rosterScore,
-        goldenRoad: sim.goldenRoad,
-        percentile,
-      });
-    }
-  }, [picks, mode, dateKey]);
-
-  const finishSimulation = useCallback(() => {
-    setPhase('result');
-  }, []);
 
   const resetToHome = useCallback(() => {
     setPhase('home');
@@ -171,19 +172,13 @@ export function useGame() {
     setResult(null);
     setDraftSubphase('spin');
     setSpinGeneration(0);
+    setRespinsLeft(1);
   }, []);
 
   const playAgain = useCallback(() => {
+    if (mode === 'daily') return;
     startGame(mode);
   }, [mode, startGame]);
-
-  const redraftLast = useCallback(() => {
-    if (picks.length === 0) return;
-    setPicks((prev) => prev.slice(0, -1));
-    setRoundIndex(picks.length - 1);
-    setDraftSubphase('pick');
-    setPhase('draft');
-  }, [picks]);
 
   return {
     phase,
@@ -204,11 +199,7 @@ export function useGame() {
     finishSpin,
     respinTeam,
     selectPlayer,
-    startSimulation,
-    finishSimulation,
     resetToHome,
     playAgain,
-    redraftLast,
-    setPhase,
   };
 }

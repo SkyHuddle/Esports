@@ -1,6 +1,6 @@
 {
   "source": "gol.gg-team-year",
-  "generatedAt": "2026-06-05T06:01:09.805Z",
+  "generatedAt": "2026-06-05T18:21:17.108Z",
   "entryCount": 285,
   "entries": {
     "skt-2013:impact": {
@@ -400,7 +400,7 @@
       "golPlayerId": 96,
       "season": "S5",
       "source": "team-roster",
-      "accomplishment": "standard",
+      "accomplishment": "worlds_champion",
       "stats": {
         "kda": 4.4,
         "killParticipation": 60.8,
@@ -410,10 +410,10 @@
         "games": 122
       },
       "ratings": {
-        "overall": 78,
-        "peak": 79,
-        "international": 83,
-        "clutch": 73,
+        "overall": 83,
+        "peak": 84,
+        "international": 87,
+        "clutch": 75,
         "consistency": 94,
         "leadership": 64,
         "synergy": 76
@@ -426,7 +426,7 @@
       "golPlayerId": 47,
       "season": "S5",
       "source": "team-roster",
-      "accomplishment": "standard",
+      "accomplishment": "worlds_champion",
       "stats": {
         "kda": 4.5,
         "killParticipation": 68.3,
@@ -436,10 +436,10 @@
         "games": 108
       },
       "ratings": {
-        "overall": 75,
-        "peak": 76,
-        "international": 80,
-        "clutch": 75,
+        "overall": 80,
+        "peak": 81,
+        "international": 84,
+        "clutch": 77,
         "consistency": 94,
         "leadership": 73,
         "synergy": 86
@@ -452,7 +452,7 @@
       "golPlayerId": 48,
       "season": "S5",
       "source": "team-roster",
-      "accomplishment": "standard",
+      "accomplishment": "worlds_champion",
       "stats": {
         "kda": 5.5,
         "killParticipation": 68.5,
@@ -462,10 +462,10 @@
         "games": 83
       },
       "ratings": {
-        "overall": 89,
-        "peak": 90,
-        "international": 94,
-        "clutch": 82,
+        "overall": 94,
+        "peak": 95,
+        "international": 96,
+        "clutch": 84,
         "consistency": 94,
         "leadership": 66,
         "synergy": 86
@@ -478,7 +478,7 @@
       "golPlayerId": 100,
       "season": "S5",
       "source": "team-roster",
-      "accomplishment": "standard",
+      "accomplishment": "worlds_champion",
       "stats": {
         "kda": 6.5,
         "killParticipation": 66.4,
@@ -488,10 +488,10 @@
         "games": 125
       },
       "ratings": {
-        "overall": 89,
-        "peak": 92,
-        "international": 94,
-        "clutch": 88,
+        "overall": 94,
+        "peak": 97,
+        "international": 96,
+        "clutch": 90,
         "consistency": 94,
         "leadership": 65,
         "synergy": 83
@@ -504,7 +504,7 @@
       "golPlayerId": 101,
       "season": "S5",
       "source": "team-roster",
-      "accomplishment": "standard",
+      "accomplishment": "worlds_champion",
       "stats": {
         "kda": 5.5,
         "killParticipation": 69.4,
@@ -514,10 +514,10 @@
         "games": 110
       },
       "ratings": {
-        "overall": 82,
-        "peak": 85,
-        "international": 87,
-        "clutch": 89,
+        "overall": 87,
+        "peak": 90,
+        "international": 91,
+        "clutch": 91,
         "consistency": 94,
         "leadership": 73,
         "synergy": 87
@@ -913,32 +913,6 @@
         "synergy": 88
       }
     },
-    "t1-2017:khan": {
-      "teamId": "t1-2017",
-      "playerId": "khan",
-      "golTeamId": 271,
-      "golPlayerId": 982,
-      "season": "S7",
-      "source": "season",
-      "accomplishment": "worlds_champion",
-      "stats": {
-        "kda": 4.1,
-        "killParticipation": 60,
-        "damagePct": 20,
-        "goldPct": 20,
-        "winRate": 70.9,
-        "games": 55
-      },
-      "ratings": {
-        "overall": 78,
-        "peak": 79,
-        "international": 81,
-        "clutch": 73,
-        "consistency": 89,
-        "leadership": 61,
-        "synergy": 74
-      }
-    },
     "t1-2017:blank": {
       "teamId": "t1-2017",
       "playerId": "blank",
@@ -946,7 +920,7 @@
       "golPlayerId": 411,
       "season": "S7",
       "source": "team-roster",
-      "accomplishment": "worlds_champion",
+      "accomplishment": "worlds_finalist",
       "stats": {
         "kda": 4.5,
         "killParticipation": 73.7,
@@ -956,10 +930,10 @@
         "games": 39
       },
       "ratings": {
-        "overall": 80,
-        "peak": 81,
-        "international": 84,
-        "clutch": 79,
+        "overall": 78,
+        "peak": 79,
+        "international": 83,
+        "clutch": 78,
         "consistency": 90,
         "leadership": 69,
         "synergy": 92
@@ -972,7 +946,7 @@
       "golPlayerId": 48,
       "season": "S7",
       "source": "team-roster",
-      "accomplishment": "worlds_champion",
+      "accomplishment": "worlds_finalist",
       "stats": {
         "kda": 4.1,
         "killParticipation": 66,
@@ -982,10 +956,10 @@
         "games": 139
       },
       "ratings": {
-        "overall": 86,
-        "peak": 87,
-        "international": 89,
-        "clutch": 74,
+        "overall": 84,
+        "peak": 85,
+        "international": 88,
+        "clutch": 73,
         "consistency": 91,
         "leadership": 65,
         "synergy": 82
@@ -998,7 +972,7 @@
       "golPlayerId": 100,
       "season": "S7",
       "source": "team-roster",
-      "accomplishment": "worlds_champion",
+      "accomplishment": "worlds_finalist",
       "stats": {
         "kda": 5.6,
         "killParticipation": 63.4,
@@ -1008,10 +982,10 @@
         "games": 139
       },
       "ratings": {
-        "overall": 91,
-        "peak": 94,
-        "international": 94,
-        "clutch": 83,
+        "overall": 89,
+        "peak": 92,
+        "international": 93,
+        "clutch": 82,
         "consistency": 91,
         "leadership": 65,
         "synergy": 79
@@ -1024,7 +998,7 @@
       "golPlayerId": 101,
       "season": "S7",
       "source": "team-roster",
-      "accomplishment": "worlds_champion",
+      "accomplishment": "worlds_finalist",
       "stats": {
         "kda": 4.5,
         "killParticipation": 66.9,
@@ -1034,10 +1008,10 @@
         "games": 139
       },
       "ratings": {
-        "overall": 85,
-        "peak": 88,
-        "international": 88,
-        "clutch": 87,
+        "overall": 83,
+        "peak": 86,
+        "international": 87,
+        "clutch": 86,
         "consistency": 91,
         "leadership": 72,
         "synergy": 83
@@ -7411,6 +7385,32 @@
         "consistency": 86,
         "leadership": 73,
         "synergy": 87
+      }
+    },
+    "t1-2017:huni": {
+      "teamId": "t1-2017",
+      "playerId": "huni",
+      "golTeamId": 271,
+      "golPlayerId": 371,
+      "season": "S7",
+      "source": "team-roster",
+      "accomplishment": "worlds_finalist",
+      "stats": {
+        "kda": 3.3,
+        "killParticipation": 58.6,
+        "damagePct": 24.8,
+        "goldPct": 21.8,
+        "winRate": 67.7,
+        "games": 93
+      },
+      "ratings": {
+        "overall": 76,
+        "peak": 77,
+        "international": 79,
+        "clutch": 66,
+        "consistency": 89,
+        "leadership": 64,
+        "synergy": 72
       }
     }
   }

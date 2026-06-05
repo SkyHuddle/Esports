@@ -38,9 +38,9 @@
   --kb-r-lg: 22px;
   --kb-r-xl: 28px;
 
-  --kb-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.4), 0 20px 40px -10px rgba(0, 0, 0, 0.6);
-  --kb-shadow-gold: 0 14px 40px -6px rgba(232, 184, 66, 0.28);
-  --kb-shadow-amber: 0 14px 40px -6px rgba(255, 106, 31, 0.35);
+  --kb-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 8px 24px -8px rgba(0, 0, 0, 0.55);
+  --kb-shadow-gold: 0 2px 12px -2px rgba(232, 184, 66, 0.12);
+  --kb-shadow-amber: 0 2px 12px -2px rgba(255, 106, 31, 0.14);
 
   --ring-gold: var(--kb-gold);
 }

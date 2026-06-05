@@ -20,32 +20,26 @@ export function SeasonRecordCard({
 
   return (
     <motion.div
-      className={`kb-card rounded-[var(--kb-r-lg)] text-center relative overflow-hidden ${
+      className={`kb-card rounded-[var(--kb-r-lg)] text-center ${
         compact ? 'px-5 py-5' : 'px-6 py-6'
       } ${isWin ? 'kb-card-accent-gold' : ''}`}
-      style={{
-        background: isWin
-          ? 'linear-gradient(165deg, rgba(232,184,66,0.12) 0%, var(--kb-bg-card) 55%)'
-          : undefined,
-        boxShadow: isWin ? 'var(--kb-shadow-card), var(--kb-shadow-gold)' : undefined,
-      }}
     >
-      {isWin && (
-        <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-40 h-24 bg-kb-gold/20 blur-3xl pointer-events-none" />
-      )}
-
-      <p className="text-[10px] uppercase tracking-[0.35em] text-kb-mute mb-2 relative">
+      <p className="text-[10px] uppercase tracking-[0.35em] text-kb-mute mb-2">
         Season record
       </p>
       <p
-        className={`font-display tabular-nums leading-none relative ${
+        className={`font-display tabular-nums leading-none ${
           compact ? 'text-5xl sm:text-6xl' : 'text-6xl'
-        } ${isWin ? 'text-ring-gold glow-ring' : 'text-kb-fg'}`}
+        } ${isWin ? 'text-ring-gold' : 'text-kb-fg'}`}
       >
         {summary.record}
       </p>
 
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-2 relative">
+      {!compact && (
+        <p className="text-sm font-display text-kb-gold/90 mt-3">{summary.runTitle}</p>
+      )}
+
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
         <Chip
           highlight={summary.majorWins > 0}
           label={summary.majorWins > 0 ? `Won ${summary.majorsLine}` : '0 Majors'}
@@ -59,7 +53,7 @@ export function SeasonRecordCard({
       </div>
 
       {!compact && (
-        <p className="text-sm text-kb-soft mt-4 leading-relaxed relative max-w-[280px] mx-auto">
+        <p className="text-sm text-kb-soft mt-4 leading-relaxed max-w-[280px] mx-auto">
           {summary.narrative}
         </p>
       )}

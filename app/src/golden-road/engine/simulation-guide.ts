@@ -18,11 +18,11 @@ export const SIMULATION_GUIDE = {
     },
     {
       title: 'The four checks',
-      body: 'Spring → MSI → Summer → Worlds. Each stage is a percentage roll based on your roster strength — stronger teams win more often, but any lineup can pull off an upset.',
+      body: 'Spring → MSI → Summer → Worlds. Each stage has five series (20 total, like Ring Chase). Domestic splits are easiest; MSI is harder; Worlds is the toughest gate.',
     },
     {
-      title: 'What to expect',
-      body: 'Win chance on the ready screen is the combined odds of clearing all four stages. Even modest OVR rosters keep a real shot; stacking legends pushes you into the teens or higher.',
+      title: 'Your result',
+      body: 'After your fifth pick, your run resolves instantly. Series record is W-L across beats played (e.g. 3-1 in Spring). Stages cleared shows how far you got (e.g. 0/4).',
     },
   ],
 } as const;

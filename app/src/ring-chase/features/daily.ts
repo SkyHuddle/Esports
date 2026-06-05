@@ -1,8 +1,25 @@
 import type { CodPlayer, DailyConstraint, DraftPick, HistoricalCodTeam } from '../core/types';
-import { cardOverall } from '../engine/card-context';
+import { cardOverall, cardRatings } from '../engine/card-context';
 
-export function getDateKey(): string {
-  return new Date().toISOString().slice(0, 10);
+/** Local calendar date — daily challenges roll at midnight in the user's timezone. */
+export function getDateKey(date: Date = new Date()): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function isFlexPlayer(player: CodPlayer): boolean {
+  return player.primaryRole === 'flex' || player.secondaryRole === 'flex';
+}
+
+function cardStat(
+  player: CodPlayer,
+  team: HistoricalCodTeam | undefined,
+  key: keyof CodPlayer['ratings']
+): number {
+  if (team) return cardRatings(player, team)[key];
+  return player.ratings[key];
 }
 
 const DAILY_CONSTRAINTS: DailyConstraint[] = [
@@ -94,13 +111,13 @@ const DAILY_CONSTRAINTS: DailyConstraint[] = [
     id: 'snd-meta',
     title: 'SnD-Heavy Meta',
     description: 'Favor Search & Destroy specialists.',
-    filter: (ctx) => ctx.roster.some((p) => p.ratings.snd >= 90),
+    filter: (ctx) => ctx.roster.some((p) => cardRatings(p, ctx.team).snd >= 90),
   },
   {
     id: 'respawn-meta',
     title: 'Respawn-Heavy Meta',
     description: 'Teams built for HP/Control.',
-    filter: (ctx) => ctx.roster.some((p) => p.ratings.respawn >= 90),
+    filter: (ctx) => ctx.roster.some((p) => cardRatings(p, ctx.team).respawn >= 90),
   },
   {
     id: 'no-top5',
@@ -113,13 +130,19 @@ const DAILY_CONSTRAINTS: DailyConstraint[] = [
     id: 'no-ar-stars',
     title: 'No AR Superstars',
     description: 'Main AR players rated 92+ are banned.',
-    pickFilter: (player) => !(player.primaryRole === 'mainAR' && player.ratings.overall >= 92),
+    pickFilter: (player, _picks, team) => {
+      const ovr = team ? cardOverall(player, team) : player.ratings.overall;
+      return !(player.primaryRole === 'mainAR' && ovr >= 92);
+    },
   },
   {
     id: 'no-smg-stars',
     title: 'No SMG Superstars',
     description: 'SMG players rated 93+ are banned.',
-    pickFilter: (player) => !(player.primaryRole === 'smg' && player.ratings.overall >= 93),
+    pickFilter: (player, _picks, team) => {
+      const ovr = team ? cardOverall(player, team) : player.ratings.overall;
+      return !(player.primaryRole === 'smg' && ovr >= 93);
+    },
   },
   {
     id: 'major-winners',
@@ -190,19 +213,24 @@ const DAILY_CONSTRAINTS: DailyConstraint[] = [
     id: 'flex-required',
     title: 'Flex Required',
     description: 'Must draft at least one flex player by round 4.',
-    pickFilter: () => true,
+    pickFilter: (player, picks) => {
+      const hasFlex = picks.some((p) => isFlexPlayer(p.player));
+      const isFinalPick = picks.length === 3;
+      if (isFinalPick && !hasFlex) return isFlexPlayer(player);
+      return true;
+    },
   },
   {
     id: 'leaders-only',
     title: 'Leaders Only',
     description: 'Only players with 88+ leadership.',
-    pickFilter: (player) => player.ratings.leadership >= 88,
+    pickFilter: (player, _picks, team) => cardStat(player, team, 'leadership') >= 88,
   },
   {
     id: 'lan-demons',
     title: 'LAN Demons',
     description: 'Only players with 88+ LAN rating.',
-    pickFilter: (player) => player.ratings.lan >= 88,
+    pickFilter: (player, _picks, team) => cardStat(player, team, 'lan') >= 88,
   },
   {
     id: 'hungry',
@@ -247,6 +275,23 @@ export function playerPassesFilter(
 ): boolean {
   if (!constraint.pickFilter) return true;
   return constraint.pickFilter(player, picks, team);
+}
+
+/** At least one roster member can be drafted under this constraint (empty picks). */
+export function teamHasPickablePlayer(
+  team: HistoricalCodTeam,
+  roster: CodPlayer[],
+  constraint: DailyConstraint
+): boolean {
+  return roster.some((player) => playerPassesFilter(player, [], constraint, team));
+}
+
+/** Flex-required dailies need a flex player on at least one of the four team cards. */
+export function dailyTeamSetHasFlexOption(
+  teams: HistoricalCodTeam[],
+  getRoster: (team: HistoricalCodTeam) => CodPlayer[]
+): boolean {
+  return teams.some((team) => getRoster(team).some((player) => isFlexPlayer(player)));
 }
 
 export function estimatePercentile(score: number, ringWon: boolean, perfectSeason: boolean): number {

@@ -26,14 +26,14 @@ export function PositionAssignSheet({
       onClick={onCancel}
     >
       <motion.div
-        className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0c0c10] p-5"
+        className="kb-card w-full max-w-lg rounded-[var(--kb-r-xl)] p-5 border border-kb-gold/20"
         initial={{ y: 80 }}
         animate={{ y: 0 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <p className="text-[10px] uppercase tracking-widest text-gold/70">Assign position</p>
-        <h3 className="font-display text-2xl text-white mt-1">{player.name}</h3>
-        <p className="text-white/40 text-xs mt-1">
+        <p className="text-[10px] uppercase tracking-widest text-kb-gold/80">Assign position</p>
+        <h3 className="font-display text-2xl text-kb-fg mt-1">{player.name}</h3>
+        <p className="text-kb-mute text-xs mt-1">
           Played {ROLE_LABELS[naturalRole]} on this team · pick an open slot
         </p>
 
@@ -45,15 +45,15 @@ export function PositionAssignSheet({
                 key={role}
                 type="button"
                 onClick={() => onAssign(role)}
-                className={`h-14 rounded-xl font-display text-lg tracking-wide transition-colors ${
+                className={`h-14 rounded-[var(--kb-r-md)] font-display text-lg transition-colors ${
                   isNatural
-                    ? 'bg-gold/15 border border-gold/50 text-gold'
-                    : 'bg-white/[0.04] border border-white/10 text-white hover:border-white/25'
+                    ? 'bg-kb-gold/15 border border-kb-gold/50 text-kb-gold'
+                    : 'bg-kb-glass border border-kb-border text-kb-fg hover:border-kb-border-strong'
                 }`}
               >
                 {ROLE_LABELS[role]}
                 {isNatural && (
-                  <span className="block text-[9px] font-sans font-normal text-gold/70 uppercase tracking-wider">
+                  <span className="block text-[9px] font-sans font-normal text-kb-gold/70 uppercase tracking-wider">
                     Natural
                   </span>
                 )}
@@ -65,7 +65,7 @@ export function PositionAssignSheet({
         <button
           type="button"
           onClick={onCancel}
-          className="w-full mt-4 text-sm text-white/40 py-2"
+          className="w-full mt-4 text-sm text-kb-mute py-2 hover:text-kb-soft transition-colors"
         >
           Back
         </button>

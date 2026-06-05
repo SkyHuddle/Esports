@@ -1,0 +1,200 @@
+import type {
+  DraftPick,
+  MajorOutcome,
+  SimulationResult,
+  StageId,
+  StageOutcome,
+} from '../core/types';
+import { STAGES } from '../core/types';
+import {
+  STAGE_PASS_MIDPOINTS,
+  STAGE_PASS_STEEPNESS,
+  STAGE_PASS_MIN,
+  STAGE_PASS_MAX,
+  MIN_MAJOR_CHANCE,
+} from '../core/constants';
+import { simulationPlayers } from './card-context';
+import { evaluateChemistry } from './chemistry';
+import { computeRosterScore, stageTeamPower, findMvp, findWeakLink } from './ratings';
+import { buildExplanation } from './explanations';
+import { buildMajorSummary } from './major-summary';
+import { buildHistoricalComparison } from './major-compare';
+import { enrichStageWithRun, buildSkippedStageRun, stageFailureHeadline, isStageSkipped } from './tournament-run';
+import { hashString, mulberry32 } from './rng';
+
+function clampPass(chance: number): number {
+  return Math.min(STAGE_PASS_MAX, Math.max(STAGE_PASS_MIN, chance));
+}
+
+export function stagePassProbability(power: number, stage: StageId): number {
+  const mid = STAGE_PASS_MIDPOINTS[stage];
+  const steepness = STAGE_PASS_STEEPNESS[stage];
+  const logistic = 1 / (1 + Math.exp(-steepness * (power - mid)));
+  return clampPass(logistic);
+}
+
+function jitter(power: number, stage: StageId, avgClutch: number, rng: () => number): number {
+  const spread = stage === 'grand_final' ? 3 + avgClutch / 28 : 2.2;
+  return power + (rng() - 0.5) * spread;
+}
+
+function failureOutcome(
+  stage: StageId,
+  roll: number,
+  passChance: number
+): MajorOutcome {
+  const gap = roll - passChance;
+
+  if (stage === 'grand_final') {
+    if (gap < 0.08) return 'runner_up';
+    return 'top4';
+  }
+  if (stage === 'semifinal') {
+    if (gap < 0.1) return 'top4';
+    return 'top8';
+  }
+  if (stage === 'quarterfinal') {
+    if (gap < 0.12) return 'top8';
+    return 'top16';
+  }
+  if (stage === 'elimination') {
+    if (gap < 0.14) return 'top16';
+    return 'eliminated';
+  }
+  return 'eliminated';
+}
+
+function passedOutcome(stage: StageId): MajorOutcome {
+  return stage === 'grand_final' ? 'champion' : 'cleared';
+}
+
+export function majorProbability(picks: DraftPick[]): number {
+  const players = simulationPlayers(picks);
+  const chemistry = evaluateChemistry(picks);
+  const trapSlots = picks.filter((p) => p.team.tier === 'underdog').length;
+  const trapPenalty = trapSlots * 1.4 + Math.max(0, trapSlots - 1) * 1.0;
+  let odds = 1;
+  for (const stage of STAGES) {
+    const power = stageTeamPower(players, stage, chemistry.score) - trapPenalty;
+    odds *= stagePassProbability(power, stage);
+  }
+  return Math.max(odds, MIN_MAJOR_CHANCE);
+}
+
+export function simulateMajorRun(
+  picks: DraftPick[],
+  options?: { seed?: string }
+): SimulationResult {
+  const players = simulationPlayers(picks);
+  const chemistry = evaluateChemistry(picks);
+  const seed = options?.seed
+    ? hashString(options.seed)
+    : (Date.now() ^ (Math.random() * 1e9)) >>> 0;
+  const rng = mulberry32(seed);
+  const avgClutch = players.reduce((s, p) => s + p.ratings.clutch, 0) / players.length;
+  const trapSlots = picks.filter((p) => p.team.tier === 'underdog').length;
+  const trapPenalty = trapSlots * 1.4 + Math.max(0, trapSlots - 1) * 1.0;
+
+  const stages: StageOutcome[] = [];
+  let failureStage: StageId | null = null;
+  let failureMessageText = '';
+  let anySeriesLost = false;
+  let roadBroken = false;
+
+  for (const stage of STAGES) {
+    if (roadBroken) {
+      stages.push({
+        stage,
+        outcome: 'eliminated',
+        passed: false,
+        passChance: 0,
+        power: 0,
+        run: buildSkippedStageRun(),
+      });
+      continue;
+    }
+
+    const power = stageTeamPower(players, stage, chemistry.score) - trapPenalty;
+    const effective = jitter(power, stage, avgClutch, rng);
+    const passChance = stagePassProbability(effective, stage);
+    const roll = rng();
+    const passed = roll < passChance;
+
+    const outcome: MajorOutcome = passed ? passedOutcome(stage) : failureOutcome(stage, roll, passChance);
+
+    if (!passed && failureStage == null) {
+      failureStage = stage;
+      failureMessageText = stageFailureHeadline(stage, outcome);
+      roadBroken = true;
+    }
+
+    const stageOutcome = enrichStageWithRun(
+      {
+        stage,
+        outcome,
+        passed,
+        passChance: Math.round(passChance * 1000) / 10,
+        power: Math.round(effective * 10) / 10,
+      },
+      rng
+    );
+
+    if (!isStageSkipped(stageOutcome) && stageOutcome.run.some((beat) => !beat.passed)) {
+      anySeriesLost = true;
+    }
+
+    stages.push(stageOutcome);
+  }
+
+  const grandFinal = stages.find((s) => s.stage === 'grand_final')!;
+  const majorWon = grandFinal.passed && grandFinal.outcome === 'champion';
+  const perfectRun = majorWon && !anySeriesLost;
+
+  const rosterScore = computeRosterScore(players);
+  const majorOdds = majorProbability(picks);
+  const mvp = findMvp(players);
+  const weakLink = findWeakLink(players);
+
+  const partial: Omit<
+    SimulationResult,
+    'explanation' | 'footer' | 'majorSummary' | 'historicalComparison'
+  > = {
+    stages,
+    majorWon,
+    perfectRun,
+    failureStage: majorWon ? null : failureStage,
+    failureMessage: perfectRun
+      ? 'Flawless Major'
+      : majorWon
+        ? 'Major Won'
+        : failureMessageText || 'Run ended',
+    rosterScore,
+    majorOdds,
+    chemistry,
+    mvp,
+    weakLink,
+  };
+
+  const majorSummary = buildMajorSummary(partial, picks);
+  const historicalComparison = buildHistoricalComparison(picks, majorSummary);
+  const { explanation, footer } = buildExplanation(partial, picks);
+
+  return { ...partial, majorSummary, historicalComparison, explanation, footer };
+}
+
+const oddsCache = new Map<string, number>();
+
+export function estimateMajorOdds(picks: DraftPick[]): number {
+  if (picks.length === 0) return 0;
+  const key = picks.map((p) => p.player.id).sort().join('|');
+  const cached = oddsCache.get(key);
+  if (cached != null) return cached;
+  const rate = majorProbability(picks);
+  oddsCache.set(key, rate);
+  return rate;
+}
+
+/** @alias perfectRun — flawless major = won without dropping a series */
+export function isFlawlessMajor(result: Pick<SimulationResult, 'majorWon' | 'perfectRun'>): boolean {
+  return result.majorWon && result.perfectRun;
+}

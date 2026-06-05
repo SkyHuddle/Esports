@@ -5,7 +5,7 @@ export function formatDailyShareLine(result: SimulationResult): string {
   const num = getDailyChallengeNumber();
   const { seasonSummary, majorWins, rosterScore, ringWon, perfectSeason } = result;
   const ring = perfectSeason ? ' · 20-0' : ringWon ? ' · Ring' : '';
-  return `Ring Chase #${num} ${seasonSummary.record} · ${majorWins} major${majorWins === 1 ? '' : 's'} · ${rosterScore.toFixed(1)}${ring}`;
+  return `Ring Chase #${num}: ${seasonSummary.runTitle}\n${seasonSummary.record} · ${majorWins} major${majorWins === 1 ? '' : 's'} · Score ${rosterScore.toFixed(0)}/100${ring}\nCan you build a better squad?`;
 }
 
 export function formatShareText(
@@ -13,8 +13,9 @@ export function formatShareText(
   rosterLine: string,
   isDaily: boolean
 ): string {
+  const { seasonSummary, rosterScore } = result;
   const headline = isDaily
     ? formatDailyShareLine(result)
-    : `${result.seasonSummary.headline} — ${result.seasonSummary.record}`;
-  return `${headline}\n${result.seasonSummary.narrative}\n\n${rosterLine}\nScore: ${result.rosterScore.toFixed(1)}`;
+    : `Ring Chase: ${seasonSummary.runTitle}\nResult: ${seasonSummary.record} · Score ${rosterScore.toFixed(0)}/100\nCan you build a better squad?`;
+  return `${headline}\n\n${seasonSummary.narrative}\n\n${rosterLine}`;
 }

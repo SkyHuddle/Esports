@@ -1,0 +1,237 @@
+import { useCallback, useMemo, useState } from 'react';
+import type {
+  CsPlayer,
+  DraftPick,
+  DraftRound,
+  DraftSubphase,
+  GameMode,
+  GamePhase,
+  RosterSlot,
+  SimulationResult,
+} from '../core/types';
+import { SLOT_ORDER } from '../core/constants';
+import {
+  createRunSeed,
+  generateDailyRounds,
+  generateDraftRounds,
+  rerollRound,
+} from '../engine/draft';
+import { simulateMajorRun } from '../engine/simulation';
+import {
+  getDailyConstraint,
+  getDateKey,
+  estimatePercentile,
+  playerPassesFilter,
+  teamPassesFilter,
+} from '../features/daily';
+import {
+  canStartDailyToday,
+  loadDailyBoard,
+  submitDailyBoardEntry,
+  type DailyBoardEntry,
+} from '../features/daily-board';
+import { recordAttempt, saveDailyResult, loadDailyResult } from '../features/storage';
+import { resolveTeamRoster } from '../data';
+
+export function useMajorRunGame() {
+  const [phase, setPhase] = useState<GamePhase>('home');
+  const [mode, setMode] = useState<GameMode>('free');
+  const [runSeed, setRunSeed] = useState('');
+  const [picks, setPicks] = useState<DraftPick[]>([]);
+  const [roundIndex, setRoundIndex] = useState(0);
+  const [draftRounds, setDraftRounds] = useState<DraftRound[]>([]);
+  const [draftSubphase, setDraftSubphase] = useState<DraftSubphase>('spin');
+  const [spinGeneration, setSpinGeneration] = useState(0);
+  const [respinsLeft, setRespinsLeft] = useState(1);
+  const [result, setResult] = useState<SimulationResult | null>(null);
+  const [dailyPercentile, setDailyPercentile] = useState<number | null>(null);
+  const [dailyBoard, setDailyBoard] = useState<DailyBoardEntry[]>([]);
+  const [dailyBoardEntryId, setDailyBoardEntryId] = useState<string | null>(null);
+
+  const dateKey = getDateKey();
+  const dailyConstraint = useMemo(() => getDailyConstraint(), []);
+  const dailyPlayed = useMemo(() => loadDailyResult(dateKey), [dateKey, phase]);
+
+  const currentRound: DraftRound | null = draftRounds[roundIndex] ?? null;
+
+  const filledRoles = useMemo(() => new Set(picks.map((p) => p.role)), [picks]);
+
+  const openRoles = useMemo(
+    () => SLOT_ORDER.filter((slot) => !filledRoles.has(slot)),
+    [filledRoles]
+  );
+
+  const startGame = useCallback(
+    (gameMode: GameMode) => {
+      if (gameMode === 'daily' && !canStartDailyToday(loadDailyResult(dateKey))) {
+        return;
+      }
+
+      const constraint = getDailyConstraint();
+      const teamFilter =
+        gameMode === 'daily' && constraint.filter
+          ? (team: Parameters<typeof teamPassesFilter>[0]) =>
+              teamPassesFilter(team, resolveTeamRoster(team), constraint)
+          : undefined;
+
+      const seed = createRunSeed(gameMode, gameMode === 'daily' ? dateKey : undefined);
+      const rounds =
+        gameMode === 'daily'
+          ? generateDailyRounds(dateKey, teamFilter, constraint)
+          : generateDraftRounds(seed, teamFilter);
+
+      setMode(gameMode);
+      setRunSeed(seed);
+      setDraftRounds(rounds);
+      setPicks([]);
+      setRoundIndex(0);
+      setDraftSubphase('spin');
+      setSpinGeneration(0);
+      setRespinsLeft(gameMode === 'daily' ? 0 : 1);
+      setResult(null);
+      setDailyPercentile(null);
+      setDailyBoardEntryId(null);
+      setPhase('draft');
+    },
+    [dateKey]
+  );
+
+  const finishSpin = useCallback(() => {
+    setDraftSubphase('pick');
+  }, []);
+
+  const respinTeam = useCallback(() => {
+    if (mode === 'daily') return;
+    if (respinsLeft <= 0 || draftSubphase !== 'pick') return;
+
+    const usedIds = draftRounds
+      .filter((_, i) => i !== roundIndex)
+      .map((r) => r.team.id);
+
+    const next = rerollRound(runSeed, roundIndex, usedIds);
+    setDraftRounds((prev) => {
+      const copy = [...prev];
+      copy[roundIndex] = next;
+      return copy;
+    });
+    setRespinsLeft((s) => s - 1);
+    setSpinGeneration((g) => g + 1);
+    setDraftSubphase('spin');
+  }, [mode, respinsLeft, draftSubphase, draftRounds, roundIndex, runSeed]);
+
+  const finalizeRun = useCallback(
+    (finalPicks: DraftPick[]) => {
+      const seed =
+        mode === 'daily'
+          ? `${dateKey}-${finalPicks.map((p) => p.player.id).sort().join('-')}`
+          : runSeed;
+
+      const sim = simulateMajorRun(finalPicks, { seed });
+      setResult(sim);
+      setPhase('result');
+
+      recordAttempt(sim.majorWon, sim.perfectRun, sim.rosterScore, mode === 'daily');
+
+      if (mode === 'daily') {
+        const percentile = estimatePercentile(sim.rosterScore, sim.majorWon, sim.perfectRun);
+        setDailyPercentile(percentile);
+        saveDailyResult({
+          date: dateKey,
+          score: sim.rosterScore,
+          majorWon: sim.majorWon,
+          perfectRun: sim.perfectRun,
+          record: sim.majorSummary.record,
+          headline: sim.majorSummary.headline,
+          percentile,
+        });
+        const board = submitDailyBoardEntry(
+          dateKey,
+          sim.majorSummary,
+          {
+            score: sim.rosterScore,
+            majorWon: sim.majorWon,
+            perfectRun: sim.perfectRun,
+            record: sim.majorSummary.record,
+            headline: sim.majorSummary.headline,
+          },
+          finalPicks.map((p) => p.player.gamertag)
+        );
+        setDailyBoard(board);
+        setDailyBoardEntryId(`you-${dateKey}`);
+      }
+    },
+    [mode, dateKey, runSeed]
+  );
+
+  const selectPlayer = useCallback(
+    (player: CsPlayer, naturalRole: RosterSlot) => {
+      const round = draftRounds[roundIndex];
+      if (!round || !openRoles.includes(naturalRole)) return;
+      if (picks.some((p) => p.player.id === player.id)) return;
+      if (mode === 'daily' && !playerPassesFilter(player, picks, dailyConstraint, round.team)) return;
+
+      const pick: DraftPick = {
+        roundIndex,
+        role: naturalRole,
+        naturalRole,
+        player,
+        team: round.team,
+      };
+      const nextPicks = [...picks, pick];
+      setPicks(nextPicks);
+
+      if (roundIndex >= SLOT_ORDER.length - 1) {
+        finalizeRun(nextPicks);
+      } else {
+        setRoundIndex((i) => i + 1);
+        setDraftSubphase('spin');
+        setSpinGeneration((g) => g + 1);
+      }
+    },
+    [draftRounds, roundIndex, picks, mode, dailyConstraint, openRoles, finalizeRun]
+  );
+
+  const resetToHome = useCallback(() => {
+    setPhase('home');
+    setPicks([]);
+    setRoundIndex(0);
+    setDraftRounds([]);
+    setRunSeed('');
+    setResult(null);
+    setDraftSubphase('spin');
+    setSpinGeneration(0);
+    setRespinsLeft(1);
+    setDailyBoard(loadDailyBoard(dateKey));
+  }, [dateKey]);
+
+  const playAgain = useCallback(() => {
+    if (mode === 'daily') return;
+    startGame(mode);
+  }, [mode, startGame]);
+
+  return {
+    phase,
+    mode,
+    picks,
+    roundIndex,
+    currentRound,
+    draftSubphase,
+    spinGeneration,
+    respinsLeft,
+    openRoles,
+    result,
+    dailyConstraint,
+    dailyPercentile,
+    dailyPlayed,
+    dailyBoard,
+    dailyBoardEntryId,
+    dateKey,
+    runSeed,
+    startGame,
+    finishSpin,
+    respinTeam,
+    selectPlayer,
+    resetToHome,
+    playAgain,
+  };
+}

@@ -71,6 +71,24 @@ function ringLine(ringWon: boolean, perfectSeason: boolean): string {
   return 'No Ring';
 }
 
+function buildRunTitle(
+  result: Omit<SimulationResult, 'seasonSummary' | 'explanation' | 'footer' | 'historicalComparison'>,
+  picks: DraftPick[]
+): string {
+  const { ringWon, perfectSeason, majorWins, champsOutcome, rosterScore, failureStage } = result;
+  const careerRings = picks.reduce((sum, pick) => sum + pick.player.rings, 0);
+  const avgOvr = rosterAvgOvr(picks);
+
+  if (perfectSeason) return 'Dynasty';
+  if (ringWon) return careerRings >= 6 ? 'Dynasty Core' : 'Champion';
+  if (champsOutcome === 'grand_final') return 'Heartbreak';
+  if (majorWins >= 2 && rosterScore >= 88) return 'Contender';
+  if (majorWins === 0 && avgOvr >= 92 && rosterScore >= 86) return 'Ringless Superteam';
+  if (failureStage === 'major1' || (majorWins === 0 && rosterScore < 78)) return 'First Round Exit';
+  if (majorWins >= 1) return 'Playoff Push';
+  return 'Grind Season';
+}
+
 function buildNarrative(
   record: string,
   majorWins: number,
@@ -219,6 +237,7 @@ export function buildSeasonSummary(
   const majorsWon = majorsVerb(majorWins);
   const champs = champsLine(champsOutcome, ringWon);
   const ring = ringLine(ringWon, perfectSeason);
+  const runTitle = buildRunTitle(result, picks);
 
   const headline = `${record} · ${majorWins > 0 ? `Won ${majors}` : '0 Majors'} · ${ring}`;
   const tagline = perfectSeason
@@ -239,6 +258,7 @@ export function buildSeasonSummary(
     majorsLine: majors,
     champsLine: champs,
     ringLine: ring,
+    runTitle,
     headline,
     tagline,
     narrative,

@@ -4,6 +4,7 @@ import type { HistoricalTeam, SlotSpin } from '@/golden-road/core/types';
 import { DRAFT_PHASE_LABELS } from '@/golden-road/core/types';
 import type { DraftTournamentPhase } from '@/golden-road/core/types';
 import { SPIN_TICK_MS } from '@/golden-road/core/constants';
+import { hapticTap } from '@/utils/haptics';
 
 interface TeamSlotMachineProps {
   phase: DraftTournamentPhase;
@@ -44,6 +45,7 @@ export function TeamSlotMachine({
 
       if (tick >= totalTicks) {
         clearInterval(interval);
+        hapticTap();
         setDone(true);
         setTimeout(() => {
           if (!cancelled) onCompleteRef.current();
@@ -60,9 +62,7 @@ export function TeamSlotMachine({
   const year = spin.yearSequence[index] ?? team.year;
   const name = spin.nameSequence[index] ?? team.name;
   const region = spin.regionSequence[index] ?? team.region;
-  const progress = spin.yearSequence.length
-    ? (index + 1) / spin.yearSequence.length
-    : 1;
+  const progress = spin.yearSequence.length ? (index + 1) / spin.yearSequence.length : 1;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[54dvh] px-5 pb-10">
@@ -71,62 +71,37 @@ export function TeamSlotMachine({
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <p className="text-[10px] uppercase tracking-[0.45em] text-gold/80 mb-2 font-medium">
+        <p className="text-[10px] uppercase tracking-[0.45em] text-kb-gold/80 mb-2 font-semibold">
           {DRAFT_PHASE_LABELS[phase]}
         </p>
-        <p className="text-white/45 text-sm">Rolling your team…</p>
+        <p className="text-kb-mute text-sm">Rolling your team…</p>
       </motion.div>
 
       <div className="w-full max-w-sm grid grid-cols-2 gap-3 mb-6">
         <Reel label="Year" value={String(year)} highlight={done} accent={team.accent} />
-        <Reel
-          label="Team"
-          value={name}
-          sub={region}
-          highlight={done}
-          accent={team.accent}
-          small
-        />
+        <Reel label="Team" value={name} sub={region} highlight={done} accent={team.accent} small />
       </div>
 
-      <motion.div
-        className="w-full max-w-sm rounded-2xl border px-5 py-5 text-center relative overflow-hidden"
-        style={{
-          borderColor: done ? `${team.accent}55` : 'rgba(255,255,255,0.08)',
-          background: done
-            ? `linear-gradient(180deg, ${team.accent}18 0%, rgba(255,255,255,0.02) 100%)`
-            : 'rgba(255,255,255,0.02)',
-          boxShadow: done ? `0 16px 48px ${team.accent}15` : undefined,
-        }}
-        animate={done ? { scale: [1, 1.015, 1] } : {}}
-        transition={{ duration: 0.4 }}
-      >
+      <div className="kb-card w-full max-w-sm rounded-[var(--kb-r-lg)] border border-kb-border px-5 py-5">
         {!done ? (
-          <div className="h-1.5 rounded-full bg-white/8 overflow-hidden">
+          <div className="h-1.5 rounded-full bg-kb-glass-strong overflow-hidden">
             <motion.div
-              className="h-full rounded-full"
-              style={{
-                width: `${progress * 100}%`,
-                background: `linear-gradient(90deg, ${team.accent}, #c9a227)`,
-              }}
+              className="h-full rounded-full bg-kb-gold/70"
+              style={{ width: `${progress * 100}%` }}
             />
           </div>
         ) : (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <p className="text-[10px] uppercase tracking-widest text-white/35 mb-1">
-              You landed
-            </p>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
+            <p className="text-[10px] uppercase tracking-widest text-kb-mute mb-1">You landed</p>
             <p className="text-base font-medium" style={{ color: team.accent }}>
               {team.tagline}
             </p>
           </motion.div>
         )}
-      </motion.div>
+      </div>
 
       {!done && (
-        <p className="text-white/25 text-[10px] uppercase tracking-[0.35em] mt-8 animate-pulse">
-          Spinning
-        </p>
+        <p className="text-kb-faint text-[10px] uppercase tracking-[0.35em] mt-8">Spinning</p>
       )}
     </div>
   );
@@ -149,32 +124,31 @@ function Reel({
 }) {
   return (
     <motion.div
-      className="rounded-2xl border p-4 text-center overflow-hidden min-h-[112px] flex flex-col justify-center relative"
+      className={`kb-card rounded-[var(--kb-r-md)] border p-4 text-center overflow-hidden min-h-[112px] flex flex-col justify-center ${
+        highlight ? 'border-kb-gold/35' : 'border-kb-border'
+      }`}
       style={{
-        borderColor: highlight ? `${accent}60` : 'rgba(255,255,255,0.08)',
         background: highlight
-          ? `linear-gradient(160deg, ${accent}22 0%, rgba(255,255,255,0.02) 100%)`
-          : 'rgba(255,255,255,0.02)',
-        boxShadow: highlight ? `0 0 32px ${accent}12, inset 0 1px 0 ${accent}20` : undefined,
+          ? `linear-gradient(160deg, ${accent}18 0%, var(--kb-bg-card) 100%)`
+          : undefined,
+        borderColor: highlight ? `${accent}40` : undefined,
       }}
     >
-      <p className="text-[9px] uppercase tracking-[0.3em] text-white/30 mb-2 font-medium">
-        {label}
-      </p>
+      <p className="text-[9px] uppercase tracking-[0.3em] text-kb-mute mb-2 font-semibold">{label}</p>
       <motion.p
         key={value}
-        initial={{ opacity: 0.3, y: 10, filter: 'blur(2px)' }}
-        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        initial={{ opacity: 0.3, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.05 }}
         className={`font-display tracking-wide leading-tight ${
           small ? 'text-[0.95rem] px-1' : 'text-4xl'
-        } ${highlight ? '' : 'text-white/85'}`}
+        } ${highlight ? '' : 'text-kb-fg'}`}
         style={highlight ? { color: accent } : undefined}
       >
         {value}
       </motion.p>
       {sub && (
-        <p className="text-[10px] text-white/30 mt-1.5 uppercase tracking-wider">{sub}</p>
+        <p className="text-[10px] text-kb-faint mt-1.5 uppercase tracking-wider">{sub}</p>
       )}
     </motion.div>
   );

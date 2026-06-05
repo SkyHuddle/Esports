@@ -11,13 +11,13 @@ import { parseGolTeamRoster, GOL_TEAM_STATS_URL } from './parse-gol-team-html';
 import { parseGolPlayerHtml, GOL_PLAYER_SEASON_URL } from './parse-gol-html';
 import { computeRatingsFromTeamYear } from './compute-ratings';
 import { yearToGolSeason } from './gol-season';
-import { accomplishmentFromTagline } from '../../src/data/teams/accomplishment';
+import { accomplishmentFromTagline } from '../../src/golden-road/data/teams/accomplishment';
 import type { GolIdMap, GolTeamYearStats, TeamYearRatingsBundle } from './types';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const TEAM_IDS_PATH = join(__dir, 'gol-teams.json');
 const PLAYER_IDS_PATH = join(__dir, 'gol-ids.json');
-const OUT_DIR = join(__dir, '../../src/data/generated');
+const OUT_DIR = join(__dir, '../../src/golden-road/data/generated');
 const OUT_FILE = join(OUT_DIR, 'team-year-ratings.json');
 const UA = 'GoldenRoad-ETL/1.0';
 const DELAY_MS = Number(process.env.GOL_ETL_DELAY_MS ?? 550);

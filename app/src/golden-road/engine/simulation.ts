@@ -16,7 +16,12 @@ import {
 } from '@/golden-road/core/constants';
 import { computeRosterScore, countTitles, stageTeamPower } from './ratings';
 import { playersForSimulation } from './player-power';
-import { enrichStageWithRun } from './tournament-run';
+import {
+  enrichStageWithRun,
+  buildSkippedStageRun,
+  bracketSeriesRecord,
+  formatSeriesRecord,
+} from './tournament-run';
 import { hashString } from './draft';
 
 function mulberry32(seed: number) {
@@ -46,14 +51,15 @@ function stagePowerJitter(
   avgClutch: number,
   rng: () => number
 ): number {
-  const spread = stage === 'worlds' ? 2 + avgClutch / 30 : 1.5;
+  const spread =
+    stage === 'worlds' ? 2.5 + avgClutch / 28 : stage === 'msi' ? 2 : 1.5;
   return power + (rng() - 0.5) * spread;
 }
 
 function worldsFailureDetail(passChance: number, rng: () => number): WorldsFailureDetail {
-  if (passChance < 0.15 || rng() < 0.35) return 'groups';
-  if (passChance < 0.3 || rng() < 0.5) return 'quarterfinals';
-  if (passChance < 0.45 || rng() < 0.65) return 'semifinals';
+  if (passChance < 0.12 || rng() < 0.3) return 'groups';
+  if (passChance < 0.28 || rng() < 0.45) return 'quarterfinals';
+  if (passChance < 0.42 || rng() < 0.6) return 'semifinals';
   return 'finals';
 }
 
@@ -62,10 +68,10 @@ function failureMessage(stage: StageId, detail?: WorldsFailureDetail): string {
     return WORLDS_FAILURE_LABELS[detail];
   }
   const labels: Record<StageId, string> = {
-    spring: 'Failed at Spring Split',
-    msi: 'Failed at MSI',
-    summer: 'Failed at Summer Split',
-    worlds: 'Failed at Worlds',
+    spring: 'Lost Spring Split',
+    msi: 'Lost at MSI',
+    summer: 'Lost Summer Split',
+    worlds: 'Lost at Worlds',
   };
   return labels[stage];
 }
@@ -95,12 +101,22 @@ export function simulateGoldenRoad(
   const avgClutch =
     simPlayers.reduce((s, p) => s + p.ratings.clutch, 0) / simPlayers.length;
   const stages: StageOutcome[] = [];
-  const stageOrder: StageId[] = ['spring', 'msi', 'summer', 'worlds'];
-  let failed = false;
+  let roadBroken = false;
   let failureStage: StageId | null = null;
   let failureMessageText = '';
 
-  for (const stage of stageOrder) {
+  for (const stage of STAGES) {
+    if (roadBroken) {
+      stages.push({
+        stage,
+        passed: false,
+        roll: 0,
+        threshold: 0,
+        run: buildSkippedStageRun(),
+      });
+      continue;
+    }
+
     const stagePower = stageTeamPower(simPlayers, stage);
     const effectivePower = stagePowerJitter(stagePower, stage, avgClutch, rng);
     const passChance = stagePassProbability(effectivePower, stage);
@@ -120,14 +136,16 @@ export function simulateGoldenRoad(
     };
     stages.push(enrichStageWithRun(base, rng));
 
-    if (!passed && !failed) {
-      failed = true;
+    if (!passed) {
+      roadBroken = true;
       failureStage = stage;
       failureMessageText = failureMessage(stage, detail);
     }
   }
 
   const goldenRoad = stages.every((s) => s.passed);
+  const series = bracketSeriesRecord(stages);
+  const stagesCleared = stages.filter((s) => s.passed).length;
 
   return {
     stages,
@@ -136,6 +154,10 @@ export function simulateGoldenRoad(
     failureMessage: goldenRoad ? 'Golden Road Achieved' : failureMessageText,
     rosterScore: Math.round(rosterScore * 10) / 10,
     titleCounts,
+    seriesWins: series.wins,
+    seriesLosses: series.losses,
+    seriesRecord: formatSeriesRecord(series.wins, series.losses),
+    stageRecord: `${stagesCleared}/${STAGES.length}`,
   };
 }
 

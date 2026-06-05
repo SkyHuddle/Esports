@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * Fetches Gol.gg career stats and writes app/src/data/generated/gol-ratings.json
+ * Fetches Gol.gg career stats and writes app/src/golden-road/data/generated/gol-ratings.json
  * Run: npm run etl:gol
  */
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -13,7 +13,7 @@ import type { GolIdMap, GolRatingsBundle } from './types';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const IDS_PATH = join(__dir, 'gol-ids.json');
-const OUT_DIR = join(__dir, '../../src/data/generated');
+const OUT_DIR = join(__dir, '../../src/golden-road/data/generated');
 const OUT_FILE = join(OUT_DIR, 'gol-ratings.json');
 const UA = 'GoldenRoad-ETL/1.0 (+https://github.com/SkyHuddle/Sky)';
 const DELAY_MS = Number(process.env.GOL_ETL_DELAY_MS ?? 700);

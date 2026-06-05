@@ -138,11 +138,17 @@ export interface SimulationResult {
   failureMessage: string;
   rosterScore: number;
   titleCounts: { domestic: number; msi: number; worlds: number };
+  /** Series wins/losses across tournament beats (20 max) */
+  seriesWins: number;
+  seriesLosses: number;
+  seriesRecord: string;
+  /** Stages cleared out of 4 (e.g. 0/4) */
+  stageRecord: string;
 }
 
 export type GameMode = 'free' | 'daily';
 
-export type GamePhase = 'home' | 'draft' | 'ready' | 'simulation' | 'result';
+export type GamePhase = 'home' | 'draft' | 'simulation' | 'result';
 
 export type DraftSubphase = 'spin' | 'pick';
 

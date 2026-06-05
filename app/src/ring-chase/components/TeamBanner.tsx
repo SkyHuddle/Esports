@@ -24,18 +24,13 @@ export function TeamBanner({ team, rosterAvgOvr }: TeamBannerProps) {
       key={team.id}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="kb-card rounded-[var(--kb-r-lg)] p-5 mb-5 relative overflow-hidden"
+      className="kb-card rounded-[var(--kb-r-lg)] p-5 mb-5"
       style={{
-        background: `linear-gradient(135deg, ${team.accent}24 0%, ${team.accent}08 45%, rgba(255,255,255,0.02) 100%)`,
-        border: `1px solid ${team.accent}35`,
-        boxShadow: `0 12px 40px ${team.accent}12`,
+        background: `linear-gradient(135deg, ${team.accent}16 0%, var(--kb-bg-card) 100%)`,
+        border: `1px solid ${team.accent}28`,
       }}
     >
-      <div
-        className="absolute -right-10 -top-10 w-36 h-36 rounded-full blur-3xl opacity-25 pointer-events-none"
-        style={{ backgroundColor: team.accent }}
-      />
-      <div className="relative z-10 flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-2 flex-wrap">
             <p className="text-[10px] uppercase tracking-[0.25em] text-kb-mute">

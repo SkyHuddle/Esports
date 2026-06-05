@@ -7,7 +7,7 @@ const __dir = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dir, '../..');
 
 function parsePlayersFromSource(file: string): AppPlayerRef[] {
-  const text = readFileSync(join(ROOT, 'src/data/players', file), 'utf8');
+  const text = readFileSync(join(ROOT, 'src/golden-road/data/players', file), 'utf8');
   const players: AppPlayerRef[] = [];
   const re = /p\('([^']+)',\s*'([^']+)',\s*'([^']+)'/g;
   let m: RegExpExecArray | null;

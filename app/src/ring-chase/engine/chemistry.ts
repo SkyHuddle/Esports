@@ -1,4 +1,5 @@
 import type { CodPlayer, ChemistryReport, DraftPick } from '../core/types';
+import { simulationPlayers } from './card-context';
 
 function hasLeader(players: CodPlayer[]): boolean {
   return players.some((p) => p.ratings.leadership >= 88);
@@ -27,7 +28,8 @@ export function evaluateChemistry(picks: DraftPick[]): ChemistryReport {
   const modifiers: string[] = [];
   const issues: string[] = [];
   let score = 0;
-  const players = picks.map((p) => p.player);
+  const simById = new Map(simulationPlayers(picks).map((p) => [p.id, p]));
+  const players = picks.map((p) => simById.get(p.player.id) ?? p.player);
 
   if (picks.length < 4) {
     return { score: -5, modifiers, issues: ['Incomplete roster'] };

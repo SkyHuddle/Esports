@@ -4,9 +4,7 @@ import { STAGES, STAGE_LABELS } from '@/golden-road/core/types';
 import { Check } from 'lucide-react';
 
 interface GoldenRoadPathProps {
-  /** 0–4 completed stages (simulation) or 0–5 draft picks */
   completedCount?: number;
-  /** Highlight current index (draft round or sim stage) */
   activeIndex?: number;
   variant?: 'compact' | 'full';
   className?: string;
@@ -43,36 +41,27 @@ export function GoldenRoadPath({
               <div
                 className={cn(
                   'w-full max-w-[52px] h-1.5 rounded-full transition-all duration-300',
-                  done && 'bg-gold shadow-sm shadow-gold/40',
-                  active && !done && 'bg-gold/50 ring-2 ring-gold/25',
-                  future && 'bg-white/8',
-                  !done && !active && !future && 'bg-white/12'
+                  done && 'bg-kb-gold shadow-sm shadow-kb-gold/30',
+                  active && !done && 'bg-kb-gold/50 ring-1 ring-kb-gold/20',
+                  future && 'bg-kb-hairline',
+                  !done && !active && !future && 'bg-kb-glass-strong'
                 )}
               />
               {variant === 'full' && (
                 <span
                   className={cn(
                     'text-[8px] uppercase tracking-wider font-medium truncate w-full text-center',
-                    done && 'text-gold',
-                    active && !done && 'text-gold/80',
-                    !done && !active && 'text-white/25'
+                    done && 'text-kb-gold',
+                    active && !done && 'text-kb-gold/80',
+                    !done && !active && 'text-kb-faint'
                   )}
                 >
-                  {done ? (
-                    <Check className="w-3 h-3 mx-auto text-gold" />
-                  ) : (
-                    STAGE_SHORT[stage]
-                  )}
+                  {done ? <Check className="w-3 h-3 mx-auto text-kb-gold" /> : STAGE_SHORT[stage]}
                 </span>
               )}
             </div>
             {i < STAGES.length - 1 && (
-              <div
-                className={cn(
-                  'w-1 h-px shrink-0 mx-0.5',
-                  done ? 'bg-gold/40' : 'bg-white/6'
-                )}
-              />
+              <div className={cn('w-1 h-px shrink-0 mx-0.5', done ? 'bg-kb-gold/40' : 'bg-kb-hairline')} />
             )}
           </div>
         );
@@ -83,7 +72,7 @@ export function GoldenRoadPath({
 
 export function GoldenRoadPathLabels({ className }: { className?: string }) {
   return (
-    <div className={cn('flex justify-between text-[9px] text-white/30 uppercase tracking-wider', className)}>
+    <div className={cn('flex justify-between text-[9px] text-kb-faint uppercase tracking-wider', className)}>
       {STAGES.map((s) => (
         <span key={s} className="flex-1 text-center">
           {STAGE_LABELS[s].split(' ')[0]}

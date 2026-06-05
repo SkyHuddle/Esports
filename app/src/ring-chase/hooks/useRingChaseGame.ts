@@ -77,7 +77,7 @@ export function useRingChaseGame() {
       const seed = createRunSeed(gameMode, gameMode === 'daily' ? dateKey : undefined);
       const rounds =
         gameMode === 'daily'
-          ? generateDailyRounds(dateKey, teamFilter)
+          ? generateDailyRounds(dateKey, teamFilter, constraint)
           : generateDraftRounds(seed, teamFilter);
 
       setMode(gameMode);
@@ -169,7 +169,7 @@ export function useRingChaseGame() {
       const round = draftRounds[roundIndex];
       if (!round || !openRoles.includes(naturalRole)) return;
       if (picks.some((p) => p.player.id === player.id)) return;
-      if (mode === 'daily' && !playerPassesFilter(player, picks, dailyConstraint)) return;
+      if (mode === 'daily' && !playerPassesFilter(player, picks, dailyConstraint, round.team)) return;
 
       const pick: DraftPick = {
         roundIndex,

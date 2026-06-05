@@ -28,6 +28,7 @@ export function ResultScreen({
   result,
   mode,
   dailyTitle,
+  dailyPercentile,
   dailyBoardEntryId,
   onPlayAgain,
   onHome,
@@ -85,7 +86,7 @@ export function ResultScreen({
             <p className="text-[10px] uppercase tracking-[0.4em] text-kb-mute mb-4">Your season</p>
             <motion.p
               className={`font-display text-7xl sm:text-8xl tabular-nums leading-none ${
-                result.ringWon || result.perfectSeason ? 'text-ring-gold glow-ring' : 'text-kb-fg'
+                result.ringWon || result.perfectSeason ? 'text-ring-gold' : 'text-kb-fg'
               }`}
               initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -94,6 +95,9 @@ export function ResultScreen({
               {result.seasonSummary.record}
             </motion.p>
             <p className="text-kb-soft text-sm mt-4 text-center max-w-[260px]">
+              {result.seasonSummary.runTitle}
+            </p>
+            <p className="text-kb-mute text-xs mt-2 text-center max-w-[280px]">
               {result.seasonSummary.headline}
             </p>
           </motion.div>
@@ -103,9 +107,18 @@ export function ResultScreen({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <p className="text-center text-[10px] uppercase tracking-[0.35em] text-kb-mute mb-4">
+            <p className="text-center text-[10px] uppercase tracking-[0.35em] text-kb-mute mb-1">
               Final standings
             </p>
+            <p className="text-center font-display text-xl text-kb-gold mb-4">
+              {result.seasonSummary.runTitle}
+            </p>
+
+            {mode === 'daily' && dailyPercentile != null && (
+              <p className="text-center text-sm text-kb-soft mb-4">
+                Top <span className="text-kb-gold font-display tabular-nums">{dailyPercentile}%</span> of today&apos;s runs
+              </p>
+            )}
 
             <div className="mb-5">
               <SeasonRecordCard

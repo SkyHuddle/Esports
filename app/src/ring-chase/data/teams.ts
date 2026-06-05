@@ -50,7 +50,7 @@ export const COD_TEAMS: HistoricalCodTeam[] = [
   team('faze-2021', 'Atlanta FaZe', 2021, 'Cold War', 'Dynasty peak', 'NA', ['simp', 'abezy', 'cellium', 'arcitys'], {
     teamRating: 97, placement: 'Champs Winner', majorWins: 4, champsPlacement: 'Champion', isChampsWinner: true, accent: '#FF0000', tier: 'legendary',
   }),
-  team('empire-2020', 'Dallas Empire', 2020, 'Modern Warfare', 'CDL inaugural champs', 'NA', ['shotzzy', 'huke', 'illeY', 'clayster', 'crimsix-emp'], {
+  team('empire-2020', 'Dallas Empire', 2020, 'Modern Warfare', 'CDL inaugural champs', 'NA', ['shotzzy', 'huke', 'illeY', 'clayster'], {
     teamRating: 94, placement: 'Champs Winner', majorWins: 2, champsPlacement: 'Champion', isChampsWinner: true, accent: '#0066CC', tier: 'legendary',
   }),
   team('eunited-2019', 'eUnited', 2019, 'Black Ops 4', 'Major winners', 'NA', ['silly', 'accuracy', 'abezy', 'sib'], {

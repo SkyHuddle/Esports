@@ -72,9 +72,9 @@ export const LOL_TEAMS_RAW: RawTeam[] = [
     name: 'SK Telecom T1',
     year: 2017,
     region: 'LCK',
-    tagline: 'Back-to-Back Worlds',
+    tagline: 'World Finalists',
     accent: '#C9A227',
-    roster: R('khan', 'blank', 'faker', 'bang', 'wolf'),
+    roster: R('huni', 'blank', 'faker', 'bang', 'wolf'),
   },
   {
     id: 'dk-2020',

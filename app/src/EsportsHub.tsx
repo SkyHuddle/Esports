@@ -20,18 +20,24 @@ const games = [
     accent: '#d4af37',
     live: true,
   },
+  {
+    id: 'major-run',
+    title: 'Major Run',
+    tagline: 'CS2 esports roster draft',
+    description: 'Draft five legends from iconic Major teams. Can your roster win it all?',
+    href: '/major-run',
+    accent: '#de9b35',
+    live: true,
+  },
 ];
 
 export default function EsportsHub() {
   return (
     <div className="min-h-[100dvh] bg-[#060608] text-[#e8e4d4] px-5 py-12">
       <div className="max-w-lg mx-auto">
-        <p className="text-[10px] uppercase tracking-[0.4em] text-[#c9a227]/80 mb-3 font-semibold">
-          SkyHuddle Esports
-        </p>
         <h1 className="font-display text-4xl tracking-tight mb-2">Draft games</h1>
         <p className="text-sm text-white/50 mb-10 leading-relaxed">
-          CoD and LoL esports roster builders — separate from the main portfolio site.
+          CoD, LoL, and CS roster builders — daily modes, share cards, and instant results.
         </p>
 
         <div className="space-y-4">

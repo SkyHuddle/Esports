@@ -31,8 +31,9 @@ export const ACCOMPLISHMENT_TUNING: Record<TeamYearAccomplishment, Accomplishmen
 export function accomplishmentFromTagline(tagline: string): TeamYearAccomplishment {
   const t = tagline.toLowerCase();
 
-  if (/world champion|back-to-back worlds/.test(t)) return 'worlds_champion';
+  if (/back-to-back-to-back|three.?peat|3.?peat/.test(t)) return 'worlds_champion';
   if (/world finalist/.test(t)) return 'worlds_finalist';
+  if (/world champion/.test(t)) return 'worlds_champion';
   if (/msi champion/.test(t)) return 'msi_champion';
   if (/world semifinal|worlds semifinal/.test(t)) return 'worlds_semis';
   if (/msi finalist|msi runners-up|msi runner-up/.test(t)) return 'msi_finalist';

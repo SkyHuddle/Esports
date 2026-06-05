@@ -25,7 +25,7 @@ export function HowItWorksModal({ onDismiss }: HowItWorksModalProps) {
         animate={{ y: 0, opacity: 1 }}
       >
         <p className="text-[10px] uppercase tracking-[0.35em] text-kb-gold/80 mb-2">How it works</p>
-        <h2 className="font-display text-2xl text-kb-fg mb-4">Three picks, one season</h2>
+        <h2 className="font-display text-2xl text-kb-fg mb-4">Four picks, one season</h2>
         <ol className="space-y-3 mb-6">
           {STEPS.map(({ n, text }) => (
             <li key={n} className="flex items-start gap-3">

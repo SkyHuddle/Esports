@@ -1,8 +1,6 @@
 # Esports Games
 
-CoD and LoL esports draft games — **Ring Chase** and **Golden Road**.
-
-Deployed separately from the [Skyler Camper portfolio](https://github.com/SkyHuddle/Sky).
+Viral esports draft games — **Ring Chase** (CoD), **Golden Road** (LoL), and **Major Run** (CS2).
 
 ## Routes
 
@@ -11,6 +9,7 @@ Deployed separately from the [Skyler Camper portfolio](https://github.com/SkyHud
 | `/` | Hub — pick a game |
 | `/ring-chase` | Ring Chase (CoD) |
 | `/golden-road` | Golden Road (LoL) |
+| `/major-run` | Major Run (CS2) |
 
 ## Development
 
@@ -20,9 +19,25 @@ npm install
 npm run dev
 ```
 
-## Validation (Ring Chase)
+## Build
+
+```bash
+cd app
+npm run build
+```
+
+## Validation
 
 ```bash
 cd app
 npm run validate:ring-chase
+npm run validate:major-run-hltv
+```
+
+## Major Run HLTV data
+
+```bash
+cd app
+npm run etl:hltv          # offline reference + estimated ratings
+npm run etl:hltv:live     # live HLTV scrape (run locally; may be blocked in CI)
 ```

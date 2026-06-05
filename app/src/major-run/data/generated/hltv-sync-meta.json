@@ -1,0 +1,11 @@
+{
+  "source": "hltv-reference+estimated",
+  "generatedAt": "2026-06-05T20:01:36.895Z",
+  "rosterEntryCount": 280,
+  "teamCount": 56,
+  "liveFetched": 0,
+  "cached": 0,
+  "reference": 47,
+  "estimated": 233,
+  "note": "Per team-year overlays keyed as teamYearId::playerId. Run etl:hltv:live to refresh from HLTV."
+}

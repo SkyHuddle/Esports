@@ -56,7 +56,7 @@ export function HomeScreen({
         <h1 className="font-display text-[3.25rem] sm:text-5xl text-kb-fg leading-[0.92]">
           Ring
           <br />
-          <span className="text-ring-gold glow-ring">Chase</span>
+          <span className="text-ring-gold">Chase</span>
         </h1>
 
         {!returning && (
@@ -72,7 +72,7 @@ export function HomeScreen({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.08, ease: easeOut }}
       >
-        <RingCtaButton onClick={onStartFree} variant="gold" className="h-14 animate-pulse-ring">
+        <RingCtaButton onClick={onStartFree} variant="gold" className="h-14">
           Run the Table
         </RingCtaButton>
 

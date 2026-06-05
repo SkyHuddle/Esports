@@ -53,7 +53,16 @@ export function getDailyConstraint(date: Date = new Date()): DailyConstraint {
 }
 
 export function getDateKey(date: Date = new Date()): string {
-  return date.toISOString().slice(0, 10);
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+export function getDailyChallengeNumber(date: Date = new Date()): number {
+  const start = new Date(date.getFullYear(), 0, 0);
+  const diff = date.getTime() - start.getTime();
+  return Math.floor(diff / 86400000);
 }
 
 /** Deterministic percentile from score (daily leaderboard mock until backend) */
@@ -72,4 +81,8 @@ export function orgConstraintViolated(
 
 export function isOnePerOrgDay(constraintId: string): boolean {
   return constraintId === 'one-per-org';
+}
+
+export function playerPassesFilter(player: Player, constraint: DailyConstraint): boolean {
+  return constraint.filter(player);
 }

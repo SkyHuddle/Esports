@@ -94,7 +94,7 @@ export function DraftScreen({
 
   return (
     <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto">
-      <header className="sticky top-0 z-20 px-5 pt-3 pb-3 kb-brand-bar">
+      <header className="sticky top-11 z-20 px-5 pt-3 pb-3 kb-brand-bar">
         <div className="flex items-center justify-between gap-2 mb-3">
           <button
             type="button"
@@ -146,7 +146,7 @@ export function DraftScreen({
 
             {isDaily && pickableCount === 0 && (
               <p className="text-sm text-kb-crimson/90 mb-4 rounded-[var(--kb-r-md)] border border-kb-crimson/20 bg-kb-crimson/10 px-4 py-3">
-                No eligible players for today&apos;s rule on this team. Respin or try Daily tomorrow.
+                No eligible players for today&apos;s rule on this team. Pick from another slot if you can, or exit and try tomorrow&apos;s daily.
               </p>
             )}
 

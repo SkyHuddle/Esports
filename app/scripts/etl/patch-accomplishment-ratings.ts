@@ -5,12 +5,12 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadAppTeams } from './load-app-teams';
 import { loadAppPlayers } from './load-app-players';
-import { accomplishmentFromTagline } from '../../src/data/teams/accomplishment';
+import { accomplishmentFromTagline } from '../../src/golden-road/data/teams/accomplishment';
 import { computeRatingsFromTeamYear } from './compute-ratings';
 import type { TeamYearRatingsBundle } from './types';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
-const OUT = join(__dir, '../../src/data/generated/team-year-ratings.json');
+const OUT = join(__dir, '../../src/golden-road/data/generated/team-year-ratings.json');
 
 const bundle = JSON.parse(readFileSync(OUT, 'utf8')) as TeamYearRatingsBundle;
 const teams = new Map(loadAppTeams().map((t) => [t.id, t]));

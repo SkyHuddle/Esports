@@ -1,4 +1,4 @@
-import type { PlayerRatings, Role } from '../../src/core/types';
+import type { PlayerRatings, Role } from '../../src/golden-road/core/types';
 
 export interface GolPlayerStats {
   golId: number;

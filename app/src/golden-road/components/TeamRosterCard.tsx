@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Sparkles } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import type { HistoricalTeam, Player, Role } from '@/golden-road/core/types';
 import { ROLE_LABELS } from '@/golden-road/core/types';
 import {
@@ -22,7 +22,6 @@ interface TeamRosterCardProps {
   onSelect: () => void;
   disabled?: boolean;
   roleTaken?: boolean;
-  recommended?: boolean;
 }
 
 export function TeamRosterCard({
@@ -32,7 +31,6 @@ export function TeamRosterCard({
   onSelect,
   disabled,
   roleTaken,
-  recommended,
 }: TeamRosterCardProps) {
   const [expanded, setExpanded] = useState(false);
   const kda = cardKda(player, team);
@@ -57,39 +55,22 @@ export function TeamRosterCard({
     <motion.div
       layout
       className={cn(
-        'relative w-full rounded-2xl overflow-hidden border transition-all duration-200',
-        recommended && !disabled
-          ? 'border-gold/45 ring-1 ring-gold/20 shadow-lg shadow-gold/10'
-          : 'border-white/[0.08]',
-        !disabled && !recommended && 'hover:border-white/18',
-        roleTaken && 'opacity-35',
-        disabled && 'opacity-40 pointer-events-none'
+        'kb-card relative w-full rounded-[var(--kb-r-md)] overflow-hidden transition-all duration-200',
+        disabled
+          ? 'border-kb-hairline opacity-40 pointer-events-none'
+          : 'border-kb-border hover:border-kb-border-strong',
+        roleTaken && 'opacity-35'
       )}
       style={{
-        background: recommended
-          ? `linear-gradient(135deg, ${player.accent}18 0%, rgba(201,162,39,0.06) 40%, rgba(6,6,8,0.95) 100%)`
-          : `linear-gradient(135deg, ${player.accent}12 0%, rgba(255,255,255,0.02) 50%, rgba(6,6,8,0.95) 100%)`,
+        background: `linear-gradient(135deg, ${player.accent}12 0%, var(--kb-glass) 50%, var(--kb-bg-card) 100%)`,
       }}
     >
-      {recommended && !disabled && (
-        <div className="absolute top-0 right-0 z-10">
-          <span className="inline-flex items-center gap-1 rounded-bl-xl rounded-tr-2xl bg-gold/90 text-black text-[9px] font-bold uppercase tracking-wider px-2.5 py-1">
-            <Sparkles className="w-3 h-3" />
-            Best pick
-          </span>
-        </div>
-      )}
-
-      <div
-        className="absolute inset-y-0 left-0 w-1 rounded-l-2xl"
-        style={{ backgroundColor: player.accent }}
-      />
-
       <button
         type="button"
         onClick={onSelect}
         disabled={disabled}
-        className="w-full text-left p-3.5 pl-4 pt-3.5 active:scale-[0.99] transition-transform"
+        style={{ touchAction: 'manipulation' }}
+        className="w-full text-left p-3.5 pl-4 active:scale-[0.99] transition-transform"
       >
         <div className="flex items-center gap-3">
           <div
@@ -126,29 +107,20 @@ export function TeamRosterCard({
                 {tier}
               </span>
             </div>
-            <p className="font-display text-lg text-white truncate leading-tight tracking-wide">
-              {player.name}
-            </p>
-            <p className="text-[10px] text-white/35 mt-0.5">
+            <p className="font-display text-lg text-kb-fg truncate leading-tight">{player.name}</p>
+            <p className="text-[10px] text-kb-mute mt-0.5">
               {team.year} {team.name}
             </p>
           </div>
 
           <div className="text-right shrink-0 pl-1">
-            <p className="text-[9px] uppercase tracking-[0.2em] text-white/30 mb-0.5">
-              OVR
-            </p>
-            <span
-              className="font-display text-3xl tabular-nums leading-none"
-              style={{ color: ovrColor }}
-            >
+            <p className="text-[9px] uppercase tracking-[0.2em] text-kb-faint mb-0.5">OVR</p>
+            <span className="font-display text-3xl tabular-nums leading-none" style={{ color: ovrColor }}>
               {confidence === 'estimated' ? '~' : ''}
               {overall}
             </span>
             {kda != null && (
-              <p className="text-[10px] text-white/30 tabular-nums mt-1">
-                {formatKda(kda)} KDA
-              </p>
+              <p className="text-[10px] text-kb-faint tabular-nums mt-1">{formatKda(kda)} KDA</p>
             )}
           </div>
         </div>
@@ -159,11 +131,9 @@ export function TeamRosterCard({
           <button
             type="button"
             onClick={handleExpand}
-            className="flex items-center gap-1 text-[10px] text-white/35 hover:text-white/55 transition-colors"
+            className="flex items-center gap-1 text-[10px] text-kb-mute hover:text-kb-soft transition-colors"
           >
-            <ChevronDown
-              className={cn('w-3 h-3 transition-transform', expanded && 'rotate-180')}
-            />
+            <ChevronDown className={cn('w-3 h-3 transition-transform', expanded && 'rotate-180')} />
             {expanded ? 'Hide stats' : 'View stats'}
           </button>
           <AnimatePresence>
@@ -206,58 +176,49 @@ export function TeamBanner({ team, rosterAvgOvr }: TeamBannerProps) {
       key={team.id}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl p-5 mb-4 relative overflow-hidden"
+      className="kb-card rounded-[var(--kb-r-lg)] p-5 mb-4"
       style={{
-        background: `linear-gradient(135deg, ${team.accent}22 0%, ${team.accent}06 45%, rgba(255,255,255,0.02) 100%)`,
-        border: `1px solid ${team.accent}35`,
-        boxShadow: `0 12px 40px ${team.accent}10`,
+        background: `linear-gradient(135deg, ${team.accent}16 0%, var(--kb-bg-card) 100%)`,
+        border: `1px solid ${team.accent}28`,
       }}
     >
-      <div
-        className="absolute -right-10 -top-10 w-36 h-36 rounded-full blur-3xl opacity-25 pointer-events-none"
-        style={{ backgroundColor: team.accent }}
-      />
-      <div className="relative z-10 flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-2 flex-wrap">
-            <p className="text-[10px] uppercase tracking-[0.25em] text-white/45">
+            <p className="text-[10px] uppercase tracking-[0.25em] text-kb-mute">
               {team.region} · {team.year}
             </p>
             <span
               className={`text-[9px] uppercase px-2 py-0.5 rounded-full font-medium ${
                 team.tier === 'weak'
-                  ? 'bg-red-500/15 text-red-300/90 border border-red-500/20'
+                  ? 'bg-kb-crimson/12 text-kb-crimson border border-kb-crimson/25'
                   : team.tier === 'legend'
-                    ? 'bg-gold/15 text-gold border border-gold/25'
-                    : 'bg-white/8 text-white/55 border border-white/10'
+                    ? 'bg-kb-gold/15 text-kb-gold border border-kb-gold/25'
+                    : 'bg-kb-glass text-kb-soft border border-kb-border'
               }`}
             >
               {TIER_BADGE[team.tier]}
             </span>
             {accomplishmentLabel && (
-              <span className="text-[9px] uppercase px-2 py-0.5 rounded-full font-medium bg-gold/10 text-gold/90 border border-gold/20">
+              <span className="text-[9px] uppercase px-2 py-0.5 rounded-full font-medium bg-kb-gold/10 text-kb-gold/90 border border-kb-gold/20">
                 {accomplishmentLabel}
               </span>
             )}
           </div>
-          <h3 className="font-display text-3xl text-white tracking-wide leading-none truncate">
-            {team.name}
-          </h3>
+          <h3 className="font-display text-3xl text-kb-fg leading-none truncate">{team.name}</h3>
           <p className="text-sm mt-2 font-medium" style={{ color: team.accent }}>
             {team.tagline}
           </p>
           {rosterAvgOvr != null && rosterAvgOvr > 0 && (
-            <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-black/20 border border-white/[0.06] px-2.5 py-1.5">
-              <span className="text-[10px] uppercase tracking-wider text-white/35">
-                Roster avg
-              </span>
+            <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-kb-glass border border-kb-border px-2.5 py-1.5">
+              <span className="text-[10px] uppercase tracking-wider text-kb-mute">Roster avg</span>
               <span
                 className="font-display text-xl tabular-nums leading-none"
                 style={{ color: ovrAccentColor(rosterAvgOvr) }}
               >
                 {Math.round(rosterAvgOvr)}
               </span>
-              <span className="text-[10px] text-white/25">OVR</span>
+              <span className="text-[10px] text-kb-faint">OVR</span>
             </div>
           )}
         </div>

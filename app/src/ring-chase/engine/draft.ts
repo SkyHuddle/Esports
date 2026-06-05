@@ -1,6 +1,10 @@
-import type { DraftRound, HistoricalCodTeam, SlotSpin } from '../core/types';
+import type { DraftRound, DailyConstraint, HistoricalCodTeam, SlotSpin } from '../core/types';
 import { DRAFT_ROUNDS, TIER_WEIGHTS, SPIN_DURATION_MS, SPIN_TICK_MS } from '../core/constants';
 import { getTeamPool, resolveTeamRoster } from '../data';
+import {
+  dailyTeamSetHasFlexOption,
+  teamHasPickablePlayer,
+} from '../features/daily';
 import { hashString, mulberry32 } from './rng';
 
 export function createRunSeed(mode: 'free' | 'daily', dateKey?: string): string {
@@ -146,17 +150,55 @@ export function getDailyTeams(dateKey: string): string[] {
 
 export function generateDailyRounds(
   dateKey: string,
-  filter?: (team: HistoricalCodTeam) => boolean
+  filter?: (team: HistoricalCodTeam) => boolean,
+  constraint?: DailyConstraint
 ): DraftRound[] {
   const seed = `ring-daily-${dateKey}`;
   const rng = mulberry32(hashString(seed));
-  const rounds: DraftRound[] = [];
   const pool = getTeamPool(filter);
+  const rounds: DraftRound[] = [];
+  const usedTeamIds = new Set<string>();
+  const preferredIds = getDailyTeams(dateKey);
+
+  const pickFallbackTeam = (): HistoricalCodTeam | null => {
+    const available = pool.filter((t) => !usedTeamIds.has(t.id));
+    if (available.length === 0) return null;
+    return weightedPick(available, rng);
+  };
+
+  const acceptTeam = (team: HistoricalCodTeam): boolean => {
+    if (usedTeamIds.has(team.id)) return false;
+    const roster = resolveTeamRoster(team);
+    if (constraint && !teamHasPickablePlayer(team, roster, constraint)) return false;
+    return true;
+  };
 
   for (let i = 0; i < DRAFT_ROUNDS; i++) {
-    const teamIds = getDailyTeams(dateKey);
-    const team = pool.find((t) => t.id === teamIds[i]);
-    if (!team) continue;
+    let team =
+      pool.find((t) => t.id === preferredIds[i] && acceptTeam(t)) ??
+      pickFallbackTeam();
+
+    if (!team) break;
+
+    if (
+      constraint?.id === 'flex-required' &&
+      i === DRAFT_ROUNDS - 1 &&
+      rounds.length === DRAFT_ROUNDS - 1
+    ) {
+      const draftTeams = [...rounds.map((r) => r.team), team];
+      if (!dailyTeamSetHasFlexOption(draftTeams, resolveTeamRoster)) {
+        const flexTeam = pool.find(
+          (t) =>
+            !usedTeamIds.has(t.id) &&
+            resolveTeamRoster(t).some(
+              (p) => p.primaryRole === 'flex' || p.secondaryRole === 'flex'
+            )
+        );
+        if (flexTeam) team = flexTeam;
+      }
+    }
+
+    usedTeamIds.add(team.id);
     rounds.push(buildRound(i, team, seed, rng));
   }
 

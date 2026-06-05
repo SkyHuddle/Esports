@@ -1,7 +1,7 @@
-import type { PlayerRatings, Role } from '../../src/core/types';
+import type { PlayerRatings, Role } from '../../src/golden-road/core/types';
 import type { GolPlayerStats, GolTeamYearStats } from './types';
-import type { TeamYearAccomplishment } from '../../src/data/teams/accomplishment';
-import { applyAccomplishmentToRatings } from '../../src/data/teams/accomplishment-apply';
+import type { TeamYearAccomplishment } from '../../src/golden-road/data/teams/accomplishment';
+import { applyAccomplishmentToRatings } from '../../src/golden-road/data/teams/accomplishment-apply';
 
 function clamp(n: number, min: number, max: number): number {
   return Math.round(Math.min(max, Math.max(min, n)));

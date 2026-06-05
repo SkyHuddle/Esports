@@ -177,6 +177,7 @@ export interface SeasonSummary {
   majorsLine: string;
   champsLine: string;
   ringLine: string;
+  runTitle: string;
   headline: string;
   tagline: string;
   narrative: string;

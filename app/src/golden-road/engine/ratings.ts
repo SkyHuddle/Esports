@@ -61,13 +61,18 @@ export function stageTeamPower(
   const intl = stage === 'msi' || stage === 'worlds' ? avg('international') : avg('consistency');
   const clutch = stage === 'worlds' ? avg('clutch') : 0;
 
+  const avgMsiTitles =
+    players.reduce((s, p) => s + p.msiTitles, 0) / players.length;
   const avgWorldTitles =
     players.reduce((s, p) => s + p.worldTitles, 0) / players.length;
+
+  const msiBoost =
+    stage === 'msi' ? Math.min(2, avgMsiTitles * 0.55) : 0;
   const worldsBoost =
-    stage === 'worlds' ? Math.min(2.5, avgWorldTitles * 0.45) : 0;
+    stage === 'worlds' ? Math.min(1.5, avgWorldTitles * 0.35) : 0;
 
   const raw =
-    base * 0.4 + focused * 0.35 + intl * 0.2 + clutch * 0.05 + worldsBoost;
+    base * 0.4 + focused * 0.35 + intl * 0.2 + clutch * 0.05 + msiBoost + worldsBoost;
   return compressStagePower(raw);
 }
 

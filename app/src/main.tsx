@@ -10,6 +10,9 @@ const RingChaseApp = lazy(() =>
 const GoldenRoadApp = lazy(() =>
   import('./golden-road/GoldenRoadApp').then((m) => ({ default: m.GoldenRoadApp }))
 );
+const MajorRunApp = lazy(() =>
+  import('./major-run/MajorRunApp').then((m) => ({ default: m.MajorRunApp }))
+);
 
 function RouteLoader() {
   return (
@@ -29,6 +32,8 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/ring-chase/*" element={<RingChaseApp />} />
           <Route path="/golden-road" element={<GoldenRoadApp />} />
           <Route path="/golden-road/*" element={<GoldenRoadApp />} />
+          <Route path="/major-run" element={<MajorRunApp />} />
+          <Route path="/major-run/*" element={<MajorRunApp />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

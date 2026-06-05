@@ -25,20 +25,9 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
     return (
       <div
         ref={ref}
-        className="w-full max-w-[360px] rounded-[var(--kb-r-xl)] overflow-hidden relative border border-kb-border kb-card"
-        style={{
-          background: 'linear-gradient(165deg, var(--kb-bg-elev) 0%, var(--kb-bg-deep) 42%, #141008 100%)',
-        }}
+        className="w-full max-w-[360px] rounded-[var(--kb-r-xl)] overflow-hidden border border-kb-border kb-card"
       >
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'radial-gradient(ellipse 90% 55% at 50% -5%, rgba(232, 184, 66, 0.2) 0%, transparent 65%)',
-          }}
-        />
-
-        <div className="relative z-10 p-5 flex flex-col gap-4">
+        <div className="p-5 flex flex-col gap-4">
           <div className="text-center">
             <p className="text-[10px] uppercase tracking-[0.35em] text-kb-gold/70 mb-1 font-semibold">
               Ring Chase {mode === 'daily' && dailyTitle ? `· ${dailyTitle}` : ''}
@@ -58,9 +47,12 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
                 : 'border-kb-border bg-kb-glass'
             }`}
           >
+            <p className="text-[10px] uppercase tracking-[0.3em] text-kb-gold/70 mb-2">
+              {result.seasonSummary.runTitle}
+            </p>
             <p
               className={`font-display text-4xl tabular-nums leading-none ${
-                isWin ? 'text-ring-gold glow-ring' : 'text-kb-fg'
+                isWin ? 'text-ring-gold' : 'text-kb-fg'
               }`}
             >
               {result.seasonSummary.record}

@@ -9,6 +9,7 @@ import { loadStats, loadDailyResult } from './features/storage';
 import { getDateKey } from './features/daily';
 import { hasSeenOnboarding, markOnboardingSeen, recordVisit } from './features/onboarding';
 import type { DailyRunResult, PlayerStats } from './core/types';
+import { HubBackLink } from '@/components/kb/HubBackLink';
 
 const easeOut: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -36,12 +37,20 @@ export function RingChaseApp() {
     setShowOnboarding(false);
   };
 
+  const confirmLeaveHub = game.phase === 'draft' && game.picks.length > 0;
+
   return (
     <div className="kb-root min-h-[100dvh] antialiased relative overflow-x-hidden">
       <div className="fixed inset-0 mesh-bg-ring pointer-events-none z-0" />
       <div className="fixed inset-0 grid-bg pointer-events-none z-0 opacity-50" />
 
-      <div className="relative z-10">
+      <div className="fixed top-0 left-0 right-0 z-40 kb-brand-bar">
+        <div className="max-w-lg mx-auto px-5 py-2.5">
+          <HubBackLink confirmIf={confirmLeaveHub} />
+        </div>
+      </div>
+
+      <div className="relative z-10 pt-11">
         <AnimatePresence mode="wait">
           {game.phase === 'home' && (
             <motion.div

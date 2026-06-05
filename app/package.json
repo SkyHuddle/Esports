@@ -20,7 +20,10 @@
     "etl:gol": "tsx scripts/etl/run-gol-etl.ts",
     "etl:gol:teams:resolve": "tsx scripts/etl/resolve-gol-teams.ts",
     "etl:gol:team-year": "tsx scripts/etl/run-team-year-etl.ts",
-    "etl:gol:patch-accomplishments": "tsx scripts/etl/patch-accomplishment-ratings.ts"
+    "etl:gol:patch-accomplishments": "tsx scripts/etl/patch-accomplishment-ratings.ts",
+    "etl:hltv": "tsx scripts/etl/major-run-hltv-sync.ts --offline",
+    "etl:hltv:live": "tsx scripts/etl/major-run-hltv-sync.ts --live --max-live=400",
+    "validate:major-run-hltv": "tsx scripts/etl/validate-major-run-hltv.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -46,6 +49,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "hltv": "^3.5.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.19",
     "tailwindcss-animate": "^1.0.7",

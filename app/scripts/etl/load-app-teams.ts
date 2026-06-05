@@ -15,7 +15,7 @@ export interface AppTeamRef {
 }
 
 function parseTeamsFromFile(file: string): AppTeamRef[] {
-  const text = readFileSync(join(ROOT, 'src/data/teams', file), 'utf8');
+  const text = readFileSync(join(ROOT, 'src/golden-road/data/teams', file), 'utf8');
   const teams: AppTeamRef[] = [];
   const blockRe =
     /\{\s*id:\s*'([^']+)',\s*esport:\s*'lol',\s*name:\s*'([^']+)',\s*year:\s*(\d+),\s*region:\s*'([^']+)',\s*tagline:\s*'([^']+)'[\s\S]*?roster:\s*R\(([^)]+)\)/g;

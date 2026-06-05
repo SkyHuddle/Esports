@@ -58,16 +58,15 @@ export function PlayerCard({
       className={cn(
         'kb-card relative w-full rounded-[var(--kb-r-md)] overflow-hidden transition-all duration-200',
         selected
-          ? 'border-kb-gold/50 ring-1 ring-kb-gold/25 shadow-lg'
+          ? 'border-kb-gold/45 ring-1 ring-kb-gold/20'
           : disabled
             ? 'border-kb-hairline opacity-40'
             : 'border-kb-border hover:border-kb-border-strong'
       )}
       style={{
         background: selected
-          ? `linear-gradient(135deg, ${team.accent}20 0%, rgba(232,184,66,0.08) 40%, var(--kb-bg-card) 100%)`
-          : `linear-gradient(135deg, ${team.accent}14 0%, var(--kb-glass) 50%, var(--kb-bg-card) 100%)`,
-        boxShadow: selected ? 'var(--kb-shadow-gold)' : undefined,
+          ? `linear-gradient(135deg, ${team.accent}16 0%, var(--kb-bg-card) 100%)`
+          : `linear-gradient(135deg, ${team.accent}10 0%, var(--kb-bg-card) 100%)`,
       }}
     >
       <div
