@@ -111,8 +111,8 @@ export function DraftScreen({
           >
             ← Exit
           </button>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-kb-mute">
-            Pick {picks.length + 1} / 5
+          <span className="text-[10px] uppercase tracking-[0.2em] text-kb-gold/70 font-medium">
+            {DRAFT_PHASE_LABELS[currentRound.phase]}
           </span>
           {!isDaily && respinsLeft > 0 && draftSubphase === 'pick' ? (
             <button
@@ -264,21 +264,35 @@ function TournamentProgress({
 }) {
   return (
     <div className="mb-1">
-      <p className="text-[10px] uppercase tracking-[0.2em] text-kb-gold/70 mb-2 font-medium">
-        {DRAFT_PHASE_LABELS[currentPhase]}
-      </p>
-      <div className="flex gap-1.5">
+      <div className="flex gap-1">
         {DRAFT_PHASE_ORDER.map((phase, i) => (
-          <div
-            key={phase}
-            className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-              i < completedCount
-                ? 'bg-kb-gold shadow-sm shadow-kb-gold/30'
-                : phase === currentPhase
-                  ? 'bg-kb-gold/50 ring-1 ring-kb-gold/20'
-                  : 'bg-kb-hairline'
-            }`}
-          />
+          <div key={phase} className="flex-1">
+            <div
+              className="h-1 rounded-full transition-all duration-300"
+              style={{
+                background:
+                  i < completedCount
+                    ? 'var(--kb-gold)'
+                    : phase === currentPhase
+                      ? 'rgba(232, 184, 66, 0.45)'
+                      : 'rgba(255, 255, 255, 0.1)',
+              }}
+            />
+            <p
+              className="text-[7px] mt-1 text-center truncate transition-colors duration-200"
+              style={{
+                color:
+                  i < completedCount
+                    ? 'var(--kb-gold)'
+                    : phase === currentPhase
+                      ? 'rgba(232, 184, 66, 0.7)'
+                      : 'rgba(255,255,255,0.2)',
+                fontWeight: phase === currentPhase ? 600 : 400,
+              }}
+            >
+              {phase === 'worlds_groups' ? 'Groups' : phase === 'worlds_playoffs' ? 'Worlds' : DRAFT_PHASE_LABELS[phase].split(' ')[0]}
+            </p>
+          </div>
         ))}
       </div>
     </div>

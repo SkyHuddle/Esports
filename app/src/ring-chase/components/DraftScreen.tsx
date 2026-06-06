@@ -103,9 +103,7 @@ export function DraftScreen({
           >
             ← Exit
           </button>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-kb-mute">
-            {picks.length + 1} / 4
-          </span>
+          <RoundTrack total={4} current={picks.length} />
           {!isDaily && respinsLeft > 0 && draftSubphase === 'pick' ? (
             <button
               type="button"
@@ -276,6 +274,35 @@ function RosterSlots({
           Draft avg <span className="text-kb-gold/80 font-display tabular-nums">{teamOvr}</span> OVR
         </p>
       )}
+    </div>
+  );
+}
+
+function RoundTrack({ total, current }: { total: number; current: number }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      {Array.from({ length: total }).map((_, i) => {
+        const done = i < current;
+        const active = i === current;
+        return (
+          <div
+            key={i}
+            className="rounded-full transition-all duration-300"
+            style={{
+              width: done ? 20 : active ? 16 : 10,
+              height: 4,
+              background: done
+                ? 'var(--kb-gold)'
+                : active
+                  ? 'rgba(232, 184, 66, 0.5)'
+                  : 'rgba(255, 255, 255, 0.12)',
+            }}
+          />
+        );
+      })}
+      <span className="text-[9px] text-kb-faint ml-0.5 font-medium tabular-nums">
+        {current + 1}/{total}
+      </span>
     </div>
   );
 }
