@@ -55,6 +55,10 @@
   --kb-steel: #7fa5c9;     /* Major Run / CS2 identity */
   --kb-steel-dim: rgba(127, 165, 201, 0.10);
 
+  --kb-coral: #c45c5c;     /* Champions Run / VALORANT identity */
+  --kb-coral-dim: rgba(196, 92, 92, 0.10);
+  --kb-coral-hot: #d97070; /* coral hover only */
+
   /* Semantic */
   --kb-crimson: #e8485c;   /* error / blocked / exit */
   --kb-green: #34c98a;     /* victory / win streak */

@@ -23,7 +23,9 @@
     "etl:gol:patch-accomplishments": "tsx scripts/etl/patch-accomplishment-ratings.ts",
     "etl:hltv": "tsx scripts/etl/major-run-hltv-sync.ts --offline",
     "etl:hltv:live": "tsx scripts/etl/major-run-hltv-sync.ts --live --max-live=400",
-    "validate:major-run-hltv": "tsx scripts/etl/validate-major-run-hltv.ts"
+    "validate:major-run-hltv": "tsx scripts/etl/validate-major-run-hltv.ts",
+    "validate:champions-run": "tsx scripts/etl/validate-champions-run-data.ts",
+    "test:champions-run": "tsx src/champions-run/engine/__tests__/champions-run.test.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -280,7 +280,8 @@
    * ---------------------------------------------------------------- */
   .mesh-bg-ring,
   .mesh-bg-cs,
-  .mesh-bg-lol {
+  .mesh-bg-lol,
+  .mesh-bg-valorant {
     background-color: var(--kb-bg-deep);
     background-image:
       radial-gradient(120% 60% at 50% -10%, rgba(255, 255, 255, 0.022) 0%, transparent 60%);

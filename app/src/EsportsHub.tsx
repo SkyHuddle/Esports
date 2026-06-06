@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Flame, Trophy, Crosshair, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Flame, Trophy, Crosshair, Target, ArrowRight, ArrowUpRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 interface Game {
@@ -48,6 +48,17 @@ const games: Game[] = [
     accent: '#7fa5c9',
     Icon: Crosshair,
   },
+  {
+    id: 'champions-run',
+    title: 'Champions Run',
+    sport: 'VALORANT',
+    tagline: 'Draft five pros. Build a Champions roster.',
+    picks: 5,
+    prize: 'Champions trophy',
+    href: '/champions-run',
+    accent: '#c45c5c',
+    Icon: Target,
+  },
 ];
 
 const steps: { n: string; title: string; body: string }[] = [
@@ -85,7 +96,7 @@ export default function EsportsHub() {
             <span style={{ color: 'var(--kb-gold)' }}>Share the result.</span>
           </h1>
           <p className="text-kb-soft text-[15px] leading-relaxed mt-6 max-w-[44ch]">
-            Three daily draft games across CoD, League, and CS2. One perfect
+            Four daily draft games across CoD, League, CS2, and VALORANT. One perfect
             lineup, one result worth arguing about, one screenshot.
           </p>
           <a
@@ -102,7 +113,7 @@ export default function EsportsHub() {
         {/* Games */}
         <section id="games" className="px-5 max-w-2xl mx-auto w-full scroll-mt-6">
           <div className="flex items-baseline justify-between border-b border-kb-hairline pb-2.5 mb-3">
-            <h2 className="kb-label text-kb-soft">Three games</h2>
+            <h2 className="kb-label text-kb-soft">Four games</h2>
             <span className="kb-label text-kb-faint">Pick one</span>
           </div>
 
