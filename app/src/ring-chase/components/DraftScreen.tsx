@@ -113,7 +113,7 @@ export function DraftScreen({
             <button
               type="button"
               onClick={handleRespin}
-              className="shrink-0 border border-kb-border rounded-lg px-3 py-1.5 text-xs text-kb-fg-mute hover:text-kb-soft transition-colors"
+              className="shrink-0 border border-kb-border rounded-lg px-3 py-1.5 text-xs text-kb-fg-mute hover:text-kb-soft hover:border-kb-border-strong active:scale-[0.98] transition-all"
             >
               Respin · {respinsLeft}
             </button>
@@ -153,6 +153,27 @@ export function DraftScreen({
               </p>
             )}
 
+            <div className="flex items-center justify-between gap-2 mb-3 mt-1">
+              <p className="text-[10px] uppercase tracking-[0.22em] text-kb-mute font-semibold shrink-0">
+                Open slots
+              </p>
+              <div className="flex flex-wrap items-center justify-end gap-1.5 min-w-0">
+                {SLOT_ORDER.filter((slot) => openRoles.includes(slot)).map((slot) => (
+                  <span
+                    key={slot}
+                    className="text-[9px] uppercase tracking-[0.16em] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
+                    style={{
+                      background: 'rgba(232,184,66,0.10)',
+                      color: 'var(--kb-gold)',
+                      border: '1px solid rgba(232,184,66,0.24)',
+                    }}
+                  >
+                    {SLOT_LABELS[slot]}
+                  </span>
+                ))}
+              </div>
+            </div>
+
             <div className="space-y-2.5">
               {rosterEntries.map(({ player, teamRole, roleTaken, dailyBlocked, blocked }) => (
                 <div key={player.id}>
@@ -189,14 +210,17 @@ export function DraftScreen({
 
       {confirmExit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-5 bg-black/70 backdrop-blur-sm">
-          <div className="kb-card w-full max-w-xs rounded-[var(--kb-r-lg)] p-5 border border-kb-border">
+          <div
+            className="kb-card w-full max-w-xs rounded-[var(--kb-r-lg)] p-5 border border-kb-border"
+            style={{ boxShadow: 'var(--kb-shadow-pop)' }}
+          >
             <p className="font-display text-lg text-kb-fg mb-2">Leave this run?</p>
             <p className="text-sm text-kb-mute mb-5">Your draft progress won&apos;t be saved.</p>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setConfirmExit(false)}
-                className="flex-1 py-3 rounded-full border border-kb-border text-sm text-kb-soft"
+                className="flex-1 py-3 rounded-full border border-kb-border text-sm text-kb-soft hover:border-kb-border-strong hover:bg-kb-fill active:scale-[0.99] transition-all"
               >
                 Stay
               </button>
@@ -206,7 +230,7 @@ export function DraftScreen({
                   setConfirmExit(false);
                   onBack();
                 }}
-                className="flex-1 py-3 rounded-full bg-kb-crimson/20 border border-kb-crimson/30 text-sm text-kb-crimson"
+                className="flex-1 py-3 rounded-full bg-kb-crimson/20 border border-kb-crimson/30 text-sm text-kb-crimson hover:bg-kb-crimson/25 active:scale-[0.99] transition-all"
               >
                 Leave
               </button>
@@ -251,8 +275,8 @@ function RosterSlots({
                     : 'border-kb-hairline opacity-40'
               }`}
             >
-              <p className="text-[7px] uppercase tracking-wider text-kb-mute font-semibold">
-                {SLOT_LABELS[slot].slice(0, 3)}
+              <p className="text-[8px] uppercase tracking-[0.08em] text-kb-mute font-semibold whitespace-nowrap leading-none">
+                {SLOT_LABELS[slot]}
               </p>
               {pick ? (
                 <div className="mx-auto mt-1 w-7 h-7 rounded-md overflow-hidden flex items-center justify-center bg-kb-glass border border-kb-hairline">

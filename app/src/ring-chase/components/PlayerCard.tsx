@@ -87,7 +87,7 @@ export function PlayerCard({
       >
         <div className="flex items-center gap-3.5">
           <div
-            className={`${compact ? 'w-8 h-8 rounded-lg' : 'w-12 h-12 rounded-xl'} flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden`}
+            className={`${compact ? 'w-12 h-12 rounded-xl' : 'w-14 h-14 rounded-xl'} flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden`}
             style={{
               background: `color-mix(in srgb, ${accent} 16%, var(--kb-bg-inset))`,
               border: `1px solid color-mix(in srgb, ${accent} 34%, transparent)`,
@@ -109,10 +109,14 @@ export function PlayerCard({
             )}
             {compact && (
               <span
-                className="inline-block text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded mb-0.5"
-                style={{ background: 'var(--kb-glass)', color: 'var(--kb-fg-mute)', border: '1px solid var(--kb-border)' }}
+                className="inline-block text-[9px] uppercase tracking-[0.18em] font-semibold px-1.5 py-0.5 rounded mb-1 whitespace-nowrap"
+                style={{
+                  background: 'rgba(232,184,66,0.10)',
+                  color: 'var(--kb-gold)',
+                  border: '1px solid rgba(232,184,66,0.24)',
+                }}
               >
-                {SLOT_LABELS[teamSlot].slice(0, 3)}
+                {SLOT_LABELS[teamSlot]}
               </span>
             )}
             <p className="font-display text-lg text-kb-fg truncate leading-tight">{player.gamertag}</p>

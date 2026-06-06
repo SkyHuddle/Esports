@@ -88,9 +88,9 @@ export function ResultScreen({
               className={`font-display text-7xl sm:text-8xl tabular-nums leading-none ${
                 result.ringWon || result.perfectSeason ? 'text-ring-gold' : 'text-kb-fg'
               }`}
-              initial={{ scale: 0.85, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             >
               {result.seasonSummary.record}
             </motion.p>

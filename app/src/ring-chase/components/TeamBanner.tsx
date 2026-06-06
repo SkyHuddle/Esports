@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Trophy } from 'lucide-react';
 import type { HistoricalCodTeam } from '../core/types';
 import { cardCredentials } from '../engine/card-context';
+import { TeamCrest } from './TeamCrest';
 
 const TIER_LABEL: Record<HistoricalCodTeam['tier'], string> = {
   legendary: 'Dynasty',
@@ -30,7 +31,8 @@ export function TeamBanner({ team, rosterAvgOvr }: TeamBannerProps) {
         border: `1px solid color-mix(in srgb, ${team.accent} 26%, transparent)`,
       }}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start gap-3.5">
+        <TeamCrest teamName={team.teamName} accent={team.accent} size={52} className="mt-0.5" />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-2 flex-wrap">
             <p className="text-[10px] uppercase tracking-[0.25em] text-kb-mute">

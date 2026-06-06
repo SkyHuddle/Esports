@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import type { SlotSpin } from '../core/types';
 import { SPIN_TICK_MS } from '../core/constants';
+import { getAllTeams } from '../data';
 import { hapticTap } from '../utils/haptics';
+import { TeamCrest } from './TeamCrest';
 
 interface TeamSlotMachineProps {
   spin: SlotSpin;
@@ -21,6 +23,13 @@ export function TeamSlotMachine({
   const [index, setIndex] = useState(0);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
+  const reduceMotion = useReducedMotion();
+
+  const accentByName = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const t of getAllTeams()) map.set(t.teamName, t.accent);
+    return map;
+  }, []);
 
   useEffect(() => {
     setIndex(0);
@@ -58,19 +67,35 @@ export function TeamSlotMachine({
   const year = spin.yearSequence[index] ?? spin.yearSequence.at(-1) ?? '';
   const name = spin.nameSequence[index] ?? '';
   const region = spin.regionSequence[index] ?? '';
+  const accent = (name && accentByName.get(name)) || 'var(--kb-fg-mute)';
   const progress = spin.yearSequence.length ? (index + 1) / spin.yearSequence.length : 1;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[54dvh] px-5 pb-10 relative w-full">
       <motion.div
-        className="text-center mb-10"
+        className="text-center mb-7"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <p className="text-[10px] uppercase tracking-[0.45em] text-kb-gold/80 mb-2 font-semibold">
+        <p className="text-[10px] uppercase tracking-[0.45em] text-kb-gold/80 mb-1.5 font-semibold">
           Pick {pickNumber} of 4
         </p>
+        <p className="text-[9px] uppercase tracking-[0.3em] text-kb-mute font-semibold">
+          Rolling a team-year
+        </p>
       </motion.div>
+
+      {/* Flashing team crest — cycles logos in sync with the names */}
+      <div className="mb-7 flex items-center justify-center" style={{ minHeight: 84 }}>
+        <motion.div
+          key={reduceMotion ? 'crest' : `${name}:${index}`}
+          initial={reduceMotion ? false : { opacity: 0.45, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.07, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <TeamCrest teamName={name || '?'} accent={accent} size={84} />
+        </motion.div>
+      </div>
 
       <div className="w-full max-w-sm grid grid-cols-2 gap-3 mb-6">
         <Reel label="Year" value={String(year)} />
@@ -78,10 +103,16 @@ export function TeamSlotMachine({
       </div>
 
       <div className="kb-card w-full max-w-sm rounded-[var(--kb-r-lg)] border border-kb-border px-5 py-5">
-        <div className="h-1.5 rounded-full bg-kb-glass-strong overflow-hidden">
+        <div
+          className="h-1.5 rounded-full overflow-hidden"
+          style={{ background: 'var(--kb-bg-inset)' }}
+        >
           <motion.div
-            className="h-full rounded-full bg-kb-border"
-            style={{ width: `${progress * 100}%` }}
+            className="h-full rounded-full"
+            style={{
+              width: `${progress * 100}%`,
+              background: 'color-mix(in srgb, var(--kb-gold) 65%, transparent)',
+            }}
           />
         </div>
       </div>
