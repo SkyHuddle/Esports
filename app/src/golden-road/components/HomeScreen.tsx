@@ -49,7 +49,7 @@ export function HomeScreen({
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-kb-gold/25 bg-kb-gold/10 mb-6">
             <span className="w-2 h-2 rounded-full bg-kb-amber kb-live-dot" />
             <span className="text-[10px] uppercase tracking-[0.22em] text-kb-soft font-semibold">
-              LoL esports · Golden Era
+              LoL · Golden Road
             </span>
           </div>
         )}
@@ -200,7 +200,7 @@ function StatsGrid({ stats }: { stats: PlayerStats }) {
           <p className="font-display text-xl text-kb-fg tabular-nums kb-mono !normal-case !tracking-normal">
             {value}
           </p>
-          <p className="text-[8px] uppercase tracking-wider text-kb-faint mt-1">{label}</p>
+          <p className="text-[11px] uppercase tracking-wider text-kb-faint mt-1">{label}</p>
         </KbCard>
       ))}
     </div>

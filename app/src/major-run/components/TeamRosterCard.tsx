@@ -140,56 +140,48 @@ export function TeamBanner({ team, rosterAvgOvr }: TeamBannerProps) {
       animate={{ opacity: 1, y: 0 }}
       className="kb-card rounded-[var(--kb-r-lg)] p-5 mb-4"
       style={{
-        background: `linear-gradient(135deg, ${team.accent}16 0%, var(--kb-bg-card) 100%)`,
-        border: `1px solid ${team.accent}28`,
+        background: `linear-gradient(135deg, ${team.accent}14 0%, var(--kb-bg-card) 100%)`,
+        border: `1px solid ${team.accent}26`,
       }}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2 mb-2 flex-wrap">
-            <p className="text-[10px] uppercase tracking-[0.25em] text-kb-mute">
-              {team.region} · {team.season}
-            </p>
-            <span
-              className={`text-[9px] uppercase px-2 py-0.5 rounded-full font-medium ${
-                team.tier === 'underdog'
-                  ? 'bg-kb-crimson/12 text-kb-crimson border border-kb-crimson/25'
-                  : team.tier === 'legendary'
-                    ? 'bg-kb-gold/15 text-kb-gold border border-kb-gold/25'
-                    : 'bg-kb-glass text-kb-soft border border-kb-border'
-              }`}
-            >
-              {TIER_BADGE[team.tier]}
-            </span>
-            {team.isMajorWinner && (
-              <span className="text-[9px] uppercase px-2 py-0.5 rounded-full font-medium bg-kb-gold/10 text-kb-gold/90 border border-kb-gold/20">
-                Major Winner
-              </span>
-            )}
-          </div>
-          <h3 className="font-display text-3xl text-kb-fg leading-none truncate">{team.teamName}</h3>
-          <p className="text-sm mt-2 font-medium" style={{ color: team.accent }}>
-            {team.tagline}
+      <div className="min-w-0">
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <p className="text-[10px] uppercase tracking-[0.25em] text-kb-mute">
+            {team.region} · {team.season}
           </p>
-          {rosterAvgOvr != null && rosterAvgOvr > 0 && (
-            <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-kb-glass border border-kb-border px-2.5 py-1.5">
-              <span className="text-[10px] uppercase tracking-wider text-kb-mute">Roster avg</span>
-              <span
-                className="font-display text-xl tabular-nums leading-none"
-                style={{ color: ovrAccent(rosterAvgOvr) }}
-              >
-                {Math.round(rosterAvgOvr)}
-              </span>
-              <span className="text-[10px] text-kb-faint">OVR</span>
-            </div>
+          <span
+            className={`text-[9px] uppercase px-2 py-0.5 rounded-full font-medium ${
+              team.tier === 'underdog'
+                ? 'bg-kb-crimson/12 text-kb-crimson border border-kb-crimson/25'
+                : team.tier === 'legendary'
+                  ? 'bg-kb-gold/15 text-kb-gold border border-kb-gold/25'
+                  : 'bg-kb-glass text-kb-soft border border-kb-border'
+            }`}
+          >
+            {TIER_BADGE[team.tier]}
+          </span>
+          {team.isMajorWinner && (
+            <span className="text-[9px] uppercase px-2 py-0.5 rounded-full font-medium bg-kb-gold/10 text-kb-gold/90 border border-kb-gold/20">
+              Major Winner
+            </span>
           )}
         </div>
-        <span
-          className="text-4xl font-display tabular-nums shrink-0 opacity-90"
-          style={{ color: team.accent }}
-        >
-          {team.season}
-        </span>
+        <h3 className="font-display text-3xl text-kb-fg leading-none truncate">{team.teamName}</h3>
+        <p className="text-sm mt-1.5 font-medium" style={{ color: team.accent }}>
+          {team.tagline}
+        </p>
+        {rosterAvgOvr != null && rosterAvgOvr > 0 && (
+          <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-kb-glass border border-kb-border px-2.5 py-1.5">
+            <span className="text-[10px] uppercase tracking-wider text-kb-mute">Avg</span>
+            <span
+              className="font-display text-xl tabular-nums leading-none"
+              style={{ color: ovrAccent(rosterAvgOvr) }}
+            >
+              {Math.round(rosterAvgOvr)}
+            </span>
+            <span className="text-[10px] text-kb-faint">OVR</span>
+          </div>
+        )}
       </div>
     </motion.div>
   );

@@ -57,7 +57,7 @@ export function ResultScreen({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Golden Era',
+          title: 'Golden Road',
           text: mode === 'daily' ? formatDailyShareLine(result) : text,
         });
         return;
@@ -107,20 +107,18 @@ export function ResultScreen({
             animate={{ opacity: 1, y: 0 }}
           >
             <p className="text-center text-[10px] uppercase tracking-[0.35em] text-kb-mute mb-1">
-              Final standings
+              Golden Road
             </p>
-            <p className="text-center font-display text-xl text-kb-gold mb-4">{summary.runTitle}</p>
+            <p className="text-center font-display text-2xl text-kb-fg mb-1">{summary.record}</p>
+            <p className="text-center text-sm text-kb-gold mb-5">{summary.runTitle}</p>
 
             <div className="mb-5">
               <GoldenRoadSummaryCard result={result} />
             </div>
 
-            <div ref={cardRef} className="flex justify-center">
+            <div ref={cardRef} className="flex justify-center mb-2">
               <ShareCard picks={orderedPicks} result={result} mode={mode} dailyTitle={dailyTitle} />
             </div>
-            <p className="text-center text-kb-faint text-xs mt-4">
-              Screenshot to share on X, Reddit, or Discord
-            </p>
 
             {mode === 'daily' && dailyPercentile != null && (
               <motion.div className="mt-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -129,7 +127,7 @@ export function ResultScreen({
             )}
 
             <motion.div className="space-y-2.5 mt-8">
-              <RingCtaButton onClick={handleShare} variant="glass">
+              <RingCtaButton onClick={handleShare} variant="amber">
                 Share Result
               </RingCtaButton>
               {mode === 'free' ? (
@@ -138,7 +136,7 @@ export function ResultScreen({
                 </RingCtaButton>
               ) : (
                 <p className="text-center text-[11px] text-kb-mute py-2">
-                  Daily locked — one official attempt per day
+                  Daily locked — one run per day
                 </p>
               )}
               <button

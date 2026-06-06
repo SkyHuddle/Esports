@@ -26,18 +26,23 @@ export function TeamBanner({ team, rosterAvgOvr }: TeamBannerProps) {
       animate={{ opacity: 1, y: 0 }}
       className="kb-card rounded-[var(--kb-r-lg)] p-5 mb-5"
       style={{
-        background: `linear-gradient(135deg, ${team.accent}16 0%, var(--kb-bg-card) 100%)`,
-        border: `1px solid ${team.accent}28`,
+        background: `linear-gradient(135deg, ${team.accent}14 0%, var(--kb-bg-card) 100%)`,
+        border: `1px solid ${team.accent}26`,
       }}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-2 flex-wrap">
             <p className="text-[10px] uppercase tracking-[0.25em] text-kb-mute">
-              {team.region} · {team.gameTitle}
+              {team.region} · {team.gameTitle} · {team.season}
             </p>
+          </div>
+          <div className="flex items-baseline gap-2.5 mb-1 flex-wrap">
+            <h3 className="font-display text-2xl sm:text-3xl text-kb-fg tracking-wide leading-none truncate">
+              {team.teamName}
+            </h3>
             <span
-              className={`text-[9px] uppercase px-2 py-0.5 rounded-full font-medium ${
+              className={`text-[9px] uppercase px-2 py-0.5 rounded-full font-medium shrink-0 ${
                 team.tier === 'legendary'
                   ? 'bg-ring-gold/15 text-ring-gold border border-ring-gold/25'
                   : team.tier === 'underdog'
@@ -48,22 +53,19 @@ export function TeamBanner({ team, rosterAvgOvr }: TeamBannerProps) {
               {TIER_LABEL[team.tier]}
             </span>
             {creds.ringsThisYear > 0 && (
-              <span className="inline-flex items-center gap-1 text-[9px] uppercase px-2 py-0.5 rounded-full font-medium bg-ring-gold/10 text-ring-gold/90 border border-ring-gold/20">
+              <span className="inline-flex items-center gap-1 text-[9px] uppercase px-2 py-0.5 rounded-full font-medium bg-ring-gold/10 text-ring-gold/90 border border-ring-gold/20 shrink-0">
                 <Trophy className="w-3 h-3" />
                 Ring
               </span>
             )}
           </div>
-          <h3 className="font-display text-2xl sm:text-3xl text-kb-fg tracking-wide leading-none truncate">
-            {team.teamName}
-          </h3>
-          <p className="text-sm mt-2 font-medium" style={{ color: team.accent }}>
+          <p className="text-sm font-medium" style={{ color: team.accent }}>
             {team.eventContext}
           </p>
-          <p className="text-[10px] text-kb-mute mt-1">{creds.detail}</p>
+          <p className="text-[10px] text-kb-mute mt-0.5">{creds.detail}</p>
           {rosterAvgOvr != null && rosterAvgOvr > 0 && (
-            <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-kb-deep/50 border border-kb-border px-2.5 py-1.5">
-              <span className="text-[10px] uppercase tracking-wider text-kb-mute">Card avg</span>
+            <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-kb-glass border border-kb-border px-2.5 py-1.5">
+              <span className="text-[10px] uppercase tracking-wider text-kb-mute">Avg</span>
               <span className="font-display text-xl tabular-nums leading-none text-kb-gold">
                 {Math.round(rosterAvgOvr)}
               </span>
@@ -71,12 +73,6 @@ export function TeamBanner({ team, rosterAvgOvr }: TeamBannerProps) {
             </div>
           )}
         </div>
-        <span
-          className="text-4xl font-display tabular-nums shrink-0 opacity-90"
-          style={{ color: team.accent }}
-        >
-          {team.season}
-        </span>
       </div>
     </motion.div>
   );

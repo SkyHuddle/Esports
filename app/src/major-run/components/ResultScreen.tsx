@@ -107,9 +107,12 @@ export function ResultScreen({
             animate={{ opacity: 1, y: 0 }}
           >
             <p className="text-center text-[10px] uppercase tracking-[0.35em] text-kb-mute mb-1">
-              Final standings
+              Major Run
             </p>
-            <p className="text-center font-display text-xl text-kb-gold mb-4">
+            <p className="text-center font-display text-2xl text-kb-fg mb-1">
+              {result.majorSummary.record}
+            </p>
+            <p className="text-center text-sm text-kb-gold mb-5">
               {result.majorSummary.runTitle}
             </p>
 
@@ -129,12 +132,9 @@ export function ResultScreen({
               </p>
             )}
 
-            <div ref={cardRef} className="flex justify-center">
+            <div ref={cardRef} className="flex justify-center mb-2">
               <ShareCard picks={picks} result={result} mode={mode} dailyTitle={dailyTitle} />
             </div>
-            <p className="text-center text-kb-faint text-xs mt-4">
-              Screenshot to share on X, Reddit, or Discord
-            </p>
 
             {mode === 'daily' && dailyBoard.length > 0 && (
               <motion.div className="mt-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -146,7 +146,7 @@ export function ResultScreen({
             )}
 
             <motion.div className="space-y-2.5 mt-8">
-              <KbCtaButton onClick={handleShare} variant="glass">
+              <KbCtaButton onClick={handleShare} variant="amber">
                 Share Result
               </KbCtaButton>
               {mode === 'free' ? (
@@ -155,7 +155,7 @@ export function ResultScreen({
                 </KbCtaButton>
               ) : (
                 <p className="text-center text-[11px] text-kb-mute py-2">
-                  Daily locked — one official attempt per day
+                  Daily locked — one run per day
                 </p>
               )}
               <button

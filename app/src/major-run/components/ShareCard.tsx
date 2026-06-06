@@ -128,7 +128,7 @@ function StatBlock({
 }) {
   return (
     <div className="min-w-0">
-      <p className="text-[8px] uppercase tracking-wider text-kb-mute">{label}</p>
+      <p className="text-[10px] uppercase tracking-wider text-kb-mute">{label}</p>
       <p
         className={`font-display text-sm mt-0.5 tabular-nums truncate ${
           highlight ? 'text-kb-gold' : 'text-kb-fg'

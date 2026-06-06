@@ -30,7 +30,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
         <div className="p-5 flex flex-col gap-4">
         <div className="text-center">
           <p className="text-[10px] uppercase tracking-[0.35em] text-kb-gold/70 mb-1 font-semibold">
-            Golden Era {mode === 'daily' && dailyTitle ? `· ${dailyTitle}` : ''}
+            Golden Road {mode === 'daily' && dailyTitle ? `· ${dailyTitle}` : ''}
           </p>
           <p className="text-[10px] uppercase tracking-[0.25em] text-kb-mute mb-2">
             {summary.runTitle}
@@ -78,7 +78,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
         </div>
 
         <p className="text-center text-[9px] uppercase tracking-[0.35em] text-kb-faint">
-          Golden Era · LoL Esports
+          Golden Road · LoL Esports
         </p>
       </div>
     </div>
@@ -96,7 +96,7 @@ function StatBlock({
 }) {
   return (
     <div>
-      <p className="text-[8px] uppercase tracking-wider text-kb-faint">{label}</p>
+      <p className="text-[10px] uppercase tracking-wider text-kb-faint">{label}</p>
       <p className={`font-display text-lg mt-0.5 tabular-nums ${highlight ? 'text-kb-gold' : 'text-kb-fg'}`}>
         {value}
       </p>

@@ -56,23 +56,19 @@ export function PlayerCard({
     <motion.div
       layout
       className={cn(
-        'kb-card relative w-full rounded-[var(--kb-r-md)] overflow-hidden transition-all duration-200',
+        'kb-card w-full rounded-[var(--kb-r-md)] overflow-hidden transition-all duration-200',
         selected
-          ? 'border-kb-gold/45 ring-1 ring-kb-gold/20'
+          ? 'border-kb-gold/45'
           : disabled
             ? 'border-kb-hairline opacity-40'
             : 'border-kb-border hover:border-kb-border-strong'
       )}
       style={{
         background: selected
-          ? `linear-gradient(135deg, ${team.accent}16 0%, var(--kb-bg-card) 100%)`
-          : `linear-gradient(135deg, ${team.accent}10 0%, var(--kb-bg-card) 100%)`,
+          ? `linear-gradient(135deg, ${team.accent}18 0%, var(--kb-bg-card) 100%)`
+          : `linear-gradient(135deg, ${team.accent}0c 0%, var(--kb-bg-card) 100%)`,
       }}
     >
-      <div
-        className="absolute inset-y-0 left-0 w-1 rounded-l-2xl"
-        style={{ backgroundColor: team.accent }}
-      />
 
       <button
         type="button"
@@ -81,7 +77,7 @@ export function PlayerCard({
           if (!disabled) onSelect();
         }}
         style={{ touchAction: 'manipulation' }}
-        className="w-full text-left p-4 pl-4 active:scale-[0.99] transition-transform"
+        className="w-full text-left p-4 active:scale-[0.99] transition-transform"
       >
         <div className="flex items-center gap-3.5">
           <div

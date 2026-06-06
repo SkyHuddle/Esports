@@ -83,7 +83,7 @@ export function ResultScreen({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
           >
-            <p className="text-[10px] uppercase tracking-[0.4em] text-kb-mute mb-4">Your season</p>
+            <p className="text-[10px] uppercase tracking-[0.4em] text-kb-mute mb-4">Season record</p>
             <motion.p
               className={`font-display text-7xl sm:text-8xl tabular-nums leading-none ${
                 result.ringWon || result.perfectSeason ? 'text-ring-gold' : 'text-kb-fg'
@@ -94,12 +94,14 @@ export function ResultScreen({
             >
               {result.seasonSummary.record}
             </motion.p>
-            <p className="text-kb-soft text-sm mt-4 text-center max-w-[260px]">
+            <motion.p
+              className="text-kb-soft text-sm mt-4 text-center max-w-[260px]"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+            >
               {result.seasonSummary.runTitle}
-            </p>
-            <p className="text-kb-mute text-xs mt-2 text-center max-w-[280px]">
-              {result.seasonSummary.headline}
-            </p>
+            </motion.p>
           </motion.div>
         ) : (
           <motion.div
@@ -108,9 +110,12 @@ export function ResultScreen({
             animate={{ opacity: 1, y: 0 }}
           >
             <p className="text-center text-[10px] uppercase tracking-[0.35em] text-kb-mute mb-1">
-              Final standings
+              Ring Chase
             </p>
-            <p className="text-center font-display text-xl text-kb-gold mb-4">
+            <p className="text-center font-display text-2xl text-kb-fg mb-1">
+              {result.seasonSummary.record}
+            </p>
+            <p className="text-center text-sm text-kb-gold mb-5">
               {result.seasonSummary.runTitle}
             </p>
 
@@ -129,12 +134,9 @@ export function ResultScreen({
               />
             </div>
 
-            <div ref={cardRef} className="flex justify-center">
+            <div ref={cardRef} className="flex justify-center mb-2">
               <ShareCard picks={picks} result={result} mode={mode} dailyTitle={dailyTitle} />
             </div>
-            <p className="text-center text-kb-faint text-xs mt-4">
-              Screenshot to share on X, Reddit, or Discord
-            </p>
 
             {mode === 'daily' && dailyBoard.length > 0 && (
               <motion.div className="mt-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -146,7 +148,7 @@ export function ResultScreen({
             )}
 
             <motion.div className="space-y-2.5 mt-8">
-              <RingCtaButton onClick={handleShare} variant="glass">
+              <RingCtaButton onClick={handleShare} variant="amber">
                 Share Result
               </RingCtaButton>
               {mode === 'free' ? (
@@ -155,7 +157,7 @@ export function ResultScreen({
                 </RingCtaButton>
               ) : (
                 <p className="text-center text-[11px] text-kb-mute py-2">
-                  Daily locked — one official attempt per day
+                  Daily locked — one run per day
                 </p>
               )}
               <button
