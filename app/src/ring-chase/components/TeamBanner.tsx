@@ -26,8 +26,8 @@ export function TeamBanner({ team, rosterAvgOvr }: TeamBannerProps) {
       animate={{ opacity: 1, y: 0 }}
       className="kb-card rounded-[var(--kb-r-lg)] p-5 mb-5"
       style={{
-        background: `linear-gradient(135deg, ${team.accent}14 0%, var(--kb-bg-card) 100%)`,
-        border: `1px solid ${team.accent}26`,
+        background: `linear-gradient(145deg, ${team.accent}20 0%, ${team.accent}08 40%, var(--kb-bg-card) 100%)`,
+        border: `1px solid ${team.accent}32`,
       }}
     >
       <div className="flex items-start justify-between gap-3">

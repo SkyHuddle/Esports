@@ -71,8 +71,8 @@ export function PlayerCard({
       )}
       style={{
         background: selected
-          ? `linear-gradient(135deg, ${team.accent}18 0%, var(--kb-bg-card) 100%)`
-          : `linear-gradient(135deg, ${team.accent}0c 0%, var(--kb-bg-card) 100%)`,
+          ? `linear-gradient(145deg, ${team.accent}28 0%, ${team.accent}10 40%, var(--kb-bg-card) 100%)`
+          : `linear-gradient(145deg, ${team.accent}18 0%, ${team.accent}06 50%, var(--kb-bg-card) 100%)`,
       }}
     >
 

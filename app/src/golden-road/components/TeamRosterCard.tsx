@@ -62,7 +62,7 @@ export function TeamRosterCard({
         roleTaken && 'opacity-35'
       )}
       style={{
-        background: `linear-gradient(135deg, ${player.accent}12 0%, var(--kb-glass) 50%, var(--kb-bg-card) 100%)`,
+        background: `linear-gradient(145deg, ${player.accent}1e 0%, ${player.accent}08 45%, var(--kb-bg-card) 100%)`,
       }}
     >
       <button

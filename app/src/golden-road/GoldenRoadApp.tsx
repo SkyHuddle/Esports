@@ -88,7 +88,7 @@ export function GoldenRoadApp() {
 
     <div className="kb-root min-h-[100dvh] antialiased relative overflow-x-hidden">
 
-      <div className="fixed inset-0 mesh-bg-ring pointer-events-none z-0" />
+      <div className="fixed inset-0 mesh-bg-lol pointer-events-none z-0" />
 
       <div className="fixed inset-0 grid-bg pointer-events-none z-0 opacity-50" />
 

@@ -161,20 +161,29 @@
 
   .mesh-bg-ring {
     background-image:
-      radial-gradient(ellipse 70% 45% at 50% -10%, rgba(255, 106, 31, 0.04) 0%, transparent 50%),
-      radial-gradient(ellipse 50% 35% at 100% 50%, rgba(232, 184, 66, 0.03) 0%, transparent 45%);
+      radial-gradient(ellipse 80% 50% at 50% -5%, rgba(245, 99, 26, 0.10) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 100% 60%, rgba(232, 184, 66, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 30% at 0% 80%, rgba(245, 99, 26, 0.04) 0%, transparent 50%);
   }
 
   .mesh-bg-cs {
     background-image:
-      radial-gradient(ellipse 70% 45% at 50% -10%, rgba(222, 155, 53, 0.04) 0%, transparent 50%),
-      radial-gradient(ellipse 50% 35% at 100% 50%, rgba(232, 184, 66, 0.03) 0%, transparent 45%);
+      radial-gradient(ellipse 80% 50% at 50% -5%, rgba(127, 165, 201, 0.10) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 100% 60%, rgba(232, 184, 66, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 30% at 0% 80%, rgba(127, 165, 201, 0.05) 0%, transparent 50%);
+  }
+
+  .mesh-bg-lol {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -5%, rgba(232, 184, 66, 0.10) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 100% 60%, rgba(232, 184, 66, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 30% at 0% 80%, rgba(232, 184, 66, 0.04) 0%, transparent 50%);
   }
 
   .grid-bg {
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
     background-size: 32px 32px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 75%);
   }
