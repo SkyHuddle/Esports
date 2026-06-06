@@ -1,246 +1,346 @@
 # DESIGN.md — Esports Draft Games
 
+> Source of truth: `app/src/styles/sister-tokens.css`, `app/src/index.css`,
+> `app/tailwind.config.js`. Every value below is what ships in code. If you
+> change a token, update this file.
+
 ## 1. Visual Theme & Atmosphere
 
-A dark-canvas competitive gaming platform built around the dramatic reveal — the score, the draft pick, the run result. The aesthetic sits between **Spotify's immersive content-first darkness**, **Raycast's precision dark product chrome**, and **Nike's athletic typographic force**. The UI recedes to make the results and data the hero; every color choice is functional, never decorative.
+A **dark premium editorial** esports platform built around the result, the
+draft pick, and the share card. The register is **Stripe / Linear / Vercel /
+VLR.gg / HLTV**: restraint, sharp hierarchy, thin borders, soft shadows,
+controlled accents, precise spacing, high data density.
 
-The dominant surfaces are **near-black with violet undertones** (`#07060a` deep, `#0d0b12` base, `#16131c` card) creating a tiered darkness. **Anton** is used exclusively for scores, records, and game titles at maximum weight — towering uppercase lockups that communicate championship gravity. **Space Grotesk** handles all UI chrome. Gold (`#e8b842`) is the singular win-state accent — precise and earned, never decorative.
+The base is a **flat neutral graphite** with the faintest cool tint, never pure
+black, never violet. The UI recedes so the data and records read as the
+subject. **Anton** carries every display lockup (scores, records, game titles)
+in uppercase at maximum impact; **Space Grotesk** runs all UI chrome and body;
+**JetBrains Mono** sets tabular numbers. Accent color is functional and earned,
+never decorative.
 
-**Physical scene:** A fan checks their daily Ring Chase run at 11pm on their phone, screen brightness low, headphones in, tournament stream muted in a background tab. The UI must be immediately legible, feel premium against the dark, and make them screenshot and share without thinking.
+**Physical scene:** a fan checks their daily run at 11pm on their phone, screen
+brightness low, a tournament stream muted in another tab. The screen must be
+immediately legible, feel expensive against the dark, and be worth a
+screenshot.
 
 **Key characteristics:**
-- Near-black violet-tinted surfaces in a 4-level stack — UI disappears so data can glow
-- **Anton** for all display type: scores, records, game titles — zero decoration, pure impact
-- **Single brand accent** per game: Gold for wins and championships, Amber for daily/urgency, Steel for CS2
-- Pill CTAs (`border-radius: 9999px`) — rounded, touch-optimized like Spotify
-- Cards use **8px–14px radius** (tighter than most systems) with 1px hairline borders — precise, not bubbly
-- **Heavy shadows** (`0 4px 24px rgba(0,0,0,0.55)`) for elevated cards — light shadows are invisible on dark
-- Section rhythm: **8px base unit**, 24px between components, 40px between sections
-- Typography lives in a **compact 10px–56px range** — never expand beyond unless it's a hero score
+- Flat graphite surfaces in a 4-level stack — no atmospheric glow, no mesh blobs
+- **Soft directional shadows** for depth — never colored bloom, never a glow
+- **Thin hairline borders** do the structural work on dark
+- **Anton** for all display type; **Space Grotesk 400** body — the weight jump *is* the hierarchy
+- One **restrained accent per game** (amber / gold / steel); gold is the win state
+- Pill CTAs (`9999px`); cards and containers use a single radius scale (6–20px)
+- Left-aligned editorial layout, compact spacing on an 8px base unit
+- A near-invisible top wash + faint masked grid give texture without arcade glow
+
+### Hard reset from the previous direction
+The earlier system used violet-tinted near-black, glowing radial "mesh"
+backgrounds, gold/amber `text-shadow` glows, gradient-filled accent cards, and
+heavy bloom shadows. **All of that is removed.** Flat graphite, soft shadows,
+hairline borders, restrained accents.
 
 ---
 
 ## 2. Color Palette & Roles
 
-### Brand accent
+### Surface stack (darkest → elevated)
+| Token | Hex | Level | Use |
+|---|---|---|---|
+| `--kb-bg-deep` | `#0a0b0d` | L0 | Page background, deepest |
+| `--kb-bg-base` | `#0f1013` | L1 | Sections, sticky / brand bars |
+| `--kb-bg-card` | `#15161a` | L2 | Cards, containers |
+| `--kb-bg-elev` | `#1c1e23` | L3 | Elevated panels, hover, modals |
+| `--kb-bg-inset` | `#0c0d10` | — | Recessed wells, inputs, tracks |
+
+### Fills (sparing — not glassmorphism)
+| Token | Value | Use |
+|---|---|---|
+| `--kb-fill` | `rgba(255,255,255,0.035)` | Quiet tertiary button / chip fill |
+| `--kb-fill-strong` | `rgba(255,255,255,0.06)` | Hover fill |
+
+### Borders
+| Token | Value | Use |
+|---|---|---|
+| `--kb-border` | `rgba(255,255,255,0.08)` | Default card / control border |
+| `--kb-border-strong` | `rgba(255,255,255,0.14)` | Hover / active / focus border |
+| `--kb-hairline` | `rgba(255,255,255,0.045)` | Dividers, rules, stat-strip edges |
+
+> `--kb-glass` / `--kb-glass-strong` exist only as legacy aliases of the two
+> fills above so older class names keep working. There is no glassmorphism by
+> default.
+
+### Text ramp (warm off-white — never `#ffffff`)
 | Token | Hex | Role |
 |---|---|---|
-| `--kb-gold` | `#e8b842` | Win state, championships, highlights, primary CTA text |
-| `--kb-amber` | `#ff6a1f` | Daily mode, urgency, secondary CTAs, fire/energy |
-| `--kb-steel` | `#8ba7c7` | CS2 / Major Run identity accent |
+| `--kb-fg` | `#ece8dd` | Primary text |
+| `--kb-fg-soft` | `#b4afa3` | Body copy, secondary |
+| `--kb-fg-mute` | `#797568` | Labels, metadata |
+| `--kb-fg-faint` | `#4f4c46` | Disabled, placeholder |
+
+### Brand accents (restrained, one per game)
+| Token | Hex | Role |
+|---|---|---|
+| `--kb-amber` | `#f5631a` | Ring Chase / CoD identity, daily / urgency |
+| `--kb-amber-hot` | `#ff7e3a` | Amber hover only |
+| `--kb-gold` | `#e8b842` | Win state, championships, prestige (Golden Road / LoL) |
+| `--kb-gold-deep` | `#b08a2e` | Second-tier OVR, dim gold |
+| `--kb-steel` | `#7fa5c9` | Major Run / CS2 identity |
+| `--kb-steel-dim` | `rgba(127,165,201,0.10)` | Steel tint fill |
 
 ### Semantic
 | Token | Hex | Role |
 |---|---|---|
-| `--kb-crimson` | `#ff3d5e` | Errors, blocked, exit |
-| `--kb-green` | `#00d17a` | Victory, win streaks |
+| `--kb-crimson` | `#e8485c` | Errors, blocked, exit |
+| `--kb-green` | `#34c98a` | Victory, win streaks, live dot |
 
-### Surface stack (darkest → elevated)
-| Token | Hex | Level | Use |
-|---|---|---|---|
-| `--kb-bg-deep` | `#07060a` | 0 | Page background, deepest |
-| `--kb-bg-base` | `#0d0b12` | 1 | Sections, dividers |
-| `--kb-bg-card` | `#16131c` | 2 | Cards, containers |
-| `--kb-bg-elev` | `#1e1a26` | 3 | Elevated panels, hover states |
-
-### Text
-| Token | Hex | Role |
-|---|---|---|
-| `--kb-fg` | `#f4f0e6` | Primary text (warm off-white — never `#ffffff`) |
-| `--kb-fg-soft` | `#c8c2b4` | Secondary text, body copy |
-| `--kb-fg-mute` | `#7a7480` | Labels, metadata |
-| `--kb-fg-faint` | `#4d4856` | Disabled, placeholder |
-
-### Border / Glass
-| Token | Value | Use |
-|---|---|---|
-| `--kb-border` | `rgba(255,255,255,0.09)` | Default card border |
-| `--kb-border-strong` | `rgba(255,255,255,0.17)` | Focus, active borders |
-| `--kb-hairline` | `rgba(255,255,255,0.055)` | Dividers, rules |
-| `--kb-glass` | `rgba(255,255,255,0.045)` | Subtle glass fills |
-
-### Shadows
-| Token | Value | Use |
-|---|---|---|
-| `--kb-shadow-card` | `0 1px 3px rgba(0,0,0,0.4), 0 6px 20px -6px rgba(0,0,0,0.5)` | Card lift |
-| `--kb-shadow-gold` | `0 2px 10px -2px rgba(232,184,66,0.15)` | Gold-accent cards |
-| `--kb-shadow-amber` | `0 2px 10px -2px rgba(255,106,31,0.16)` | Amber-accent cards |
-
-**Shadow law (from Spotify):** On dark backgrounds, shadows must be heavy (≥0.35 opacity) to read. Never use thin hairline shadows on dark cards — use the full `--kb-shadow-card` stack.
+> The Tailwind `kb.*` palette in `tailwind.config.js` mirrors these exact hex /
+> rgba values so utilities like `text-kb-gold`, `bg-kb-card`, `border-kb-border`
+> stay in sync with the CSS variables. Accent tints on bespoke cards are built
+> with `color-mix(in srgb, <accent> N%, var(--kb-bg-card))` — flat tint, no
+> gradient.
 
 ---
 
-## 3. Typography Rules
+## 3. Typography
 
 ### Font families
-| Role | Family | Fallback |
+| Role | Token | Family | Fallback |
+|---|---|---|---|
+| Display | `--kb-display` | **Anton** | `'Oswald', 'Arial Narrow', system-ui` |
+| UI / Body | `--kb-ui` | **Space Grotesk** | `system-ui, sans-serif` |
+| Mono / Data | `--kb-mono` | **JetBrains Mono** | `ui-monospace, monospace` |
+
+Loaded in `app/index.html`. Anton is single-weight (400). Space Grotesk ships
+400/500/600/700. JetBrains Mono uses `font-feature-settings: 'tnum'` for tabular
+numbers (`.kb-mono`).
+
+### Type scale (tokens, px)
+| Token | Size | Use |
 |---|---|---|
-| Display | **Anton** | `'Oswald', 'Arial Narrow', system-ui` |
-| UI / Body | **Space Grotesk** | `system-ui, sans-serif` |
-| Mono / Data | **JetBrains Mono** | `ui-monospace, monospace` |
+| `--kb-text-micro` | 10px | Badges, pill tags, chip text |
+| `--kb-text-label` | 11px | Uppercase metadata, stat labels |
+| `--kb-text-sm` | 13px | Secondary UI |
+| `--kb-text-body` | 14px | Body copy |
+| `--kb-text-md` | 16px | Emphasized body |
 
-### Hierarchy
+Display sizes are set per-context with Anton and live above the token scale
+(roughly 24–36px card / section titles, ~48–72px game titles via `clamp()`,
+~64–96px hero scores / records).
 
-| Role | Font | Size | Weight | Letter-spacing | Notes |
-|---|---|---|---|---|---|
-| Hero score / record | Anton | 64–80px | 400 (Anton is single-weight) | 0 | Season records, Major bracket results |
-| Game title | Anton | 52–64px | 400 | 0 | HomeScreen H1 |
-| Section title | Anton | 28–36px | 400 | 0 | Result screens, card headers |
-| Card headline | Anton | 20–24px | 400 | 0 | Player name, team name |
-| Sport eyebrow | Space Grotesk | 10px | 600 | 0.3em | Uppercase, tracked — "Call of Duty Esports" |
-| Body | Space Grotesk | 14px | 400 | 0 | Descriptions, how-to-play |
-| Label | Space Grotesk | 11px | 600 | 0.2em | Uppercase metadata, stat labels |
-| Micro | Space Grotesk | 9–10px | 500 | 0.2em | Badges, pill tags |
-| Data / OVR | JetBrains Mono | varies | 400 | `font-feature-settings: 'tnum'` | Tabular numbers |
+### Tracking helpers
+| Token | Value | Use |
+|---|---|---|
+| `--kb-tracking-label` | `0.22em` | Uppercase labels (`.kb-label`) |
+| `--kb-tracking-eyebrow` | `0.32em` | Sport eyebrows (`.kb-eyebrow`) |
 
-**Typography laws:**
+Utility classes: `.font-display` (Anton, uppercase, `0.01em`), `.kb-eyebrow`
+(10px / 0.32em / 600), `.kb-label` (11px / 0.22em / 600 / muted), `.kb-mono`.
+
+### Typography laws
 - **Anton is uppercase only.** Never titlecase Anton.
-- **Compact range:** Body tops out at 15px. UI labels are 10–11px. This is a game, not an article.
-- **Weight contrast:** The dramatic shift between Anton (single heavy display) and Space Grotesk 400 body IS the hierarchy. Don't insert medium-weight Space Grotesk headers — they kill the contrast.
-- **No em dashes.** Use colons, pipes, or hyphens.
+- **Compact range.** Body tops out at 16px; most UI labels are 10–11px.
+- **Weight contrast is the hierarchy.** Anton display vs Space Grotesk 400 body.
+  Don't insert medium-weight headers that flatten the contrast.
+- **No gradient text** (`background-clip: text`).
+- **No em dashes in copy.** Use commas, colons, or periods.
 
 ---
 
 ## 4. Component Stylings
 
-### CTAs
+### CTAs (pill, `9999px`)
+States: default / hover / active / disabled (+ keyboard focus ring §6).
 
-**Primary gold (`kb-cta-gold`)**
-- Background: `var(--kb-gold)` / Text: `#0a0806` / Font: Space Grotesk 600 0.02em
-- Radius: 9999px / Height: 56px / Padding: 0 24px
-- Shadow: `0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.22)`
-- Hover: `filter: brightness(1.06)`
+- **`kb-cta-gold`** — bg `--kb-gold`, text `#100b02`, `--kb-shadow-cta`. Hover
+  `brightness(1.05)`; active `translateY(0.5px)` + `brightness(0.98)`.
+- **`kb-cta-amber`** — bg `--kb-amber`, text `#160a04`, same shape / states.
+- **`kb-cta-steel`** — bg `--kb-steel`, text `#07101a`, same shape / states.
+- **`kb-cta-glass`** (tertiary, quiet outline) — `--kb-fill` bg + `--kb-border`;
+  hover `--kb-fill-strong` + `--kb-border-strong`. No blur fill.
+- Disabled: `opacity` reduced, no pointer events. `.kb-cta-icon` is the trailing
+  circular arrow that nudges `+2px` on group hover.
 
-**Secondary amber (`kb-cta-amber`)**
-- Same shape, `var(--kb-amber)` background, same text color
+### Cards (`.kb-card`)
+- Background `--kb-bg-card`, `1px solid --kb-border`, radius `--kb-r-md` (12px),
+  `box-shadow: --kb-shadow-card`, `overflow: hidden`.
+- **Hover** (`.kb-card-hover`): border → `--kb-border-strong`, bg → `--kb-bg-elev`.
+- **Accent variants** raise only the border, no bloom:
+  `kb-card-accent-gold` / `-amber` / `-steel` set the border to the accent at
+  ~22% alpha.
+- Bespoke accent cards (PlayerCard, TeamBanner, TeamRosterCard) use a flat
+  `color-mix` accent tint (~6–9%) over `--kb-bg-card` and an accent-tinted
+  border. No gradients, **no side-stripe accents.**
 
-**Glass tertiary (`kb-cta-glass`)**
-- Background: `rgba(255,255,255,0.07)` / Border: `1px solid rgba(255,255,255,0.12)` / Text: `var(--kb-fg)`
-- Radius: 9999px / Height: 56px
+### Inputs (`.kb-input`)
+- Recessed: bg `--kb-bg-inset`, `1px solid --kb-border`, radius `--kb-r-sm`.
+- Placeholder `--kb-fg-faint`. Hover → `--kb-border-strong`. Focus → border
+  `rgba(255,255,255,0.28)` (no extra ring on inputs).
 
-**Daily row button** (custom component in HomeScreens)
-- NOT a generic CTA pill. A custom row card with calendar icon, daily number, constraint chip, and chevron
-- Border: `1px solid rgba(255,106,31,0.35)` / Background: `rgba(255,106,31,0.07)` / Radius: 16px
+### Chips (`.kb-chip`)
+- Pill, 10px / 500, `2px 8px`, `--kb-border` + `--kb-fill`, text `--kb-fg-soft`.
+- Tone variants `kb-chip-gold` / `-amber` / `-steel`: accent border (~28–30%),
+  accent fill (~10–12%), accent text.
 
-### Cards (`kb-card`)
-- Background: `var(--kb-bg-card)` (`#16131c`)
-- Border: `1px solid rgba(255,255,255,0.09)`
-- Radius: **14px** (`--kb-r-md`) or **18px** (`--kb-r-lg`)
-- Shadow: `var(--kb-shadow-card)`
-- Overflow: `hidden` — always
+### Stats strip
+- Flex row, equal `flex-1` cells, `w-px` `--kb-hairline` dividers, top+bottom
+  hairline borders (not a card). Anton ~24px numbers (gold when highlighted),
+  `.kb-label` style 10–11px uppercase labels.
 
-**Gold accent card:** adds `border-color: rgba(232,184,66,0.25)`, shadow extends with `--kb-shadow-gold`
+### Leaderboard (DailyLeaderboard)
+- Rendered in a `kb-card` (amber accent). Header: medal + "Today's board" +
+  your rank.
+- Rows: `--kb-fill` background, hairline borders, compact `text-xs`. Rank glyph
+  is Anton tabular; **#1 only** is gold. The current-user row is highlighted
+  with an amber fill + amber border (no other cheese for top 3). Record is Anton
+  tabular, right-aligned; a small gold trophy marks a perfect run.
+- Footer line states the ranking order.
 
-**TeamBanner card:**
-- Background: `linear-gradient(135deg, {accent}14 0%, var(--kb-bg-card) 100%)`
-- Border: `1px solid {accent}26`
-- Radius: 18px
+### Progress / round track (DraftScreen)
+- Segmented bars, one per round. Done = `--kb-gold`; active = gold at ~50%;
+  empty = `rgba(255,255,255,0.12)`. Never a bare "1 / 4" text counter.
 
-**PlayerCard / TeamRosterCard:**
-- Same gradient background pattern
-- No side-stripe accents — banned
-- OVR number: Anton, 28–32px, colored by tier
-- Avatar box: 48px, rounded-xl, accent tint bg
+### Brand bar (`.kb-brand-bar`)
+- Solid, quiet: `color-mix` of `--kb-bg-deep` at 88% + `blur(8px)`, single
+  `--kb-hairline` bottom divider.
 
-### Stats strip (HomeScreen)
-- Layout: flex row with `flex-1` equal-width cells, `w-px bg-kb-hairline` dividers
-- Border: `1px solid rgba(255,255,255,0.055)` on top and bottom (not a card wrapper)
-- Padding: 14px vertical
-- Numbers: Anton 24px, `var(--kb-gold)` if highlighted else `var(--kb-fg)`
-- Labels: Space Grotesk 10px uppercase tracking-wider `var(--kb-fg-mute)`
+### Backgrounds (utilities)
+- `.mesh-bg-ring` / `.mesh-bg-cs` / `.mesh-bg-lol` are now **flat graphite**
+  (`--kb-bg-deep`) with one near-invisible white top wash (`~0.022`). The names
+  are kept for compatibility; they no longer render colored mesh glow.
+- `.grid-bg` is a faint editorial grid (`~0.018` lines, 44px) masked to fade
+  out — texture, not a glowing field.
+- `.kb-grain` (optional `::after`) adds ~2.5% SVG noise to kill banding.
+- `.glow-ring` is intentionally inert (`text-shadow: none`); win emphasis comes
+  from color + weight only.
 
-### Badges / Chips
-- Tier badge: 9px Space Grotesk 500, uppercase, `px-2 py-0.5 rounded-full border`
-- Gold tier: `bg-kb-gold/15 text-kb-gold border-kb-gold/25`
-- Amber/underdog: `bg-kb-amber/12 text-kb-amber border-kb-amber/25`
-- Default: `bg-kb-glass text-kb-soft border-kb-border`
-
-### Progress tracker (DraftScreen header)
-- Segmented track: N circles/squares for N rounds
-- Filled: `var(--kb-gold)` / Active: amber outline / Empty: `var(--kb-hairline)` fill
-- NEVER just "1 / 4" text
+### Loading / skeleton
+- `.kb-skeleton` is a graphite shimmer (card → elev → card). Route loader is a
+  pulsing gold dot + a muted "Loading" label.
 
 ---
 
-## 5. Layout Principles
+## 5. Layout & Spacing
 
 ### Spacing scale (8px base)
 | Token | Value |
 |---|---|
-| xs | 4px |
-| sm | 8px |
-| md | 16px |
-| lg | 24px |
-| xl | 40px |
-| xxl | 64px |
-| section | 96px (mobile: 48px) |
+| `--kb-space-xs` | 4px |
+| `--kb-space-sm` | 8px |
+| `--kb-space-md` | 16px |
+| `--kb-space-lg` | 24px |
+| `--kb-space-xl` | 40px |
+| `--kb-space-2xl` | 64px |
 
 ### Page structure
-- `max-w-lg mx-auto` (512px) — mobile-first single column
-- `px-5` horizontal page padding
-- Left-aligned content (NOT center-aligned) — editorial, like ESPN/sheepesports/The Verge
-- Section titles left-aligned, body text left-aligned
+- Game screens: `max-w-lg mx-auto` (512px), single column, mobile-first.
+- Hub: `max-w-2xl mx-auto` for a slightly wider editorial landing.
+- `px-5` (20px) horizontal padding on mobile, `px-8` on larger.
+- **Left-aligned content.** Only result scores and CTA labels center.
 
-### Section rhythm (from PlayStation)
-- Between major sections: 40px gap
-- Between cards in a list: 8–10px gap
-- Between header and first CTA: 20px
+### Rhythm
+- ~40px between major sections, 8–10px between list cards, ~20px header → first
+  CTA. Compact by default; breathing room is earned (post-result), not a default.
 
-### Whitespace philosophy
-- **Compact by default** — this is a game, not a magazine
-- Breathing room is earned by context (post-result screen) not by default padding
-- Never center-align content on a full page — editorial pages left-align
+### Radii — one scale, no mismatches
+| Token | Value | Use |
+|---|---|---|
+| `--kb-r-xs` | 6px | Tiny chips / inner elements |
+| `--kb-r-sm` | 8px | Inputs, small controls |
+| `--kb-r-md` | 12px | Default card |
+| `--kb-r-lg` | 16px | Large cards, banners |
+| `--kb-r-xl` | 20px | Hero / share card |
+| `--kb-r-pill` | 9999px | CTAs and pills only |
 
 ---
 
-## 6. Depth & Elevation
+## 6. Depth, Elevation, Focus & Motion
 
-| Level | Surface | Border | Shadow | Use |
-|---|---|---|---|---|
-| 0 | `#07060a` | none | none | Page background |
-| 1 | `#16131c` | `rgba(255,255,255,0.09)` | `--kb-shadow-card` | Cards, containers |
-| 2 | `#1e1a26` | `rgba(255,255,255,0.12)` | heavier card shadow | Elevated panels, modals |
-| 3 | `rgba(0,0,0,0.7) blur(16px)` | `rgba(255,255,255,0.09)` | heavy | Overlay dialogs |
+### Shadows — soft, directional, dark (depth, not glow)
+| Token | Value | Use |
+|---|---|---|
+| `--kb-shadow-sm` | `0 1px 2px rgba(0,0,0,0.4)` | Small lift |
+| `--kb-shadow-card` | `0 1px 2px rgba(0,0,0,0.35), 0 10px 28px -16px rgba(0,0,0,0.8)` | Card |
+| `--kb-shadow-pop` | `0 2px 4px rgba(0,0,0,0.4), 0 18px 44px -20px rgba(0,0,0,0.85)` | Modal / popover |
+| `--kb-shadow-cta` | `0 1px 2px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.16)` | CTA |
+| `--kb-shadow-gold` / `--kb-shadow-amber` | `0 8px 24px -16px rgba(0,0,0,0.8)` | Legacy aliases — a deeper directional shadow, **not** a glow |
 
-**Shadow law:** Never use light shadows on dark surfaces. `rgba(0,0,0,0.4)` minimum for card base shadow. The `--kb-shadow-card` stack (two-layer) is mandatory for all card elements.
+**Shadow law:** all shadow color is `rgba(0,0,0,…)`. No colored shadows, no
+`0 0 Npx` bloom anywhere.
+
+### Focus
+- `--kb-focus: 0 0 0 2px var(--kb-bg-deep), 0 0 0 4px rgba(255,255,255,0.28)`.
+- Applied globally on `:focus-visible` (keyboard only), accent-neutral so it
+  reads on any surface.
+
+### Z-index scale
+| Token | Value | Use |
+|---|---|---|
+| `--kb-z-base` | 1 | Content |
+| `--kb-z-sticky` | 20 | Sticky sub-headers |
+| `--kb-z-brandbar` | 40 | Top brand bar |
+| `--kb-z-overlay` | 50 | Overlays |
+| `--kb-z-modal` | 60 | Modals / confirmations |
+
+### Motion — ease-out only, no bounce / elastic
+| Token | Value |
+|---|---|
+| `--kb-ease-out` | `cubic-bezier(0.22, 1, 0.36, 1)` |
+| `--kb-ease-std` | `cubic-bezier(0.4, 0, 0.2, 1)` |
+| `--kb-dur-fast` | 120ms |
+| `--kb-dur` | 200ms |
+| `--kb-dur-slow` | 360ms |
+
+`--kb-ease-spring` is a legacy alias of `--kb-ease-out` (no springiness).
+Transitions are short and restrained: hover, selected, slot fill, progress,
+result reveal, leaderboard highlight, route fades. A global
+`prefers-reduced-motion: reduce` block collapses animation / transition
+durations to ~0.
 
 ---
 
 ## 7. Do's and Don'ts
 
 ### Do
-- Use **Anton uppercase** for every score, record, game title — never mixed-case
-- Left-align content — editorial identity, not app-widget centering
-- Use pill CTAs (9999px radius) for primary actions
-- Use **tighter card radius** (14–18px) — the 28px radius previously used made cards feel like a children's app
-- Use **heavy shadows** on cards (`--kb-shadow-card`) — light shadows disappear on dark
-- Make the daily row a **custom informative card**, not a disabled pill
-- Show stats inline (strip with dividers), not in a 3-col icon-card grid
-- Show how-to-play steps **inline for new players** — never behind an accordion
-- Differentiate games by their **sport identity label** (`Call of Duty Esports` / `Counter-Strike 2` / `League of Legends`), not just by accent color
+- Use **Anton uppercase** for every score, record, and game title.
+- **Left-align** content — editorial identity, not centered app widgets.
+- Use **flat graphite surfaces** with **hairline borders** and **soft, dark
+  directional shadows**.
+- Tint accent cards with a flat `color-mix` (~6–9%) + an accent-tinted border.
+- Use the **single radius scale** (6 / 8 / 12 / 16 / 20 / pill).
+- Use **pill CTAs** for primary actions; show explicit hover / active / focus /
+  disabled states.
+- Keep accents restrained: gold = win, amber = CoD / daily, steel = CS2.
+- Show how-to-play steps **inline** for new players.
+- Differentiate games by **sport label** (`Call of Duty Esports` /
+  `League of Legends` / `Counter-Strike 2`), not only by accent color.
 
 ### Don't
-- **No gradient text** (`background-clip: text`) — banned
-- **No side-stripe borders** (`border-left` accent > 1px on cards) — banned
-- **No glassmorphism as default** — glass is rare and purposeful
-- **No `text-center` on entire pages** — only for scores in results and CTA labels
-- **No icon + number + label grid for stats** — use the stats strip pattern instead
-- **No accordion to hide "how it works"** — show steps inline
-- **No SaaS dashboard widgets** (hero-metric template: big number + small label + gradient) — banned
-- **No identical card grids** — vary card weight by importance
-- **No "Screenshot to share on X, Reddit, or Discord"** — if share works, the button is enough
-- **No "Final standings"** generic labels — use the game name
+- **No glow / bloom** — no glowing mesh backgrounds, no `0 0 Npx` shadows, no
+  colored shadows, no `text-shadow` glow on records.
+- **No neon / oversaturated arcade orange** spread across surfaces.
+- **No gradient text** (`background-clip: text`).
+- **No side-stripe borders** (colored `border-left/right > 1px` on cards).
+- **No glassmorphism as default** — translucency / blur is reserved for the
+  brand bar and overlay sheets, used sparingly.
+- **No gradient-filled accent cards** — flat tint only.
+- **No `#000` / `#fff`** — surfaces tint graphite, text is warm off-white.
+- **No SaaS hero-metric template**, no identical card grids, no
+  modal-as-first-thought.
+- **No em dashes in copy** — commas, colons, periods only.
+- **No bounce / elastic motion** — ease-out only; respect reduced motion.
 
 ---
 
 ## 8. Responsive Behavior
 
-- **Primary target:** 375–430px mobile (iPhone SE through iPhone Pro Max)
-- **Secondary:** 768–1024px tablet — same layout, more breathing room
-- Font scale: Hero score 80px mobile → 96px tablet+
-- Game title: 60px mobile → 72px tablet+
-- Section padding: `px-5` (20px) mobile, `px-8` (32px) tablet
-- Min touch target: 44×44px (WCAG AA minimum)
+- **Primary target:** 375–430px mobile (iPhone SE → Pro Max).
+- **Secondary:** 768px+ tablet / desktop — same single-column game screens with
+  more breathing room; the hub widens to `max-w-2xl`.
+- Display type scales with `clamp()` (e.g. hub headline `clamp(48px, 13vw,
+  84px)`); game titles ~48 → 72px.
+- Section padding `px-5` (mobile) → `px-8` (larger).
+- **Minimum touch target 44×44px.** Tables / leaderboards stay legible on mobile
+  via compact rows and truncation.
 
 ---
 
@@ -248,37 +348,47 @@ The dominant surfaces are **near-black with violet undertones** (`#07060a` deep,
 
 ### Ring Chase (Call of Duty)
 - Sport label: "Call of Duty Esports"
-- Accent: `var(--kb-amber)` (#ff6a1f) for sport identifier
-- Win accent: `var(--kb-gold)` for rings and championship moments
+- Identity accent: `--kb-amber` (`#f5631a`) for the eyebrow and daily row
+- Win accent: `--kb-gold` for rings and championship moments
 - Character: aggressive, warm, championship gravity
 
 ### Golden Road (League of Legends)
 - Sport label: "League of Legends"
-- Accent: `var(--kb-gold)` (#e8b842) for prestige and stages
+- Accent: `--kb-gold` (`#e8b842`) for prestige and stages
 - Character: prestigious, historical, Worlds legacy
 
 ### Major Run (Counter-Strike 2)
 - Sport label: "Counter-Strike 2"
-- Accent: `var(--kb-steel)` (#8ba7c7) for CS2 identity
-- Win accent: `var(--kb-gold)` for Major wins
+- Identity accent: `--kb-steel` (`#7fa5c9`)
+- Win accent: `--kb-gold` for Major wins
 - Character: tactical, precise, bracket-clinical
 
 ---
 
-## 10. Agent Prompt Guide
+## 10. Agent Quick Reference
 
-### Quick reference
-- Background: `#07060a` (deep) / `#16131c` (card)
-- Primary text: `#f4f0e6` (warm off-white)
-- Secondary text: `#7a7480` (muted)
-- Win accent: `#e8b842` (gold)
-- Daily accent: `#ff6a1f` (amber)
-- CS2 accent: `#8ba7c7` (steel)
-- Card border: `rgba(255,255,255,0.09)` / radius: 14–18px
+### Values
+- Page bg: `#0a0b0d` (deep) · card `#15161a` · elevated `#1c1e23` · inset `#0c0d10`
+- Primary text: `#ece8dd` (warm off-white) · muted `#797568` · faint `#4f4c46`
+- Win accent: `#e8b842` (gold) · CoD / daily: `#f5631a` (amber) · CS2: `#7fa5c9` (steel)
+- Error `#e8485c` · success `#34c98a`
+- Border `rgba(255,255,255,0.08)` · hairline `rgba(255,255,255,0.045)` · radius 12px default
+- Card shadow `0 1px 2px rgba(0,0,0,0.35), 0 10px 28px -16px rgba(0,0,0,0.8)` (soft, dark)
+- Motion: `cubic-bezier(0.22, 1, 0.36, 1)`, 120 / 200 / 360ms, ease-out only
 
 ### Component prompts
-- "Create a HomeScreen hero: left-align, `Call of Duty Esports` in 10px uppercase tracking-[0.32em] amber text, followed by `Ring Chase` in Anton 60px, then a 13px muted tagline. Stats strip below with hairline borders."
-- "Create a stats strip: flex row, three cells with `flex-1`, `w-px bg-kb-hairline` vertical dividers, top+bottom `1px solid rgba(255,255,255,0.055)` borders. Anton 24px numbers, 10px uppercase Space Grotesk labels."
-- "Create a Daily row button: 16px radius, border `rgba(255,106,31,0.35)`, bg `rgba(255,106,31,0.07)`. Calendar icon + 'Daily #N' in 14px Space Grotesk 600 + constraint chip pill + ChevronRight icon."
-- "Create a PlayerCard: 14px radius, `linear-gradient(135deg, {accent}0c 0%, var(--kb-bg-card) 100%)` background, 1px border. 48px avatar square with accent tint. Anton 20px player name. Anton 28px OVR right-aligned in tier color."
-- "Create a result score reveal: center layout, `Season record` in 10px uppercase muted label, Anton 80px gold record number spring-animated, then `runTitle` in 14px soft text."
+- "HomeScreen hero: left-aligned. Sport label in `.kb-eyebrow` accent color,
+  game title in Anton via `clamp()`, then a 13px `text-kb-soft` tagline. Stats
+  strip below with hairline top+bottom borders and `w-px` dividers."
+- "Card: `.kb-card` (flat `--kb-bg-card`, `--kb-border`, radius 12px,
+  `--kb-shadow-card`). For an accent card, tint with
+  `color-mix(in srgb, <accent> 7%, var(--kb-bg-card))` and an accent-tinted
+  border. No gradient, no glow, no side stripe."
+- "Primary CTA: pill, `kb-cta-gold`, Space Grotesk 600, trailing `.kb-cta-icon`
+  arrow. Provide hover / active / focus / disabled."
+- "Leaderboard row: `--kb-fill` bg, hairline border, Anton tabular rank (#1 gold
+  only), Anton record right-aligned; current user gets an amber fill + amber
+  border."
+- "Result reveal: centered. Label in `.kb-label`, Anton ~80px record (gold on
+  win, else `--kb-fg`) with an ease-out spring-in, then the run title in 13px
+  `text-kb-soft`. No text glow."
