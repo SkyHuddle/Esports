@@ -141,6 +141,27 @@ export function DraftScreen({
           >
             <TeamBanner team={team} rosterAvgOvr={teamRosterAvgOvr(team)} />
 
+            <div className="mb-3 -mt-1 flex items-center gap-2 flex-wrap">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-kb-mute shrink-0">
+                Pick {picks.length + 1} of {DRAFT_ROUNDS} · Open
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {openRoles.map((slot) => (
+                  <span
+                    key={slot}
+                    className="text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full"
+                    style={{
+                      color: 'var(--kb-steel)',
+                      background: 'rgba(127,165,201,0.08)',
+                      border: '1px solid rgba(127,165,201,0.3)',
+                    }}
+                  >
+                    {SLOT_LABELS[slot]}
+                  </span>
+                ))}
+              </div>
+            </div>
+
             {isDaily && dailyConstraint.id !== 'standard' && (
               <p className="text-[10px] text-kb-amber/80 mb-4 -mt-2 px-1 font-medium">{dailyConstraint.title}</p>
             )}
@@ -241,26 +262,27 @@ function RosterSlots({
           return (
             <div
               key={slot}
-              className={`flex-1 rounded-xl py-2 px-0.5 text-center border transition-all ${
+              className="flex-1 min-w-0 rounded-[var(--kb-r-sm)] py-2 px-1 text-center border transition-all duration-200"
+              style={
                 pick
-                  ? 'border-kb-gold/25 bg-kb-gold/8'
+                  ? { borderColor: 'rgba(232,184,66,0.28)', background: 'rgba(232,184,66,0.08)' }
                   : open
-                    ? 'border-kb-gold/15 bg-kb-gold/[0.04] ring-1 ring-kb-gold/10'
-                    : 'border-kb-hairline opacity-40'
-              }`}
+                    ? { borderColor: 'rgba(127,165,201,0.32)', background: 'rgba(127,165,201,0.07)' }
+                    : { borderColor: 'var(--kb-hairline)', opacity: 0.4 }
+              }
             >
-              <p className="text-[6px] uppercase tracking-wider text-kb-mute font-semibold">
-                {SLOT_LABELS[slot].slice(0, 3)}
+              <p className="text-[9px] leading-none uppercase tracking-tight text-kb-mute font-semibold truncate">
+                {SLOT_LABELS[slot]}
               </p>
               {pick ? (
-                <p className="text-[9px] text-kb-fg font-medium mt-1 truncate px-0.5">
-                  {pick.player.gamertag.slice(0, 4)}
+                <p className="text-[10px] text-kb-fg font-medium mt-1 truncate px-0.5">
+                  {pick.player.gamertag}
                 </p>
               ) : (
-                <p className="text-[10px] text-kb-fg font-medium mt-1.5">{open ? '?' : '—'}</p>
+                <p className="text-[11px] text-kb-fg font-medium mt-1.5 leading-none">{open ? '?' : '—'}</p>
               )}
               {ovr != null && (
-                <p className="text-[8px] font-display tabular-nums mt-0.5 text-kb-gold/80">
+                <p className="text-[9px] font-display tabular-nums mt-0.5 text-kb-gold/80">
                   {ovr}
                 </p>
               )}

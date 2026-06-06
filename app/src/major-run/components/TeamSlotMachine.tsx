@@ -1,8 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import type { SlotSpin } from '../core/types';
 import { DRAFT_ROUNDS, SPIN_TICK_MS } from '../core/constants';
+import { CS_TEAMS } from '../data/teams';
 import { hapticTap } from '@/utils/haptics';
+
+/** Real team accents keyed by team name (first occurrence wins). */
+const ACCENT_BY_NAME: Map<string, string> = (() => {
+  const map = new Map<string, string>();
+  for (const t of CS_TEAMS) {
+    if (!map.has(t.teamName)) map.set(t.teamName, t.accent);
+  }
+  return map;
+})();
+
+/** Tasteful monogram from a real team name: initials of words, else first 3 chars. */
+function teamMonogram(name: string): string {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
+  return name.slice(0, 3).toUpperCase();
+}
 
 interface TeamSlotMachineProps {
   spin: SlotSpin;
@@ -19,6 +36,7 @@ export function TeamSlotMachine({
 }: TeamSlotMachineProps) {
   const pickNumber = roundIndex + 1;
   const [index, setIndex] = useState(0);
+  const reduceMotion = useReducedMotion();
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
@@ -59,11 +77,13 @@ export function TeamSlotMachine({
   const name = spin.nameSequence[index] ?? '';
   const region = spin.regionSequence[index] ?? '';
   const progress = spin.yearSequence.length ? (index + 1) / spin.yearSequence.length : 1;
+  const accent = ACCENT_BY_NAME.get(name) ?? 'var(--kb-steel)';
+  const mono = name ? teamMonogram(name) : '';
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[54dvh] px-5 pb-10 relative w-full">
       <motion.div
-        className="text-center mb-10"
+        className="text-center mb-7"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -71,6 +91,27 @@ export function TeamSlotMachine({
           Pick {pickNumber} of {DRAFT_ROUNDS}
         </p>
       </motion.div>
+
+      <div className="mb-6 flex flex-col items-center">
+        <p className="text-[9px] uppercase tracking-[0.32em] text-kb-mute mb-3 font-semibold">
+          Rolling teams
+        </p>
+        <motion.div
+          key={reduceMotion ? 'crest' : `${index}-${name}`}
+          initial={reduceMotion ? false : { scale: 0.84, opacity: 0.45 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.13, ease: [0.22, 1, 0.36, 1] }}
+          className="w-[88px] h-[88px] rounded-[var(--kb-r-lg)] flex items-center justify-center font-display text-3xl tracking-wide select-none"
+          style={{
+            background: `color-mix(in srgb, ${accent} 18%, var(--kb-bg-inset))`,
+            border: `1px solid color-mix(in srgb, ${accent} 42%, transparent)`,
+            color: accent,
+            boxShadow: 'var(--kb-shadow-card)',
+          }}
+        >
+          {mono}
+        </motion.div>
+      </div>
 
       <div className="w-full max-w-sm grid grid-cols-2 gap-3 mb-6">
         <Reel label="Year" value={String(year)} />

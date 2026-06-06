@@ -60,9 +60,9 @@ export function TeamRosterCard({
         style={{ touchAction: 'manipulation' }}
         className="w-full text-left p-3.5 pl-4 active:scale-[0.99] transition-transform"
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3.5">
           <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-bold shrink-0"
+            className="w-[52px] h-[52px] rounded-[14px] flex items-center justify-center text-base font-bold shrink-0 overflow-hidden leading-none"
             style={{
               background: `color-mix(in srgb, ${player.accent} 16%, var(--kb-bg-inset))`,
               border: `1px solid color-mix(in srgb, ${player.accent} 32%, transparent)`,

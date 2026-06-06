@@ -96,20 +96,17 @@ export function ReadyScreen({ picks, isDaily, onAttempt, onEdit }: ReadyScreenPr
             return (
               <motion.div
                 key={`${team.id}-${player.id}`}
-                className="kb-card flex items-center gap-3.5 p-3 rounded-[var(--kb-r-md)] relative overflow-hidden"
+                className="kb-card flex items-center gap-3.5 p-3 rounded-[var(--kb-r-md)]"
                 style={{
-                  background: `linear-gradient(90deg, ${team.accent}12 0%, var(--kb-bg-card) 70%)`,
+                  background: `color-mix(in srgb, ${team.accent} 7%, var(--kb-bg-card))`,
+                  borderColor: `${team.accent}26`,
                 }}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.14 + i * 0.04 }}
               >
                 <div
-                  className="absolute inset-y-0 left-0 w-0.5"
-                  style={{ backgroundColor: team.accent }}
-                />
-                <div
-                  className="w-11 h-11 rounded-xl overflow-hidden flex items-center justify-center text-xs font-bold shrink-0 ml-1"
+                  className="w-12 h-12 rounded-[14px] overflow-hidden flex items-center justify-center text-sm font-bold shrink-0 leading-none"
                   style={{
                     background: `${team.accent}22`,
                     color: team.accent,
