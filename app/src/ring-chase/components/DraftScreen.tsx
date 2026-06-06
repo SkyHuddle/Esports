@@ -103,12 +103,17 @@ export function DraftScreen({
           >
             ← Exit
           </button>
-          <RoundTrack total={4} current={picks.length} />
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-[8px] uppercase tracking-[0.3em] font-semibold leading-none" style={{ color: 'var(--kb-amber)', opacity: 0.7 }}>
+              Call of Duty
+            </p>
+            <RoundTrack total={4} current={picks.length} />
+          </div>
           {!isDaily && respinsLeft > 0 && draftSubphase === 'pick' ? (
             <button
               type="button"
               onClick={handleRespin}
-              className="shrink-0 text-[10px] uppercase tracking-wider font-semibold px-3 py-2 rounded-full border border-kb-gold/30 bg-kb-gold/10 text-kb-gold hover:bg-kb-gold/15 transition-colors"
+              className="shrink-0 border border-kb-border rounded-lg px-3 py-1.5 text-xs text-kb-fg-mute hover:text-kb-soft transition-colors"
             >
               Respin · {respinsLeft}
             </button>
@@ -280,17 +285,15 @@ function RosterSlots({
 
 function RoundTrack({ total, current }: { total: number; current: number }) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-1">
       {Array.from({ length: total }).map((_, i) => {
         const done = i < current;
         const active = i === current;
         return (
           <div
             key={i}
-            className="rounded-full transition-all duration-300"
+            className="w-8 h-1.5 rounded-full transition-all duration-300"
             style={{
-              width: done ? 20 : active ? 16 : 10,
-              height: 4,
               background: done
                 ? 'var(--kb-gold)'
                 : active
@@ -300,9 +303,6 @@ function RoundTrack({ total, current }: { total: number; current: number }) {
           />
         );
       })}
-      <span className="text-[9px] text-kb-faint ml-0.5 font-medium tabular-nums">
-        {current + 1}/{total}
-      </span>
     </div>
   );
 }

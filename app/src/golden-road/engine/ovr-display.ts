@@ -3,24 +3,24 @@
 export type OvrTier = 'elite' | 'strong' | 'solid' | 'fringe';
 
 export function getOvrTier(ovr: number): OvrTier {
-  if (ovr >= 84) return 'elite';
-  if (ovr >= 78) return 'strong';
+  if (ovr >= 88) return 'elite';
+  if (ovr >= 80) return 'strong';
   if (ovr >= 72) return 'solid';
   return 'fringe';
 }
 
 const TIER_COLORS: Record<OvrTier, string> = {
-  elite: '#f0c14b',
-  strong: '#d4a84b',
-  solid: '#a8a29e',
-  fringe: '#78716c',
+  elite: 'var(--kb-gold)',
+  strong: 'var(--kb-amber)',
+  solid: 'var(--kb-fg-soft)',
+  fringe: 'var(--kb-fg-mute)',
 };
 
 const TIER_LABELS: Record<OvrTier, string> = {
-  elite: 'Elite',
-  strong: 'Strong',
-  solid: 'Solid',
-  fringe: 'Fringe',
+  elite: 'Legend',
+  strong: 'Elite',
+  solid: 'Star',
+  fringe: 'Solid',
 };
 
 export function ovrAccentColor(ovr: number): string {

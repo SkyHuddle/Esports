@@ -64,10 +64,11 @@ export default function EsportsHub() {
             <Link
               key={game.id}
               to={game.href}
-              className="group block rounded-2xl overflow-hidden transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
+              className="group block rounded-[var(--kb-r-md)] overflow-hidden transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
               style={{
-                background: game.accentDim,
+                background: `linear-gradient(135deg, ${game.accentDim} 0%, var(--kb-bg-card) 100%)`,
                 border: `1px solid ${game.accentBorder}`,
+                boxShadow: 'var(--kb-shadow-card)',
               }}
             >
               <div

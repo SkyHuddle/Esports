@@ -11,7 +11,7 @@ export function KbCard({ children, className, accent = 'none', padded = true }: 
   return (
     <div
       className={cn(
-        'kb-card rounded-[var(--kb-r-lg)]',
+        'kb-card rounded-[var(--kb-r-md)]',
         padded && 'p-4',
         accent === 'gold' && 'kb-card-accent-gold',
         accent === 'amber' && 'kb-card-accent-amber',

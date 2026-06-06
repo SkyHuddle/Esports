@@ -14,16 +14,15 @@ interface TeamRosterCardProps {
 }
 
 function ovrAccent(overall: number): string {
-  if (overall >= 94) return 'var(--kb-gold)';
-  if (overall >= 90) return 'var(--kb-gold-deep)';
-  if (overall >= 86) return 'var(--kb-fg-soft)';
-  return 'var(--kb-mute)';
+  if (overall >= 88) return 'var(--kb-gold)';
+  if (overall >= 80) return 'var(--kb-amber)';
+  return 'var(--kb-fg-mute)';
 }
 
 function ovrTier(overall: number): string {
-  if (overall >= 94) return 'Legend';
-  if (overall >= 90) return 'Elite';
-  if (overall >= 86) return 'Star';
+  if (overall >= 88) return 'Legend';
+  if (overall >= 80) return 'Elite';
+  if (overall >= 72) return 'Star';
   return 'Solid';
 }
 

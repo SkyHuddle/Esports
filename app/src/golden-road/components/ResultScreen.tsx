@@ -106,11 +106,19 @@ export function ResultScreen({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <p className="text-center text-[10px] uppercase tracking-[0.35em] text-kb-mute mb-1">
+            <p className="text-center text-[10px] uppercase tracking-[0.35em] text-kb-mute mb-3">
               Golden Road
             </p>
-            <p className="text-center font-display text-2xl text-kb-fg mb-1">{summary.record}</p>
-            <p className="text-center text-sm text-kb-gold mb-5">{summary.runTitle}</p>
+            <p
+              className="text-center font-display text-7xl sm:text-8xl tabular-nums leading-none mb-2"
+              style={{
+                color: result.goldenRoad ? 'var(--kb-gold)' : 'var(--kb-fg)',
+                textShadow: result.goldenRoad ? '0 0 24px rgba(232,184,66,0.25)' : 'none',
+              }}
+            >
+              {summary.record}
+            </p>
+            <p className="text-center text-[13px] italic text-kb-soft mb-5">{summary.runTitle}</p>
 
             <div className="mb-5">
               <GoldenRoadSummaryCard result={result} />

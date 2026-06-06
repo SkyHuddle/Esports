@@ -109,13 +109,19 @@ export function ResultScreen({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <p className="text-center text-[10px] uppercase tracking-[0.35em] text-kb-mute mb-1">
+            <p className="text-center text-[10px] uppercase tracking-[0.35em] text-kb-mute mb-3">
               Ring Chase
             </p>
-            <p className="text-center font-display text-2xl text-kb-fg mb-1">
+            <p
+              className="text-center font-display text-7xl sm:text-8xl tabular-nums leading-none mb-2"
+              style={{
+                color: (result.ringWon || result.perfectSeason) ? 'var(--kb-gold)' : 'var(--kb-fg)',
+                textShadow: (result.ringWon || result.perfectSeason) ? '0 0 24px rgba(232,184,66,0.25)' : 'none',
+              }}
+            >
               {result.seasonSummary.record}
             </p>
-            <p className="text-center text-sm text-kb-gold mb-5">
+            <p className="text-center text-[13px] italic text-kb-soft mb-5">
               {result.seasonSummary.runTitle}
             </p>
 

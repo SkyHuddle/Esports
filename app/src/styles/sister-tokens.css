@@ -1,49 +1,57 @@
 /**
  * Esports Draft Games — design tokens.
+ * Premium dark esports palette (HLTV/VLR/sheepesports inspired).
  */
 :root {
   --kb-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --kb-ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
 
-  --kb-bg-deep: #07060a;
-  --kb-bg-base: #0d0b12;
-  --kb-bg-card: #16131c;
-  --kb-bg-elev: #1e1a26;
-  --kb-glass: rgba(255, 255, 255, 0.045);
+  /* Surfaces — layered darkness, violet-tinted */
+  --kb-bg-deep: #070609;
+  --kb-bg-base: #0e0c14;
+  --kb-bg-card: #161320;
+  --kb-bg-elev: #1e1a2a;
+  --kb-glass: rgba(255, 255, 255, 0.04);
   --kb-glass-strong: rgba(255, 255, 255, 0.08);
-  --kb-border: rgba(255, 255, 255, 0.09);
-  --kb-border-strong: rgba(255, 255, 255, 0.17);
-  --kb-hairline: rgba(255, 255, 255, 0.055);
+  --kb-border: rgba(255, 255, 255, 0.08);
+  --kb-border-strong: rgba(255, 255, 255, 0.15);
+  --kb-hairline: rgba(255, 255, 255, 0.05);
 
-  --kb-fg: #f4f0e6;
-  --kb-fg-soft: #c8c2b4;
-  --kb-fg-mute: #7a7480;
-  --kb-fg-faint: #4d4856;
+  /* Text */
+  --kb-fg: #f0ecdf;
+  --kb-fg-soft: #b8b3a8;
+  --kb-fg-mute: #6b6575;
+  --kb-fg-faint: #3d3847;
 
-  --kb-amber: #ff6a1f;
-  --kb-amber-hot: #ff8a3d;
+  /* Brand accents */
+  --kb-amber: #f5631a;
+  --kb-amber-hot: #ff7e3a;
   --kb-amber-glow: #ffb475;
 
   --kb-gold: #e8b842;
   --kb-gold-deep: #8a6418;
 
-  --kb-steel: #8ba7c7;
-  --kb-steel-dim: rgba(139, 167, 199, 0.08);
+  --kb-steel: #7fa5c9;
+  --kb-steel-dim: rgba(127, 165, 201, 0.08);
 
-  --kb-crimson: #ff3d5e;
-  --kb-green: #00d17a;
+  --kb-crimson: #e8364a;
+  --kb-green: #2dd97a;
 
+  /* Typography */
   --kb-display: 'Anton', 'Oswald', 'Arial Narrow', system-ui, sans-serif;
   --kb-ui: 'Space Grotesk', system-ui, sans-serif;
   --kb-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  --kb-r-md: 14px;
-  --kb-r-lg: 18px;
-  --kb-r-xl: 24px;
+  /* Radii — max 18px per DESIGN.md */
+  --kb-r-sm: 8px;
+  --kb-r-md: 12px;
+  --kb-r-lg: 16px;
+  --kb-r-xl: 20px;
 
-  --kb-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4), 0 6px 20px -6px rgba(0, 0, 0, 0.5);
-  --kb-shadow-gold: 0 2px 10px -2px rgba(232, 184, 66, 0.15);
-  --kb-shadow-amber: 0 2px 10px -2px rgba(255, 106, 31, 0.16);
+  /* Shadows */
+  --kb-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5), 0 4px 16px -4px rgba(0, 0, 0, 0.6);
+  --kb-shadow-gold: 0 0 16px -4px rgba(232, 184, 66, 0.12);
+  --kb-shadow-amber: 0 0 16px -4px rgba(245, 99, 26, 0.14);
 
   --ring-gold: var(--kb-gold);
 }

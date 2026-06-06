@@ -118,7 +118,7 @@ export function DraftScreen({
             <button
               type="button"
               onClick={handleRespin}
-              className="shrink-0 text-[10px] uppercase tracking-wider font-semibold px-3 py-2 rounded-full border border-kb-gold/30 bg-kb-gold/10 text-kb-gold hover:bg-kb-gold/15 transition-colors"
+              className="shrink-0 border border-kb-border rounded-lg px-3 py-1.5 text-xs text-kb-fg-mute hover:text-kb-soft transition-colors"
             >
               Respin · {respinsLeft}
             </button>
@@ -268,7 +268,7 @@ function TournamentProgress({
         {DRAFT_PHASE_ORDER.map((phase, i) => (
           <div key={phase} className="flex-1">
             <div
-              className="h-1 rounded-full transition-all duration-300"
+              className="h-1.5 rounded-full transition-all duration-300"
               style={{
                 background:
                   i < completedCount

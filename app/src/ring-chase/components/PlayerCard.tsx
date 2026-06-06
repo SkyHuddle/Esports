@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Trophy } from 'lucide-react';
 import type { CodPlayer, HistoricalCodTeam, RosterSlot } from '../core/types';
@@ -24,10 +25,15 @@ interface PlayerCardProps {
 }
 
 function ovrAccent(overall: number): string {
-  if (overall >= 94) return 'var(--kb-gold)';
-  if (overall >= 90) return 'var(--kb-gold-deep)';
-  if (overall >= 86) return 'var(--kb-fg-soft)';
-  return 'var(--kb-mute)';
+  if (overall >= 88) return 'var(--kb-gold)';
+  if (overall >= 80) return 'var(--kb-amber)';
+  return 'var(--kb-fg-mute)';
+}
+
+function ovrBadgeStyle(overall: number): React.CSSProperties {
+  if (overall >= 88) return { background: 'rgba(232,184,66,0.15)', color: 'var(--kb-gold)', border: '1px solid rgba(232,184,66,0.3)' };
+  if (overall >= 80) return { background: 'rgba(245,99,26,0.15)', color: 'var(--kb-amber)', border: '1px solid rgba(245,99,26,0.3)' };
+  return { background: 'var(--kb-glass)', color: 'var(--kb-fg-mute)', border: '1px solid var(--kb-border)' };
 }
 
 export function PlayerCard({
@@ -81,7 +87,7 @@ export function PlayerCard({
       >
         <div className="flex items-center gap-3.5">
           <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden"
+            className={`${compact ? 'w-8 h-8 rounded-lg' : 'w-12 h-12 rounded-xl'} flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden`}
             style={{
               background: `linear-gradient(145deg, ${accent}35 0%, ${accent}08 100%)`,
               border: `1px solid ${accent}40`,
@@ -101,8 +107,16 @@ export function PlayerCard({
                 {SLOT_LABELS[teamSlot]}
               </p>
             )}
+            {compact && (
+              <span
+                className="inline-block text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded mb-0.5"
+                style={{ background: 'var(--kb-glass)', color: 'var(--kb-fg-mute)', border: '1px solid var(--kb-border)' }}
+              >
+                {SLOT_LABELS[teamSlot].slice(0, 3)}
+              </span>
+            )}
             <p className="font-display text-lg text-kb-fg truncate leading-tight">{player.gamertag}</p>
-            <p className="text-[10px] text-kb-mute mt-0.5 truncate">
+            <p className="text-[11px] text-kb-mute mt-0.5 truncate">
               {compact ? `${team.season} · ${team.teamName}` : creds.headline}
             </p>
             {!compact && (
@@ -128,15 +142,26 @@ export function PlayerCard({
           </div>
 
           <div className="text-right shrink-0">
-            <p className="text-[9px] uppercase tracking-[0.2em] text-kb-mute mb-0.5">OVR</p>
-            <span
-              className="font-display text-2xl tabular-nums leading-none"
-              style={{ color: ovrColor }}
-            >
-              {confidence === 'estimated' ? '~' : ''}
-              {overall}
-            </span>
-            <p className="text-[9px] text-kb-faint mt-0.5 kb-mono">{team.season}</p>
+            {compact ? (
+              <span
+                className="font-display text-lg tabular-nums rounded-md px-2 py-0.5"
+                style={ovrBadgeStyle(overall)}
+              >
+                {confidence === 'estimated' ? '~' : ''}{overall}
+              </span>
+            ) : (
+              <>
+                <p className="text-[9px] uppercase tracking-[0.2em] text-kb-mute mb-0.5">OVR</p>
+                <span
+                  className="font-display text-2xl tabular-nums leading-none"
+                  style={{ color: ovrColor }}
+                >
+                  {confidence === 'estimated' ? '~' : ''}
+                  {overall}
+                </span>
+                <p className="text-[9px] text-kb-faint mt-0.5 kb-mono">{team.season}</p>
+              </>
+            )}
           </div>
         </div>
       </button>
