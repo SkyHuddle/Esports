@@ -162,7 +162,7 @@ export function HomeScreen({
               {[
                 { n: '1', text: 'Spin a historical CS2/CSGO Major team roster' },
                 { n: '2', text: 'Pick one player from the team to fill an open slot' },
-                { n: '3', text: 'Repeat 5 rounds — then run the Major bracket' },
+                { n: '3', text: 'Repeat 5 rounds, then run the Major bracket' },
               ].map(({ n, text }) => (
                 <div key={n} className="flex items-start gap-3.5">
                   <span

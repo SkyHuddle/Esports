@@ -163,7 +163,7 @@ export function DraftScreen({
                   </>
                 ) : (
                   <>
-                    {pickableCount} slots open — cards sorted by OVR.
+                    {pickableCount} slots open. Cards sorted by OVR.
                   </>
                 )}
               </p>
@@ -217,7 +217,7 @@ export function DraftScreen({
             </div>
             {isDaily && (
               <p className="text-center text-[10px] text-kb-faint mt-6">
-                Daily mode — one official attempt per day
+                Daily mode: one official attempt per day
               </p>
             )}
           </motion.div>

@@ -62,7 +62,7 @@ export function TeamRosterCard({
         roleTaken && 'opacity-35'
       )}
       style={{
-        background: `linear-gradient(145deg, ${player.accent}1e 0%, ${player.accent}08 45%, var(--kb-bg-card) 100%)`,
+        background: `color-mix(in srgb, ${player.accent} 7%, var(--kb-bg-card))`,
       }}
     >
       <button
@@ -76,7 +76,7 @@ export function TeamRosterCard({
           <div
             className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-bold shrink-0"
             style={{
-              background: `linear-gradient(145deg, ${player.accent}35 0%, ${player.accent}08 100%)`,
+              background: `color-mix(in srgb, ${player.accent} 16%, var(--kb-bg-inset))`,
               border: `1px solid ${player.accent}40`,
               color: player.accent,
             }}
@@ -178,7 +178,7 @@ export function TeamBanner({ team, rosterAvgOvr }: TeamBannerProps) {
       animate={{ opacity: 1, y: 0 }}
       className="kb-card rounded-[var(--kb-r-lg)] p-5 mb-4"
       style={{
-        background: `linear-gradient(135deg, ${team.accent}14 0%, var(--kb-bg-card) 100%)`,
+        background: `color-mix(in srgb, ${team.accent} 6%, var(--kb-bg-card))`,
         border: `1px solid ${team.accent}26`,
       }}
     >

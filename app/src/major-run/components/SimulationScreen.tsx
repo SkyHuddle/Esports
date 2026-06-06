@@ -69,7 +69,7 @@ export function SimulationScreen({ result, simSeed, onComplete }: SimulationScre
       setActiveMoment(
         step?.passed
           ? `${mvp} closes out ${step.label}`
-          : `${step?.label ?? 'Round'} — roster cracks under pressure`
+          : `${step?.label ?? 'Round'}: roster cracks under pressure`
       );
 
       schedule(() => {

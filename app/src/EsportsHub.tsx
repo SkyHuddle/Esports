@@ -1,231 +1,204 @@
 import { Link } from 'react-router';
-import { Flame, Trophy, Crosshair, ArrowRight, Users } from 'lucide-react';
+import { Flame, Trophy, Crosshair, ArrowRight, ArrowUpRight } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-const games = [
+interface Game {
+  id: string;
+  title: string;
+  sport: string;
+  tagline: string;
+  picks: number;
+  prize: string;
+  href: string;
+  accent: string;
+  Icon: LucideIcon;
+}
+
+const games: Game[] = [
   {
     id: 'ring-chase',
     title: 'Ring Chase',
     sport: 'Call of Duty',
-    tagline: 'Draft 4 legends. Chase the championship.',
-    stat: '4 picks · Championship ring',
-    drafting: '23.4K',
+    tagline: 'Draft four legends from iconic team-years. Chase the ring.',
+    picks: 4,
+    prize: 'Championship ring',
     href: '/ring-chase',
     accent: '#f5631a',
-    accentRgb: '245, 99, 26',
     Icon: Flame,
   },
   {
     id: 'golden-road',
     title: 'Golden Road',
     sport: 'League of Legends',
-    tagline: 'Build a Worlds run from legendary eras.',
-    stat: '5 picks · Worlds champion',
-    drafting: '18.7K',
+    tagline: 'Build a Worlds run from legendary eras. Lift the trophy.',
+    picks: 5,
+    prize: 'Worlds champion',
     href: '/golden-road',
     accent: '#e8b842',
-    accentRgb: '232, 184, 66',
     Icon: Trophy,
   },
   {
     id: 'major-run',
     title: 'Major Run',
     sport: 'Counter-Strike 2',
-    tagline: 'Draft 5 pros. Survive the bracket.',
-    stat: '5 picks · Major trophy',
-    drafting: '16.2K',
+    tagline: 'Draft five pros and survive the bracket to the grand final.',
+    picks: 5,
+    prize: 'Major trophy',
     href: '/major-run',
     accent: '#7fa5c9',
-    accentRgb: '127, 165, 201',
     Icon: Crosshair,
   },
 ];
 
+const steps: { n: string; title: string; body: string }[] = [
+  { n: '01', title: 'Spin a team-year', body: 'A real roster from esports history lands on the board.' },
+  { n: '02', title: 'Draft one per round', body: 'Pick the player who fills your slot. Build the lineup.' },
+  { n: '03', title: 'Get the result, share it', body: 'A season plays out. Screenshot the card. Settle it.' },
+];
+
 export default function EsportsHub() {
   return (
-    <div
-      className="min-h-[100dvh] text-[#f0ecdf] flex flex-col"
-      style={{ background: '#07060a' }}
-    >
-      {/* Atmospheric top glow */}
-      <div
-        className="fixed top-0 left-0 right-0 h-64 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse 80% 100% at 50% -20%, rgba(232,184,66,0.06) 0%, transparent 70%)',
-        }}
-      />
+    <div className="kb-root min-h-[100dvh] flex flex-col mesh-bg-ring relative">
+      <div className="fixed inset-0 grid-bg pointer-events-none z-0" />
 
-      <header className="relative z-10 px-5 pt-12 pb-6 max-w-lg mx-auto w-full">
-        <p
-          className="text-[10px] uppercase tracking-[0.35em] font-semibold mb-3"
-          style={{ color: 'rgba(232,184,66,0.5)' }}
-        >
-          Esports Draft
-        </p>
-        <h1
-          className="leading-[0.86] tracking-tight text-[#f0ecdf]"
-          style={{
-            fontFamily: "'Anton', 'Arial Narrow', system-ui, sans-serif",
-            fontWeight: 400,
-            fontSize: 'clamp(52px, 14vw, 72px)',
-            textTransform: 'uppercase',
-          }}
-        >
-          Draft<br />
-          <span style={{ color: '#e8b842' }}>Games</span>
-        </h1>
-        <p
-          className="text-[13px] mt-4 leading-relaxed"
-          style={{ color: 'rgba(255,255,255,0.35)', fontFamily: "'Space Grotesk', system-ui" }}
-        >
-          CoD · LoL · CS2 — draft legends, get a result, share it.
-        </p>
-      </header>
+      <div className="relative z-10 flex-1 flex flex-col">
+        {/* Top wordmark */}
+        <header className="px-5 pt-6 max-w-2xl mx-auto w-full">
+          <div className="flex items-center justify-between">
+            <span className="kb-label text-kb-soft">Esports Draft</span>
+            <span className="flex items-center gap-1.5 text-kb-mute text-[11px]">
+              <span className="w-1.5 h-1.5 rounded-full kb-live-dot" style={{ background: 'var(--kb-green)' }} />
+              New board daily
+            </span>
+          </div>
+        </header>
 
-      <main className="relative z-10 flex-1 px-5 pb-12 max-w-lg mx-auto w-full space-y-3">
-        {games.map((game) => {
-          const { Icon } = game;
-          return (
-            <Link
-              key={game.id}
-              to={game.href}
-              className="group block overflow-hidden transition-all duration-200 active:scale-[0.985]"
-              style={{
-                background: `linear-gradient(145deg, rgba(${game.accentRgb}, 0.14) 0%, #161320 55%, #161320 100%)`,
-                border: `1px solid rgba(${game.accentRgb}, 0.28)`,
-                borderRadius: '14px',
-                boxShadow: `0 1px 2px rgba(0,0,0,0.6), 0 8px 24px -8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(${game.accentRgb}, 0.08)`,
-              }}
-            >
-              {/* Top accent line — thicker, more visible */}
-              <div style={{ height: '2px', background: game.accent, opacity: 0.85 }} />
+        {/* Hero */}
+        <section className="px-5 pt-12 pb-10 max-w-2xl mx-auto w-full">
+          <p className="kb-eyebrow text-kb-mute mb-5">Draft the past. Settle the debate.</p>
+          <h1
+            className="font-display text-kb-fg leading-[0.86]"
+            style={{ fontSize: 'clamp(48px, 13vw, 84px)' }}
+          >
+            Draft legends.
+            <br />
+            <span style={{ color: 'var(--kb-gold)' }}>Share the result.</span>
+          </h1>
+          <p className="text-kb-soft text-[15px] leading-relaxed mt-6 max-w-[44ch]">
+            Three daily draft games across CoD, League, and CS2. One perfect
+            lineup, one result worth arguing about, one screenshot.
+          </p>
+          <a
+            href="#games"
+            className="group mt-8 inline-flex items-center gap-2.5 rounded-full kb-cta-gold h-12 pl-6 pr-5 text-sm"
+          >
+            Choose your game
+            <span className="kb-cta-icon">
+              <ArrowRight className="w-3.5 h-3.5" />
+            </span>
+          </a>
+        </section>
 
-              {/* Atmospheric radial glow top-right */}
-              <div
-                className="absolute top-0 right-0 w-32 h-32 pointer-events-none"
-                style={{
-                  background: `radial-gradient(circle at 90% 0%, rgba(${game.accentRgb}, 0.12) 0%, transparent 70%)`,
-                  borderRadius: '14px',
-                }}
-              />
+        {/* Games */}
+        <section id="games" className="px-5 max-w-2xl mx-auto w-full scroll-mt-6">
+          <div className="flex items-baseline justify-between border-b border-kb-hairline pb-2.5 mb-3">
+            <h2 className="kb-label text-kb-soft">Three games</h2>
+            <span className="kb-label text-kb-faint">Pick one</span>
+          </div>
 
-              <div className="relative px-5 pt-4 pb-4">
-                {/* Top row: sport label + LIVE badge */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
+          <div className="space-y-2.5">
+            {games.map((game) => {
+              const { Icon } = game;
+              return (
+                <Link
+                  key={game.id}
+                  to={game.href}
+                  className="kb-card kb-card-hover group block rounded-[var(--kb-r-lg)] active:translate-y-px"
+                >
+                  <div className="p-4 sm:p-5 flex items-center gap-4">
                     <div
-                      className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
+                      className="w-11 h-11 rounded-[var(--kb-r-md)] flex items-center justify-center shrink-0"
                       style={{
-                        background: `rgba(${game.accentRgb}, 0.18)`,
-                        border: `1px solid rgba(${game.accentRgb}, 0.35)`,
+                        background: `color-mix(in srgb, ${game.accent} 14%, transparent)`,
+                        border: `1px solid color-mix(in srgb, ${game.accent} 32%, transparent)`,
                       }}
                     >
-                      <Icon
-                        className="w-3.5 h-3.5"
+                      <Icon className="w-5 h-5" style={{ color: game.accent }} strokeWidth={1.75} />
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <p
+                        className="kb-eyebrow mb-1"
                         style={{ color: game.accent }}
-                        strokeWidth={2}
-                      />
-                    </div>
-                    <p
-                      className="text-[10px] uppercase tracking-[0.28em] font-semibold"
-                      style={{ color: game.accent, fontFamily: "'Space Grotesk', system-ui" }}
-                    >
-                      {game.sport}
-                    </p>
-                  </div>
-
-                  <span
-                    className="inline-flex items-center gap-1.5 text-[9px] uppercase tracking-wider font-semibold px-2 py-1 rounded-full"
-                    style={{
-                      color: game.accent,
-                      background: `rgba(${game.accentRgb}, 0.14)`,
-                      border: `1px solid rgba(${game.accentRgb}, 0.3)`,
-                      fontFamily: "'Space Grotesk', system-ui",
-                    }}
-                  >
-                    <span
-                      className="w-1.5 h-1.5 rounded-full kb-live-dot"
-                      style={{ background: game.accent }}
-                    />
-                    Daily Live
-                  </span>
-                </div>
-
-                {/* Game title */}
-                <h2
-                  className="text-[#f0ecdf] leading-none mb-2"
-                  style={{
-                    fontFamily: "'Anton', 'Arial Narrow', system-ui, sans-serif",
-                    fontWeight: 400,
-                    fontSize: 'clamp(28px, 8vw, 36px)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.01em',
-                  }}
-                >
-                  {game.title}
-                </h2>
-
-                {/* Tagline */}
-                <p
-                  className="text-[13px] leading-relaxed mb-3.5"
-                  style={{ color: 'rgba(255,255,255,0.45)', fontFamily: "'Space Grotesk', system-ui" }}
-                >
-                  {game.tagline}
-                </p>
-
-                {/* Bottom row: stat + drafting count + arrow */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span
-                      className="text-[10px] font-medium"
-                      style={{ color: 'rgba(255,255,255,0.3)', fontFamily: "'Space Grotesk', system-ui" }}
-                    >
-                      {game.stat}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="flex items-center gap-1"
-                      style={{ color: 'rgba(255,255,255,0.25)' }}
-                    >
-                      <Users className="w-3 h-3" />
-                      <span
-                        className="text-[10px] tabular-nums"
-                        style={{ fontFamily: "'Space Grotesk', system-ui" }}
                       >
-                        {game.drafting}
-                      </span>
+                        {game.sport}
+                      </p>
+                      <h3 className="font-display text-2xl sm:text-[28px] text-kb-fg leading-none">
+                        {game.title}
+                      </h3>
+                      <p className="text-[13px] text-kb-soft leading-snug mt-2 max-w-[40ch]">
+                        {game.tagline}
+                      </p>
+                      <div className="flex items-center gap-3 mt-3 text-[11px] text-kb-mute">
+                        <span className="kb-mono tabular-nums">{game.picks} picks</span>
+                        <span className="w-px h-3 bg-kb-hairline" />
+                        <span>{game.prize}</span>
+                      </div>
                     </div>
-                    <ArrowRight
-                      className="w-4 h-4 transition-all duration-200 group-hover:translate-x-0.5"
-                      style={{ color: `rgba(${game.accentRgb}, 0.5)` }}
+
+                    <ArrowUpRight
+                      className="w-5 h-5 shrink-0 self-start text-kb-faint transition-all duration-200 group-hover:text-kb-soft group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     />
                   </div>
-                </div>
-              </div>
-            </Link>
-          );
-        })}
-      </main>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
 
-      <footer className="relative z-10 px-5 pb-8 max-w-lg mx-auto w-full">
-        <div
-          className="pt-5 flex items-center justify-between"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
-        >
-          <span
-            className="text-[10px] uppercase tracking-wider"
-            style={{ color: 'rgba(255,255,255,0.18)', fontFamily: "'Space Grotesk', system-ui" }}
-          >
-            Daily · Share · Replay
-          </span>
-          <span
-            className="text-[10px]"
-            style={{ color: 'rgba(255,255,255,0.12)', fontFamily: "'Space Grotesk', system-ui" }}
-          >
-            Esports Draft Games
-          </span>
-        </div>
-      </footer>
+        {/* How it works */}
+        <section className="px-5 mt-12 max-w-2xl mx-auto w-full">
+          <div className="flex items-baseline justify-between border-b border-kb-hairline pb-2.5 mb-5">
+            <h2 className="kb-label text-kb-soft">How it works</h2>
+            <span className="kb-label text-kb-faint">Under two minutes</span>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-x-5 gap-y-6">
+            {steps.map((step) => (
+              <div key={step.n}>
+                <p className="font-display text-2xl text-kb-faint tabular-nums leading-none">{step.n}</p>
+                <p className="text-kb-fg text-sm font-semibold mt-2.5">{step.title}</p>
+                <p className="text-[13px] text-kb-mute leading-relaxed mt-1">{step.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Closing CTA */}
+        <section className="px-5 mt-12 mb-4 max-w-2xl mx-auto w-full">
+          <div className="kb-card rounded-[var(--kb-r-lg)] p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className="font-display text-xl text-kb-fg leading-tight">Today&apos;s board is live</p>
+              <p className="text-[13px] text-kb-mute mt-1">One run per game, per day. Best lineup wins.</p>
+            </div>
+            <a
+              href="#games"
+              className="group inline-flex items-center gap-2.5 rounded-full kb-cta-glass h-11 pl-5 pr-4 text-sm shrink-0 self-start sm:self-auto"
+            >
+              Start drafting
+              <span className="kb-cta-icon">
+                <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            </a>
+          </div>
+        </section>
+
+        <footer className="px-5 pb-8 mt-auto max-w-2xl mx-auto w-full">
+          <div className="pt-5 flex items-center justify-between border-t border-kb-hairline">
+            <span className="kb-label text-kb-faint">Daily · Share · Replay</span>
+            <span className="text-[11px] text-kb-faint">Esports Draft Games</span>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }

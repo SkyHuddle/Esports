@@ -116,7 +116,6 @@ export function ResultScreen({
               className="text-center font-display text-7xl sm:text-8xl tabular-nums leading-none mb-2"
               style={{
                 color: (result.ringWon || result.perfectSeason) ? 'var(--kb-gold)' : 'var(--kb-fg)',
-                textShadow: (result.ringWon || result.perfectSeason) ? '0 0 24px rgba(232,184,66,0.25)' : 'none',
               }}
             >
               {result.seasonSummary.record}
@@ -163,7 +162,7 @@ export function ResultScreen({
                 </RingCtaButton>
               ) : (
                 <p className="text-center text-[11px] text-kb-mute py-2">
-                  Daily locked — one run per day
+                  Daily locked. One run per day.
                 </p>
               )}
               <button

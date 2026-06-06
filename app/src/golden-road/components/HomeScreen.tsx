@@ -148,7 +148,7 @@ export function HomeScreen({
               {[
                 { n: '1', text: 'Spin a random LoL team-year from iconic eras' },
                 { n: '2', text: 'Pick one player from the roster to fill an open role' },
-                { n: '3', text: 'Repeat 5 rounds — clear Spring, MSI, Summer, and Worlds' },
+                { n: '3', text: 'Repeat 5 rounds, clearing Spring, MSI, Summer, and Worlds' },
               ].map(({ n, text }) => (
                 <div key={n} className="flex items-start gap-3.5">
                   <span

@@ -180,7 +180,7 @@ export function DraftScreen({
 
             {isDaily && (
               <p className="text-center text-[10px] text-kb-faint mt-6">
-                Daily mode — fixed teams, no respins
+                Daily mode: fixed teams, no respins
               </p>
             )}
           </motion.div>

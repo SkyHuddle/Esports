@@ -8,7 +8,7 @@ interface HowItWorksModalProps {
 const STEPS = [
   { n: '1', text: 'Spin four historical team-years' },
   { n: '2', text: 'Draft one player from each roster' },
-  { n: '3', text: 'Get your season record — 20-0 through 0-20' },
+  { n: '3', text: 'Get your season record, 20-0 through 0-20' },
 ];
 
 export function HowItWorksModal({ onDismiss }: HowItWorksModalProps) {

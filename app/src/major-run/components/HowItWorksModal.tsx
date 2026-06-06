@@ -8,7 +8,7 @@ interface HowItWorksModalProps {
 const STEPS = [
   { n: '1', text: 'Spin five iconic CS rosters' },
   { n: '2', text: 'Draft one player from each team-year card' },
-  { n: '3', text: 'Your Major run resolves instantly — see your bracket record at the end' },
+  { n: '3', text: 'Your Major run resolves instantly. See your bracket record at the end' },
 ];
 
 export function HowItWorksModal({ onDismiss }: HowItWorksModalProps) {

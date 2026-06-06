@@ -8,31 +8,32 @@
 @layer base {
   :root {
     --ring-gold: var(--kb-gold);
-    --background: 0 0% 0%;
-    --foreground: 48 18% 83%;
-    --card: 0 0% 6%;
-    --card-foreground: 48 18% 83%;
-    --popover: 0 0% 6%;
-    --popover-foreground: 48 18% 83%;
-    --primary: 48 18% 83%;
-    --primary-foreground: 0 0% 4%;
-    --secondary: 0 0% 13%;
-    --secondary-foreground: 48 18% 83%;
-    --muted: 0 0% 13%;
+    --background: 220 14% 5%;
+    --foreground: 44 16% 84%;
+    --card: 222 12% 9%;
+    --card-foreground: 44 16% 84%;
+    --popover: 222 12% 9%;
+    --popover-foreground: 44 16% 84%;
+    --primary: 44 16% 84%;
+    --primary-foreground: 220 14% 5%;
+    --secondary: 222 10% 14%;
+    --secondary-foreground: 44 16% 84%;
+    --muted: 222 10% 14%;
     --muted-foreground: 0 0% 60%;
-    --accent: 0 0% 13%;
-    --accent-foreground: 48 18% 83%;
-    --destructive: 0 84.2% 60.2%;
+    --accent: 222 10% 14%;
+    --accent-foreground: 44 16% 84%;
+    --destructive: 351 74% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 48 18% 83%;
-    --radius: 0.625rem;
+    --border: 0 0% 100% / 0.08;
+    --input: 0 0% 100% / 0.08;
+    --ring: 44 16% 70%;
+    --radius: 0.75rem;
   }
 
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
@@ -40,6 +41,18 @@
     color: var(--kb-fg);
     font-family: var(--kb-ui);
     overflow-x: hidden;
+  }
+
+  /* Consistent, accent-neutral focus ring for keyboard users only. */
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--kb-focus);
+    border-radius: var(--kb-r-sm);
+  }
+
+  ::selection {
+    background: rgba(232, 184, 66, 0.24);
+    color: var(--kb-fg);
   }
 }
 
@@ -53,7 +66,7 @@
   .font-display {
     font-family: var(--kb-display);
     font-weight: 400;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
     text-transform: uppercase;
   }
 
@@ -62,87 +75,139 @@
     font-feature-settings: 'tnum';
   }
 
+  .kb-eyebrow {
+    font-size: var(--kb-text-micro);
+    text-transform: uppercase;
+    letter-spacing: var(--kb-tracking-eyebrow);
+    font-weight: 600;
+  }
+
+  .kb-label {
+    font-size: var(--kb-text-label);
+    text-transform: uppercase;
+    letter-spacing: var(--kb-tracking-label);
+    font-weight: 600;
+    color: var(--kb-fg-mute);
+  }
+
+  /* Text colors */
   .text-kb-fg { color: var(--kb-fg); }
   .text-kb-soft { color: var(--kb-fg-soft); }
   .text-kb-mute { color: var(--kb-fg-mute); }
   .text-kb-faint { color: var(--kb-fg-faint); }
   .text-kb-amber { color: var(--kb-amber); }
   .text-kb-amber-hot { color: var(--kb-amber-hot); }
+  .text-kb-steel { color: var(--kb-steel); }
   .text-ring-gold { color: var(--kb-gold); }
   .bg-ring-gold { background-color: var(--kb-gold); }
   .border-ring-gold { border-color: var(--kb-gold); }
 
-  /* Gold accent text — no external glow bleed */
-  .glow-ring {
-    text-shadow: none;
-  }
+  /* glow-ring is intentionally inert now — kept so callers don't break.
+     Win emphasis comes from color + weight, never from a text glow. */
+  .glow-ring { text-shadow: none; }
 
+  /* ------------------------------------------------------------------
+   * Brand bar — solid, quiet. A single hairline divider, no heavy blur.
+   * ---------------------------------------------------------------- */
   .kb-brand-bar {
-    background: rgba(7, 6, 10, 0.82);
-    backdrop-filter: blur(16px);
+    background: color-mix(in srgb, var(--kb-bg-deep) 88%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--kb-hairline);
   }
 
+  /* ------------------------------------------------------------------
+   * Card — the workhorse surface. Flat charcoal, hairline border,
+   * soft directional shadow. Hover lifts the border, not a glow.
+   * ---------------------------------------------------------------- */
   .kb-card {
     background: var(--kb-bg-card);
     border: 1px solid var(--kb-border);
-    border-radius: 12px;
+    border-radius: var(--kb-r-md);
     box-shadow: var(--kb-shadow-card);
     overflow: hidden;
   }
 
+  /* Accent cards: a restrained accent border + a hairline top rule via
+     a subtle inset highlight. No colored bloom, no side stripes. */
   .kb-card-accent-gold {
-    border-color: rgba(232, 184, 66, 0.25);
-    box-shadow: var(--kb-shadow-card), var(--kb-shadow-gold);
+    border-color: rgba(232, 184, 66, 0.22);
   }
-
   .kb-card-accent-amber {
-    border-color: rgba(255, 106, 31, 0.25);
-    box-shadow: var(--kb-shadow-card), var(--kb-shadow-amber);
+    border-color: rgba(245, 99, 26, 0.22);
+  }
+  .kb-card-accent-steel {
+    border-color: rgba(127, 165, 201, 0.22);
   }
 
+  .kb-card-hover {
+    transition: border-color var(--kb-dur) var(--kb-ease-out),
+      background-color var(--kb-dur) var(--kb-ease-out),
+      transform var(--kb-dur) var(--kb-ease-out);
+  }
+  .kb-card-hover:hover {
+    border-color: var(--kb-border-strong);
+    background: var(--kb-bg-elev);
+  }
+
+  /* Rare, purposeful translucent panel (overlays/sheets only). */
   .glass-panel,
   .kb-glass-panel {
-    background: var(--kb-glass);
+    background: color-mix(in srgb, var(--kb-bg-elev) 82%, transparent);
     border: 1px solid var(--kb-border);
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
+  /* ------------------------------------------------------------------
+   * CTAs — pill primary actions. Solid fills, soft inset highlight,
+   * states: hover (lighten), active (press), focus (ring), disabled.
+   * ---------------------------------------------------------------- */
   .kb-cta-gold {
     background: var(--kb-gold);
-    color: #0a0806;
+    color: #100b02;
     font-weight: 600;
-    letter-spacing: 0.02em;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    letter-spacing: 0.01em;
+    box-shadow: var(--kb-shadow-cta);
+    transition: filter var(--kb-dur) var(--kb-ease-out), transform var(--kb-dur-fast) var(--kb-ease-out);
   }
-
-  .kb-cta-gold:hover:not(:disabled) {
-    filter: brightness(1.06);
-  }
+  .kb-cta-gold:hover:not(:disabled) { filter: brightness(1.05); }
+  .kb-cta-gold:active:not(:disabled) { transform: translateY(0.5px); filter: brightness(0.98); }
 
   .kb-cta-amber {
     background: var(--kb-amber);
-    color: #0a0806;
+    color: #160a04;
     font-weight: 600;
-    letter-spacing: 0.02em;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    letter-spacing: 0.01em;
+    box-shadow: var(--kb-shadow-cta);
+    transition: filter var(--kb-dur) var(--kb-ease-out), transform var(--kb-dur-fast) var(--kb-ease-out);
   }
+  .kb-cta-amber:hover:not(:disabled) { filter: brightness(1.05); }
+  .kb-cta-amber:active:not(:disabled) { transform: translateY(0.5px); filter: brightness(0.98); }
 
-  .kb-cta-amber:hover:not(:disabled) {
-    filter: brightness(1.06);
+  .kb-cta-steel {
+    background: var(--kb-steel);
+    color: #07101a;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    box-shadow: var(--kb-shadow-cta);
+    transition: filter var(--kb-dur) var(--kb-ease-out), transform var(--kb-dur-fast) var(--kb-ease-out);
   }
+  .kb-cta-steel:hover:not(:disabled) { filter: brightness(1.05); }
+  .kb-cta-steel:active:not(:disabled) { transform: translateY(0.5px); filter: brightness(0.98); }
 
+  /* Tertiary — quiet outline button, no blur fill. */
   .kb-cta-glass {
-    background: var(--kb-glass-strong);
+    background: var(--kb-fill);
     border: 1px solid var(--kb-border);
     color: var(--kb-fg);
-    backdrop-filter: blur(12px);
+    transition: background-color var(--kb-dur) var(--kb-ease-out), border-color var(--kb-dur) var(--kb-ease-out);
   }
-
   .kb-cta-glass:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--kb-fill-strong);
     border-color: var(--kb-border-strong);
   }
+  .kb-cta-glass:active:not(:disabled) { background: var(--kb-fill); }
 
   .kb-cta-icon {
     display: flex;
@@ -150,51 +215,129 @@
     justify-content: center;
     width: 2rem;
     height: 2rem;
-    border-radius: 9999px;
-    background: rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s var(--kb-ease-out);
+    border-radius: var(--kb-r-pill);
+    background: rgba(0, 0, 0, 0.18);
+    transition: transform var(--kb-dur) var(--kb-ease-out);
+  }
+  .group:hover .kb-cta-icon { transform: translateX(2px); }
+
+  /* ------------------------------------------------------------------
+   * Inputs — recessed well, hairline border, accent focus border.
+   * ---------------------------------------------------------------- */
+  .kb-input {
+    background: var(--kb-bg-inset);
+    border: 1px solid var(--kb-border);
+    border-radius: var(--kb-r-sm);
+    color: var(--kb-fg);
+    font-family: var(--kb-ui);
+    transition: border-color var(--kb-dur) var(--kb-ease-out);
+  }
+  .kb-input::placeholder { color: var(--kb-fg-faint); }
+  .kb-input:hover { border-color: var(--kb-border-strong); }
+  .kb-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.28);
+    box-shadow: none;
   }
 
-  .group:hover .kb-cta-icon {
-    transform: scale(1.08);
+  /* ------------------------------------------------------------------
+   * Chips — compact metadata pills.
+   * ---------------------------------------------------------------- */
+  .kb-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--kb-text-micro);
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: var(--kb-r-pill);
+    border: 1px solid var(--kb-border);
+    background: var(--kb-fill);
+    color: var(--kb-fg-soft);
+    white-space: nowrap;
+  }
+  .kb-chip-gold {
+    border-color: rgba(232, 184, 66, 0.28);
+    background: rgba(232, 184, 66, 0.10);
+    color: var(--kb-gold);
+  }
+  .kb-chip-amber {
+    border-color: rgba(245, 99, 26, 0.28);
+    background: rgba(245, 99, 26, 0.10);
+    color: var(--kb-amber);
+  }
+  .kb-chip-steel {
+    border-color: rgba(127, 165, 201, 0.30);
+    background: rgba(127, 165, 201, 0.12);
+    color: var(--kb-steel);
   }
 
-  .mesh-bg-ring {
-    background-image:
-      radial-gradient(ellipse 80% 50% at 50% -5%, rgba(245, 99, 26, 0.10) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 40% at 100% 60%, rgba(232, 184, 66, 0.06) 0%, transparent 50%),
-      radial-gradient(ellipse 40% 30% at 0% 80%, rgba(245, 99, 26, 0.04) 0%, transparent 50%);
-  }
-
-  .mesh-bg-cs {
-    background-image:
-      radial-gradient(ellipse 80% 50% at 50% -5%, rgba(127, 165, 201, 0.10) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 40% at 100% 60%, rgba(232, 184, 66, 0.05) 0%, transparent 50%),
-      radial-gradient(ellipse 40% 30% at 0% 80%, rgba(127, 165, 201, 0.05) 0%, transparent 50%);
-  }
-
+  /* ------------------------------------------------------------------
+   * Page backgrounds — flat graphite with an almost-imperceptible
+   * cool top wash + a faint editorial grid. No glowing mesh blobs.
+   * The mesh-bg-* class names are preserved; their meaning is now
+   * "flat base with a faint atmospheric edge" tuned per game accent.
+   * ---------------------------------------------------------------- */
+  .mesh-bg-ring,
+  .mesh-bg-cs,
   .mesh-bg-lol {
+    background-color: var(--kb-bg-deep);
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -5%, rgba(232, 184, 66, 0.10) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 40% at 100% 60%, rgba(232, 184, 66, 0.06) 0%, transparent 50%),
-      radial-gradient(ellipse 40% 30% at 0% 80%, rgba(232, 184, 66, 0.04) 0%, transparent 50%);
+      radial-gradient(120% 60% at 50% -10%, rgba(255, 255, 255, 0.022) 0%, transparent 60%);
   }
 
+  /* Faint structural grid, masked so it never tiles the whole viewport. */
   .grid-bg {
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 75%);
+      linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, black 0%, transparent 70%);
+    mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, black 0%, transparent 70%);
   }
+
+  /* Optional fine grain to kill banding on large dark fields. */
+  .kb-grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Hairline divider helper */
+  .kb-rule { border-color: var(--kb-hairline); }
 
   @keyframes kb-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.55; transform: scale(1.2); }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
   }
+  .kb-live-dot { animation: kb-pulse 2s var(--kb-ease-std) infinite; }
 
-  .kb-live-dot {
-    animation: kb-pulse 1.6s ease-in-out infinite;
+  @keyframes kb-shimmer {
+    0% { background-position: -150% 0; }
+    100% { background-position: 250% 0; }
+  }
+  .kb-skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--kb-bg-card) 0%,
+      var(--kb-bg-elev) 50%,
+      var(--kb-bg-card) 100%
+    );
+    background-size: 200% 100%;
+    animation: kb-shimmer 1.4s linear infinite;
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

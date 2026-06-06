@@ -157,7 +157,7 @@ export function ReadyScreen({ picks, isDaily, onAttempt, onEdit }: ReadyScreenPr
         )}
         {isDaily && (
           <p className="text-center text-[10px] text-kb-faint py-1">
-            Daily locked — no redrafts or respins
+            Daily locked. No redrafts or respins.
           </p>
         )}
       </motion.div>

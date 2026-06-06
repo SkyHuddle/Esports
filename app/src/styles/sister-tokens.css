@@ -1,57 +1,138 @@
 /**
- * Esports Draft Games — design tokens.
- * Premium dark esports palette (HLTV/VLR/sheepesports inspired).
+ * Esports Draft Games — design tokens (--kb-*).
+ *
+ * Direction: dark premium editorial. Graphite/charcoal base, warm off-white
+ * text, restrained per-game accents. No glow, no neon, no glassmorphism by
+ * default. Shadows are soft and directional (depth, not light). Borders are
+ * thin hairlines. Accents are earned, never decorative.
+ *
+ * Reference register: Stripe / Linear / Vercel / VLR.gg / HLTV — restraint,
+ * sharp hierarchy, precise spacing, high data density.
  */
 :root {
-  --kb-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --kb-ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  /* ----------------------------------------------------------------------
+   * Surfaces — neutral graphite, the faintest cool tint, never pure black.
+   * A 4-level stack so the UI recedes and data/results read as the subject.
+   * -------------------------------------------------------------------- */
+  --kb-bg-deep: #0a0b0d;   /* L0 — page background, deepest */
+  --kb-bg-base: #0f1013;   /* L1 — sections, sticky bars */
+  --kb-bg-card: #15161a;   /* L2 — cards, containers */
+  --kb-bg-elev: #1c1e23;   /* L3 — elevated panels, hover, modals */
+  --kb-bg-inset: #0c0d10;  /* recessed wells, inputs, tracks */
 
-  /* Surfaces — layered darkness, violet-tinted */
-  --kb-bg-deep: #070609;
-  --kb-bg-base: #0e0c14;
-  --kb-bg-card: #161320;
-  --kb-bg-elev: #1e1a2a;
-  --kb-glass: rgba(255, 255, 255, 0.04);
-  --kb-glass-strong: rgba(255, 255, 255, 0.08);
+  /* Subtle fills (used sparingly — not glassmorphism) */
+  --kb-fill: rgba(255, 255, 255, 0.035);
+  --kb-fill-strong: rgba(255, 255, 255, 0.06);
+
+  /* ----------------------------------------------------------------------
+   * Borders — thin hairlines do the structural work on dark.
+   * -------------------------------------------------------------------- */
   --kb-border: rgba(255, 255, 255, 0.08);
-  --kb-border-strong: rgba(255, 255, 255, 0.15);
-  --kb-hairline: rgba(255, 255, 255, 0.05);
+  --kb-border-strong: rgba(255, 255, 255, 0.14);
+  --kb-hairline: rgba(255, 255, 255, 0.045);
 
-  /* Text */
-  --kb-fg: #f0ecdf;
-  --kb-fg-soft: #b8b3a8;
-  --kb-fg-mute: #6b6575;
-  --kb-fg-faint: #3d3847;
+  /* Legacy aliases kept so existing class names don't break */
+  --kb-glass: var(--kb-fill);
+  --kb-glass-strong: var(--kb-fill-strong);
 
-  /* Brand accents */
-  --kb-amber: #f5631a;
-  --kb-amber-hot: #ff7e3a;
-  --kb-amber-glow: #ffb475;
+  /* ----------------------------------------------------------------------
+   * Text — warm off-white, never #fff. Four steps of emphasis.
+   * -------------------------------------------------------------------- */
+  --kb-fg: #ece8dd;        /* primary */
+  --kb-fg-soft: #b4afa3;   /* body / secondary */
+  --kb-fg-mute: #797568;   /* labels / metadata */
+  --kb-fg-faint: #4f4c46;  /* disabled / placeholder */
 
-  --kb-gold: #e8b842;
-  --kb-gold-deep: #8a6418;
+  /* ----------------------------------------------------------------------
+   * Brand accents — one accent per game, used with restraint.
+   * -------------------------------------------------------------------- */
+  --kb-amber: #f5631a;     /* Ring Chase / CoD, daily / urgency */
+  --kb-amber-hot: #ff7e3a; /* amber hover only */
 
-  --kb-steel: #7fa5c9;
-  --kb-steel-dim: rgba(127, 165, 201, 0.08);
+  --kb-gold: #e8b842;      /* win state, championships, prestige (LoL) */
+  --kb-gold-deep: #b08a2e; /* second-tier OVR / dim gold */
 
-  --kb-crimson: #e8364a;
-  --kb-green: #2dd97a;
+  --kb-steel: #7fa5c9;     /* Major Run / CS2 identity */
+  --kb-steel-dim: rgba(127, 165, 201, 0.10);
 
-  /* Typography */
+  /* Semantic */
+  --kb-crimson: #e8485c;   /* error / blocked / exit */
+  --kb-green: #34c98a;     /* victory / win streak */
+
+  /* ----------------------------------------------------------------------
+   * Typography
+   * -------------------------------------------------------------------- */
   --kb-display: 'Anton', 'Oswald', 'Arial Narrow', system-ui, sans-serif;
   --kb-ui: 'Space Grotesk', system-ui, sans-serif;
   --kb-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  /* Radii — max 18px per DESIGN.md */
+  /* Type scale (px). Compact range — this is a game, not an article. */
+  --kb-text-micro: 10px;   /* badges, pill tags */
+  --kb-text-label: 11px;   /* uppercase metadata, stat labels */
+  --kb-text-sm: 13px;      /* secondary UI */
+  --kb-text-body: 14px;    /* body copy */
+  --kb-text-md: 16px;      /* emphasized body */
+
+  --kb-tracking-label: 0.22em; /* uppercase labels */
+  --kb-tracking-eyebrow: 0.32em; /* sport eyebrows */
+
+  /* ----------------------------------------------------------------------
+   * Radii — one consistent scale. Pill for CTAs only.
+   * -------------------------------------------------------------------- */
+  --kb-r-xs: 6px;
   --kb-r-sm: 8px;
   --kb-r-md: 12px;
   --kb-r-lg: 16px;
   --kb-r-xl: 20px;
+  --kb-r-pill: 9999px;
 
-  /* Shadows */
-  --kb-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5), 0 4px 16px -4px rgba(0, 0, 0, 0.6);
-  --kb-shadow-gold: 0 0 16px -4px rgba(232, 184, 66, 0.12);
-  --kb-shadow-amber: 0 0 16px -4px rgba(245, 99, 26, 0.14);
+  /* ----------------------------------------------------------------------
+   * Spacing — 8px base unit.
+   * -------------------------------------------------------------------- */
+  --kb-space-xs: 4px;
+  --kb-space-sm: 8px;
+  --kb-space-md: 16px;
+  --kb-space-lg: 24px;
+  --kb-space-xl: 40px;
+  --kb-space-2xl: 64px;
+
+  /* ----------------------------------------------------------------------
+   * Shadows — soft, directional, dark. Depth, not glow. No colored bloom.
+   * -------------------------------------------------------------------- */
+  --kb-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --kb-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 28px -16px rgba(0, 0, 0, 0.8);
+  --kb-shadow-pop: 0 2px 4px rgba(0, 0, 0, 0.4), 0 18px 44px -20px rgba(0, 0, 0, 0.85);
+  --kb-shadow-cta: 0 1px 2px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+
+  /* Accent shadows = a slightly deeper directional shadow, NOT a glow.
+     Kept as aliases so existing usages stay coherent. */
+  --kb-shadow-gold: 0 8px 24px -16px rgba(0, 0, 0, 0.8);
+  --kb-shadow-amber: 0 8px 24px -16px rgba(0, 0, 0, 0.8);
+
+  /* ----------------------------------------------------------------------
+   * Focus ring — visible, accent-neutral so it works on any surface.
+   * -------------------------------------------------------------------- */
+  --kb-focus: 0 0 0 2px var(--kb-bg-deep), 0 0 0 4px rgba(255, 255, 255, 0.28);
+
+  /* ----------------------------------------------------------------------
+   * Z-index scale
+   * -------------------------------------------------------------------- */
+  --kb-z-base: 1;
+  --kb-z-sticky: 20;
+  --kb-z-brandbar: 40;
+  --kb-z-overlay: 50;
+  --kb-z-modal: 60;
+
+  /* ----------------------------------------------------------------------
+   * Motion — ease-out only, no bounce/elastic. Fast and restrained.
+   * -------------------------------------------------------------------- */
+  --kb-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --kb-ease-std: cubic-bezier(0.4, 0, 0.2, 1);
+  --kb-dur-fast: 120ms;
+  --kb-dur: 200ms;
+  --kb-dur-slow: 360ms;
+  /* legacy alias */
+  --kb-ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
 
   --ring-gold: var(--kb-gold);
 }

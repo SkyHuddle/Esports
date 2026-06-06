@@ -71,8 +71,8 @@ export function PlayerCard({
       )}
       style={{
         background: selected
-          ? `linear-gradient(145deg, ${team.accent}28 0%, ${team.accent}10 40%, var(--kb-bg-card) 100%)`
-          : `linear-gradient(145deg, ${team.accent}18 0%, ${team.accent}06 50%, var(--kb-bg-card) 100%)`,
+          ? `color-mix(in srgb, ${team.accent} 9%, var(--kb-bg-card))`
+          : 'var(--kb-bg-card)',
       }}
     >
 
@@ -89,8 +89,8 @@ export function PlayerCard({
           <div
             className={`${compact ? 'w-8 h-8 rounded-lg' : 'w-12 h-12 rounded-xl'} flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden`}
             style={{
-              background: `linear-gradient(145deg, ${accent}35 0%, ${accent}08 100%)`,
-              border: `1px solid ${accent}40`,
+              background: `color-mix(in srgb, ${accent} 16%, var(--kb-bg-inset))`,
+              border: `1px solid color-mix(in srgb, ${accent} 34%, transparent)`,
               color: accent,
             }}
           >

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Flame, Target, Calendar, Lock, ChevronRight } from 'lucide-react';
+import { Calendar, Lock, ChevronRight } from 'lucide-react';
 import type { DailyConstraint, DailyRunResult, PlayerStats } from '../core/types';
 import { RingPath } from './RingPath';
 import { DailyLeaderboard } from './DailyLeaderboard';
@@ -158,7 +158,7 @@ export function HomeScreen({
               {[
                 { n: '1', text: 'Spin a random CoD team-year from franchise history' },
                 { n: '2', text: 'Pick one player from the roster to fill an open slot' },
-                { n: '3', text: 'Repeat 4 rounds — get your season record and ring count' },
+                { n: '3', text: 'Repeat 4 rounds, then get your season record and ring count' },
               ].map(({ n, text }) => (
                 <div key={n} className="flex items-start gap-3.5">
                   <span
@@ -257,8 +257,8 @@ function DailyRow({
       onClick={onStart}
       className="w-full h-auto min-h-[3.5rem] flex items-center gap-3 px-5 py-3.5 rounded-2xl border text-left transition-all duration-200 hover:brightness-110 active:scale-[0.99]"
       style={{
-        borderColor: 'rgba(255, 106, 31, 0.35)',
-        background: 'rgba(255, 106, 31, 0.07)',
+        borderColor: 'color-mix(in srgb, var(--kb-amber) 32%, transparent)',
+        background: 'color-mix(in srgb, var(--kb-amber) 7%, transparent)',
       }}
     >
       <Calendar className="w-4 h-4 shrink-0" style={{ color: 'var(--kb-amber)' }} />
@@ -270,8 +270,8 @@ function DailyRow({
               className="text-[10px] font-medium px-2 py-0.5 rounded-full"
               style={{
                 color: 'var(--kb-amber)',
-                background: 'rgba(255, 106, 31, 0.12)',
-                border: '1px solid rgba(255, 106, 31, 0.25)',
+                background: 'color-mix(in srgb, var(--kb-amber) 12%, transparent)',
+                border: '1px solid color-mix(in srgb, var(--kb-amber) 26%, transparent)',
               }}
             >
               {constraint.title}

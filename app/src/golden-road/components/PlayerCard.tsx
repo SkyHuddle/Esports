@@ -31,8 +31,8 @@ export function PlayerCard({ player, onSelect, disabled, selected }: PlayerCardP
       )}
       style={{
         background: selected
-          ? `linear-gradient(135deg, ${player.accent}16 0%, var(--kb-bg-card) 100%)`
-          : `linear-gradient(135deg, ${player.accent}10 0%, var(--kb-bg-card) 100%)`,
+          ? `color-mix(in srgb, ${player.accent} 9%, var(--kb-bg-card))`
+          : 'var(--kb-bg-card)',
       }}
       whileTap={{ scale: disabled ? 1 : 0.98 }}
       layout
@@ -41,8 +41,8 @@ export function PlayerCard({ player, onSelect, disabled, selected }: PlayerCardP
         <div
           className="w-16 h-16 rounded-xl flex items-center justify-center text-lg font-bold shrink-0"
           style={{
-            background: `linear-gradient(135deg, ${player.accent}40 0%, ${player.accent}15 100%)`,
-            border: `1px solid ${player.accent}50`,
+            background: `color-mix(in srgb, ${player.accent} 18%, var(--kb-bg-inset))`,
+            border: `1px solid color-mix(in srgb, ${player.accent} 38%, transparent)`,
             color: player.accent,
           }}
         >

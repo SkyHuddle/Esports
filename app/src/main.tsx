@@ -16,8 +16,9 @@ const MajorRunApp = lazy(() =>
 
 function RouteLoader() {
   return (
-    <div className="min-h-[100dvh] flex items-center justify-center bg-[#060608]">
-      <p className="text-white/40 text-sm uppercase tracking-widest animate-pulse">Loading…</p>
+    <div className="kb-root min-h-[100dvh] flex flex-col items-center justify-center gap-3">
+      <span className="w-1.5 h-1.5 rounded-full kb-live-dot" style={{ background: 'var(--kb-gold)' }} />
+      <p className="kb-label text-kb-faint">Loading</p>
     </div>
   );
 }
