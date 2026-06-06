@@ -151,26 +151,10 @@ export function DraftScreen({
           >
             <TeamBanner team={currentRound.team} rosterAvgOvr={rosterAvg} />
 
-            <div className="mb-4 rounded-[var(--kb-r-md)] kb-glass-panel px-4 py-3.5 border border-kb-gold/10">
-              <p className="text-xs text-kb-soft leading-relaxed">
-                {pickableCount === 1 ? (
-                  <>
-                    Draft your{' '}
-                    <span className="text-kb-gold font-medium">
-                      {ROLE_LABELS[openRoles[0]!]}
-                    </span>
-                    . Highest OVR wins.
-                  </>
-                ) : (
-                  <>
-                    {pickableCount} slots open. Cards sorted by OVR.
-                  </>
-                )}
-              </p>
-            </div>
+            <DraftPrompt openRoles={openRoles} pickableCount={pickableCount} />
 
             {isDaily && dailyConstraint && (
-              <p className="text-[10px] text-kb-amber/80 mb-4 -mt-2 px-1 font-medium">
+              <p className="text-[10px] text-kb-amber/80 mb-4 -mt-1 px-1 font-medium">
                 {dailyConstraint.title}
               </p>
             )}
@@ -255,6 +239,50 @@ export function DraftScreen({
   );
 }
 
+function DraftPrompt({
+  openRoles,
+  pickableCount,
+}: {
+  openRoles: Role[];
+  pickableCount: number;
+}) {
+  const single = openRoles.length === 1;
+
+  return (
+    <div className="mb-4 rounded-[var(--kb-r-md)] border border-kb-border bg-kb-elev px-4 py-3.5 shadow-[var(--kb-shadow-sm)]">
+      <p className="kb-label text-kb-mute mb-2">On the clock</p>
+      <div className="flex flex-wrap items-center gap-1.5">
+        {openRoles.map((role) => (
+          <span
+            key={role}
+            className="text-[11px] font-semibold uppercase tracking-[0.1em] px-2.5 py-1 rounded-full"
+            style={{
+              color: 'var(--kb-gold)',
+              background: 'rgba(232,184,66,0.10)',
+              border: '1px solid rgba(232,184,66,0.28)',
+            }}
+          >
+            {ROLE_LABELS[role]}
+          </span>
+        ))}
+      </div>
+      <p className="text-xs text-kb-soft leading-relaxed mt-2.5">
+        {single ? (
+          <>
+            Pick your{' '}
+            <span className="text-kb-fg font-medium">{ROLE_LABELS[openRoles[0]!]}</span>.{' '}
+            {pickableCount <= 1 ? 'Highest OVR wins.' : 'Cards sorted by OVR.'}
+          </>
+        ) : (
+          <>
+            {openRoles.length} roles still open. Cards are sorted by OVR.
+          </>
+        )}
+      </p>
+    </div>
+  );
+}
+
 function TournamentProgress({
   currentPhase,
   completedCount,
@@ -325,7 +353,7 @@ function RosterSlots({
           return (
             <div
               key={role}
-              className={`flex-1 rounded-xl py-2 px-1 text-center border transition-all ${
+              className={`flex-1 rounded-xl py-2 px-0.5 text-center border transition-all ${
                 pick
                   ? 'border-kb-gold/25 bg-kb-gold/8'
                   : open
@@ -333,10 +361,14 @@ function RosterSlots({
                     : 'border-kb-hairline opacity-40'
               }`}
             >
-              <p className="text-[7px] uppercase tracking-wider text-kb-mute font-semibold">
-                {ROLE_LABELS[role].slice(0, 3)}
+              <p
+                className={`text-[8px] uppercase tracking-[0.04em] font-semibold leading-none ${
+                  pick || open ? 'text-kb-gold/70' : 'text-kb-mute'
+                }`}
+              >
+                {ROLE_LABELS[role]}
               </p>
-              <p className="text-[10px] text-kb-fg font-medium mt-0.5 px-0.5">
+              <p className="text-[10px] text-kb-fg font-medium mt-1 px-0.5 truncate">
                 {pick ? pick.player.name.split(' ').pop() : open ? '?' : '—'}
               </p>
               {ovr != null && (
