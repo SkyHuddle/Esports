@@ -13,6 +13,9 @@ const GoldenRoadApp = lazy(() =>
 const MajorRunApp = lazy(() =>
   import('./major-run/MajorRunApp').then((m) => ({ default: m.MajorRunApp }))
 );
+const ChampionsRunApp = lazy(() =>
+  import('./champions-run/ChampionsRunApp').then((m) => ({ default: m.ChampionsRunApp }))
+);
 
 function RouteLoader() {
   return (
@@ -35,6 +38,8 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/golden-road/*" element={<GoldenRoadApp />} />
           <Route path="/major-run" element={<MajorRunApp />} />
           <Route path="/major-run/*" element={<MajorRunApp />} />
+          <Route path="/champions-run" element={<ChampionsRunApp />} />
+          <Route path="/champions-run/*" element={<ChampionsRunApp />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

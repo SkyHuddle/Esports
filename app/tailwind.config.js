@@ -45,6 +45,8 @@ module.exports = {
           gold: "#e8b842",
           "gold-deep": "#b08a2e",
           steel: "#7fa5c9",
+          coral: "#c45c5c",
+          "coral-dim": "rgba(196, 92, 92, 0.10)",
           fg: "#ece8dd",
           soft: "#b4afa3",
           mute: "#797568",

@@ -1,0 +1,324 @@
+import { useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
+import type {
+  ValorantPlayer,
+  DailyConstraint,
+  DraftPick,
+  DraftRound,
+  DraftSubphase,
+  RosterSlot,
+} from '../core/types';
+import { SLOT_LABELS } from '../core/types';
+import { DRAFT_ROUNDS, SLOT_ORDER } from '../core/constants';
+import { TeamBanner, TeamRosterCard } from './TeamRosterCard';
+import { TeamSlotMachine } from './TeamSlotMachine';
+import { playerPassesFilter } from '../features/daily';
+import { cardOverall, teamRosterAvgOvr } from '../engine/card-context';
+import { hapticTap } from '@/utils/haptics';
+
+interface DraftScreenProps {
+  currentRound: DraftRound;
+  draftSubphase: DraftSubphase;
+  picks: DraftPick[];
+  openRoles: RosterSlot[];
+  spinGeneration: number;
+  respinsLeft: number;
+  dailyConstraint: DailyConstraint;
+  isDaily: boolean;
+  onSpinComplete: () => void;
+  onRespinTeam: () => void;
+  onSelectPlayer: (player: ValorantPlayer, naturalRole: RosterSlot) => void;
+  onBack: () => void;
+}
+
+export function DraftScreen({
+  currentRound,
+  draftSubphase,
+  picks,
+  openRoles,
+  spinGeneration,
+  respinsLeft,
+  dailyConstraint,
+  isDaily,
+  onSpinComplete,
+  onRespinTeam,
+  onSelectPlayer,
+  onBack,
+}: DraftScreenProps) {
+  const [confirmExit, setConfirmExit] = useState(false);
+  const pickedIds = new Set(picks.map((p) => p.player.id));
+  const { team } = currentRound;
+
+  const rosterEntries = useMemo(() => {
+    return SLOT_ORDER.map((teamRole) => {
+      const playerId = currentRound.team.roster[teamRole];
+      const player = currentRound.roster.find((p) => p.id === playerId);
+      if (!player) return null;
+
+      const taken = pickedIds.has(player.id);
+      const roleTaken = !openRoles.includes(teamRole);
+      const dailyBlocked =
+        isDaily && !playerPassesFilter(player, picks, dailyConstraint, team);
+      const blocked = taken || roleTaken || dailyBlocked;
+
+      return { player, teamRole, roleTaken, dailyBlocked, blocked };
+    })
+      .filter((entry): entry is NonNullable<typeof entry> => entry != null)
+      .sort((a, b) => {
+        if (a.blocked !== b.blocked) return a.blocked ? 1 : -1;
+        return cardOverall(b.player, team) - cardOverall(a.player, team);
+      });
+  }, [currentRound, openRoles, pickedIds, isDaily, picks, dailyConstraint, team]);
+
+  const pickableCount = rosterEntries.filter((e) => !e.blocked).length;
+
+  const handleExit = () => {
+    if (picks.length === 0) {
+      onBack();
+      return;
+    }
+    setConfirmExit(true);
+  };
+
+  const handleRespin = () => {
+    hapticTap();
+    onRespinTeam();
+  };
+
+  const handleSelect = (player: ValorantPlayer, teamRole: RosterSlot) => {
+    hapticTap();
+    onSelectPlayer(player, teamRole);
+  };
+
+  return (
+    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto">
+      <header className="sticky top-11 z-20 px-5 pt-3 pb-3 kb-brand-bar">
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <button
+            type="button"
+            onClick={handleExit}
+            className="text-kb-mute text-sm hover:text-kb-soft transition-colors py-2 shrink-0"
+          >
+            ← Exit
+          </button>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-[8px] uppercase tracking-[0.3em] font-semibold leading-none" style={{ color: 'var(--kb-coral)', opacity: 0.7 }}>
+              VALORANT
+            </p>
+            <RoundTrack total={DRAFT_ROUNDS} current={picks.length} />
+          </div>
+          {!isDaily && respinsLeft > 0 && draftSubphase === 'pick' ? (
+            <button
+              type="button"
+              onClick={handleRespin}
+              className="shrink-0 border border-kb-border rounded-lg px-3 py-1.5 text-xs text-kb-fg-mute hover:text-kb-soft transition-colors"
+            >
+              Respin · {respinsLeft}
+            </button>
+          ) : (
+            <span className="w-[72px] shrink-0" aria-hidden />
+          )}
+        </div>
+        <RosterSlots picks={picks} openRoles={openRoles} />
+      </header>
+
+      <div className="flex-1 overflow-y-auto">
+        {draftSubphase === 'spin' && (
+          <TeamSlotMachine
+            key={spinGeneration}
+            spin={currentRound.spin}
+            spinKey={spinGeneration}
+            roundIndex={currentRound.roundIndex}
+            onComplete={onSpinComplete}
+          />
+        )}
+
+        {draftSubphase === 'pick' && (
+          <motion.div
+            className="px-5 py-4 pb-12"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <TeamBanner team={team} rosterAvgOvr={teamRosterAvgOvr(team)} />
+
+            <div className="mb-3 -mt-1 flex items-center gap-2 flex-wrap">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-kb-mute shrink-0">
+                Pick {picks.length + 1} of {DRAFT_ROUNDS} · Open
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {openRoles.map((slot) => (
+                  <span
+                    key={slot}
+                    className="text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full"
+                    style={{
+                      color: 'var(--kb-coral)',
+                      background: 'rgba(127,165,201,0.08)',
+                      border: '1px solid rgba(127,165,201,0.3)',
+                    }}
+                  >
+                    {SLOT_LABELS[slot]}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {isDaily && dailyConstraint.id !== 'standard' && (
+              <p className="text-[10px] text-kb-amber/80 mb-4 -mt-2 px-1 font-medium">{dailyConstraint.title}</p>
+            )}
+
+            {isDaily && pickableCount === 0 && (
+              <p className="text-sm text-kb-crimson/90 mb-4 rounded-[var(--kb-r-md)] border border-kb-crimson/20 bg-kb-crimson/10 px-4 py-3">
+                No eligible players for today&apos;s rule on this team.
+              </p>
+            )}
+
+            <div className="space-y-2.5">
+              {rosterEntries.map(({ player, teamRole, roleTaken, dailyBlocked, blocked }) => (
+                <div key={player.id}>
+                  <TeamRosterCard
+                    player={player}
+                    team={team}
+                    teamRole={teamRole}
+                    disabled={blocked}
+                    roleTaken={roleTaken}
+                    onSelect={() => handleSelect(player, teamRole)}
+                  />
+                  {roleTaken && (
+                    <p className="text-[10px] text-kb-faint mt-1.5 pl-1">
+                      {SLOT_LABELS[teamRole]} slot filled
+                    </p>
+                  )}
+                  {!roleTaken && dailyBlocked && (
+                    <p className="text-[10px] text-kb-crimson/80 mt-1.5 pl-1">
+                      Blocked by today&apos;s rule
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {isDaily && (
+              <p className="text-center text-[10px] text-kb-faint mt-6">
+                Daily mode: fixed teams, no respins
+              </p>
+            )}
+          </motion.div>
+        )}
+      </div>
+
+      {confirmExit && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-5 bg-black/70 backdrop-blur-sm">
+          <div className="kb-card w-full max-w-xs rounded-[var(--kb-r-lg)] p-5 border border-kb-border">
+            <p className="font-display text-lg text-kb-fg mb-2">Leave this run?</p>
+            <p className="text-sm text-kb-mute mb-5">Your draft progress won&apos;t be saved.</p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirmExit(false)}
+                className="flex-1 py-3 rounded-full border border-kb-border text-sm text-kb-soft"
+              >
+                Stay
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setConfirmExit(false);
+                  onBack();
+                }}
+                className="flex-1 py-3 rounded-full bg-kb-crimson/20 border border-kb-crimson/30 text-sm text-kb-crimson"
+              >
+                Leave
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RosterSlots({
+  picks,
+  openRoles,
+}: {
+  picks: DraftPick[];
+  openRoles: RosterSlot[];
+}) {
+  const teamOvr =
+    picks.length > 0
+      ? Math.round(
+          picks.reduce((sum, pick) => sum + cardOverall(pick.player, pick.team), 0) / picks.length
+        )
+      : null;
+
+  return (
+    <div>
+      <div className="flex gap-1">
+        {SLOT_ORDER.map((slot) => {
+          const pick = picks.find((p) => p.role === slot);
+          const open = openRoles.includes(slot);
+          const ovr = pick ? cardOverall(pick.player, pick.team) : null;
+
+          return (
+            <div
+              key={slot}
+              className="flex-1 min-w-0 rounded-[var(--kb-r-sm)] py-2 px-1 text-center border transition-all duration-200"
+              style={
+                pick
+                  ? { borderColor: 'rgba(232,184,66,0.28)', background: 'rgba(232,184,66,0.08)' }
+                  : open
+                    ? { borderColor: 'rgba(127,165,201,0.32)', background: 'rgba(127,165,201,0.07)' }
+                    : { borderColor: 'var(--kb-hairline)', opacity: 0.4 }
+              }
+            >
+              <p className="text-[9px] leading-none uppercase tracking-tight text-kb-mute font-semibold truncate">
+                {SLOT_LABELS[slot]}
+              </p>
+              {pick ? (
+                <p className="text-[10px] text-kb-fg font-medium mt-1 truncate px-0.5">
+                  {pick.player.gamertag}
+                </p>
+              ) : (
+                <p className="text-[11px] text-kb-fg font-medium mt-1.5 leading-none">{open ? '?' : '—'}</p>
+              )}
+              {ovr != null && (
+                <p className="text-[9px] font-display tabular-nums mt-0.5 text-kb-gold/80">
+                  {ovr}
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {teamOvr != null && (
+        <p className="text-[9px] text-center text-kb-mute mt-2 uppercase tracking-wider">
+          Draft avg <span className="text-kb-gold/80 font-display tabular-nums">{teamOvr}</span> OVR
+        </p>
+      )}
+    </div>
+  );
+}
+
+function RoundTrack({ total, current }: { total: number; current: number }) {
+  return (
+    <div className="flex items-center gap-1">
+      {Array.from({ length: total }).map((_, i) => {
+        const done = i < current;
+        const active = i === current;
+        return (
+          <div
+            key={i}
+            className="w-8 h-1.5 rounded-full transition-all duration-300"
+            style={{
+              background: done
+                ? 'var(--kb-coral)'
+                : active
+                  ? 'rgba(139, 167, 199, 0.5)'
+                  : 'rgba(255, 255, 255, 0.12)',
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
